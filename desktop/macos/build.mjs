@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {rebaseReleaseLinks} from './release-links.mjs';
+import {normalizeReleasePermissions} from './release-permissions.mjs';
 import {JETHUB_PACKAGE, JETHUB_LEGACY_PACKAGE} from '../../scripts/jethub-package.mjs';
 import {resolveOfmSource, verifyPackagedOfm, resolveJetHubSource, verifyPackagedJetHub} from '../plugin-sources.mjs';
 
@@ -91,7 +92,10 @@ const bundles = ['@deepseek-ai/dsh-base', '@deepseek-ai/dsh-web-app', '@deepseek
 const profile = {name: 'dsh-profile-web', private: true, dependencies: {}, dsh: {profile: {bundles}}};
 await writeFile(path.join(runtime, 'bundle.json'), JSON.stringify({version: appInfo.version, coreVersion: '0.2.1-alpha.4', plugins, profile}, null, 2));
 await mkdir(path.join(work, 'bin'));
-execFileSync('/usr/bin/lipo', [process.execPath, '-thin', 'arm64', '-output', path.join(work, 'bin/node')]);
+const nodeArchitectures = execFileSync('/usr/bin/lipo', ['-archs', process.execPath], {encoding:'utf8'}).trim().split(/\s+/);
+if (!nodeArchitectures.includes('arm64')) throw Error('构建 Node.js 不包含 arm64 架构');
+if (nodeArchitectures.length === 1) await cp(process.execPath, path.join(work, 'bin/node'));
+else execFileSync('/usr/bin/lipo', [process.execPath, '-thin', 'arm64', '-output', path.join(work, 'bin/node')]);
 await chmod(path.join(work, 'bin/node'), 0o755);
 const nodeLicense = await fetch('https://raw.githubusercontent.com/nodejs/node/v24.14.0/LICENSE');
 if (!nodeLicense.ok) throw Error('无法取得 Node.js 发行声明');
@@ -137,6 +141,7 @@ await cp(path.join(work, 'bin/OPENCODE-NOTICES.txt'), path.join(appPath, 'Conten
 execFileSync('/usr/bin/plutil', ['-replace', 'CFBundleShortVersionString', '-string', appInfo.version, path.join(appPath, 'Contents/Info.plist')]);
 execFileSync('/usr/bin/plutil', ['-replace', 'CFBundleVersion', '-string', bundleVersion, path.join(appPath, 'Contents/Info.plist')]);
 console.log('3/6 验证本机签名');
+const releasePermissions = await normalizeReleasePermissions(appPath);
 execFileSync('/usr/bin/codesign', ['--force', '--deep', '--sign', '-', appPath], {stdio: 'inherit'});
 execFileSync('/usr/bin/codesign', ['--verify', '--deep', '--strict', appPath], {stdio: 'inherit'});
 execFileSync(path.join(appPath, 'Contents/Resources/bin/node'), ['--version'], {stdio: 'inherit'});
@@ -168,7 +173,8 @@ execFileSync('/usr/bin/productbuild', ['--distribution', distribution, '--resour
 const sha256 = createHash('sha256').update(await readFile(installer)).digest('hex');
 const receipt = {version: appInfo.version, coreVersion: '0.2.1-alpha.4', electronVersion: '44.7.2', nodeVersion: process.versions.node,
   platform: 'darwin-arm64', appPath, installer, sha256, runtimeFiles, internalLinks: runtimeLinks, signed: 'ad-hoc', notarized: false,
-  profileDataBundled: false};
+  profileDataBundled: false, releasePermissions,
+  jetHub: {version: jetHubSource.version, upstreamCommit: jetHubSource.contract.upstreamCommit}};
 await writeFile(path.join(output, 'build-receipt.json'), JSON.stringify(receipt, null, 2));
 await writeFile(installer + '.sha256', sha256 + '  ' + path.basename(installer) + '\n');
 console.log('6/6 安装包已生成：' + installer);

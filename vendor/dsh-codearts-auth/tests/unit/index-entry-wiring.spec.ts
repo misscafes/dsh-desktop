@@ -59,6 +59,8 @@ vi.mock('react', () => ({
   useMemo: (fn) => fn(),
 }))
 
+vi.mock('react-dom/client', () => ({createRoot: () => ({render() {}, unmount() {}})}))
+
 // ── 注册器：本文件的被测对象是「有没有被调用」，故做成 spy ──
 const registerSpy = vi.hoisted(() => vi.fn())
 

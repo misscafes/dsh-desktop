@@ -346,7 +346,10 @@ export function createOpenAiGateway(options: OpenAiGatewayOptions): OpenAiGatewa
     const { groups, effortViews } = await resolveGatewayModelMetadata(options.llm, listed, (provider, error) => {
       logger.warn(`[openai-gateway] ${provider}：${describe(error)}`)
     })
-    jsonResponse(response, 200, { object: 'list', data: toOpenAiModels(groups, effortViews) })
+    jsonResponse(response, 200, {
+      object: 'list',
+      data: toOpenAiModels(groups, effortViews),
+    })
   }
 
   /**

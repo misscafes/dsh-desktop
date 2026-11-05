@@ -18,7 +18,7 @@ export async function installDesktopJetHubChatGpt(directory) {
   const manifest = JSON.parse(await readFile(path.join(directory, 'package.json'), 'utf8'));
   if (!isJetHubPackage(manifest.name)) throw Error('请选择电脑正在使用的 Jet Hub 插件目录');
   const baseline = JSON.parse(await readFile(path.join(root, 'desktop-chatgpt/jet-hub-source-hashes.json'), 'utf8'));
-  const names = [...Object.keys(baseline), 'plugin-src/client/chatgpt-plan-panel.js', 'plugin-src/client/chatgpt-plan-rpc.js'];
+  const names = [...Object.keys(baseline), 'plugin-src/client/chatgpt-plan-panel.js', 'plugin-src/client/chatgpt-plan-rpc.js', 'plugin-src/client/codex-plan-panel.js'];
   const plan = new Map(), originals = new Map();
   for (const name of names) {
     const file = path.join(directory, name), original = await readOptional(file), next = await readFile(path.join(sourceRoot, name));
@@ -35,7 +35,7 @@ export async function installDesktopJetHubChatGpt(directory) {
   const result = await build({
     entryPoints: [path.join(directory, 'plugin-src/client/index.js')],
     bundle: true, format: 'cjs', platform: 'browser', target: ['chrome100'],
-    charset: 'utf8', external: ['react', 'react-dom'], write: false,
+    charset: 'utf8', external: ['react', 'react-dom', '@deepseek-ai/dsh-client-ui-primitives'], write: false,
     minify: process.env.NODE_ENV === 'production', legalComments: 'none',
     plugins: [{ name: 'chatgpt-account-overlay', setup(builder) {
       builder.onResolve({ filter: /^\./ }, args => {

@@ -88,6 +88,29 @@ export function toGatewayModelIds(groups, effortViews) {
     }));
 }
 /**
+ * 逐个模型解析档位与窗口（一次 `resolveModelInfo` 同时取两者）。
+ *
+ * 容错口径与旧实现一致：单个模型解析失败只让它没有附加字段，不影响整份目录；
+ * 宿主没提供 `resolveModelInfo` 时返回两张空表。
+ */
+export async function collectGatewayModelDetails(llm, groups, onError) {
+    return resolveGatewayModelMetadata(llm, groups, onError);
+}
+/** 把解析到的窗口合并进目录项（未解析到的不写，不猜）。 */
+export function applyGatewayContextWindows(groups, contextWindows) {
+    if (contextWindows.size === 0)
+        return [...groups];
+    return groups.map(({ provider, models }) => ({
+        provider,
+        models: models.map((model) => {
+            const window = contextWindows.get(toOpenAiModelId(provider, model.id));
+            return window === undefined
+                ? model
+                : { ...model, contextWindow: model.contextWindow ?? window };
+        }),
+    }));
+}
+/**
  * 逐个模型解析**档位视图**（key = `provider/model`）。
  *
  * ## 为什么要单独解析
@@ -113,9 +136,10 @@ export async function collectGatewayEffortViews(llm, groups, onError) {
  */
 export async function resolveGatewayModelMetadata(llm, groups, onError) {
     const effortViews = new Map();
+    const contextWindows = new Map();
     const resolve = llm?.resolveModelInfo;
     if (typeof resolve !== 'function')
-        return { groups, effortViews };
+        return { groups, effortViews, contextWindows };
     const resolvedGroups = await Promise.all(groups.map(async ({ provider, models }) => ({
         provider,
         models: await Promise.all(models.map(async (model) => {
@@ -127,6 +151,9 @@ export async function resolveGatewayModelMetadata(llm, groups, onError) {
                 const input = info?.inputModalities;
                 const contextWindow = info?.context?.contextWindow ?? info?.contextWindow;
                 const maxTokens = info?.defaultMaxTokens ?? info?.maxTokens;
+                if (typeof contextWindow === 'number' && Number.isSafeInteger(contextWindow) && contextWindow > 0) {
+                    contextWindows.set(toOpenAiModelId(provider, model.id), contextWindow);
+                }
                 return {
                     ...model,
                     ...Array.isArray(input) && input.length > 0 && input.every(value => typeof value === 'string')
@@ -144,7 +171,7 @@ export async function resolveGatewayModelMetadata(llm, groups, onError) {
             }
         })),
     })));
-    return { groups: resolvedGroups, effortViews };
+    return { groups: resolvedGroups, effortViews, contextWindows };
 }
 /** 将 DSH 的 provider 分组目录转换为 OpenAI models 响应中的 data 项。 */
 export function toOpenAiModels(groups, effortViews) {

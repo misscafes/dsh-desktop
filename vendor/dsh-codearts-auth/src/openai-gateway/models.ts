@@ -168,6 +168,52 @@ export function toGatewayModelIds(
 }
 
 /**
+ * `/v1/models` 需要的**逐模型附加信息**：档位视图 + 上下文窗口。
+ *
+ * ⚠️ 为什么窗口要在这里解析（issue #36）：宿主 `LlmRuntime.listModels()` 会把
+ * 适配器返回的对象**按白名单重建**（`provider/id/name/description/inputModalities`），
+ * 适配器在 `listModels` 里多带的 `contextWindow` 到网关这里已经被剥掉。
+ * 唯一还带着窗口的是 `resolveModelInfo()` 的 `context.contextWindow`，而它
+ * **本来就已经被档位解析逐个调用**（见 `collectGatewayEffortViews` 的成本注释）
+ * ⇒ 同一次调用里把窗口也读出来，零额外请求。
+ */
+export interface GatewayModelDetails {
+  effortViews: Map<string, GatewayEffortView>
+  contextWindows: Map<string, number>
+}
+
+/**
+ * 逐个模型解析档位与窗口（一次 `resolveModelInfo` 同时取两者）。
+ *
+ * 容错口径与旧实现一致：单个模型解析失败只让它没有附加字段，不影响整份目录；
+ * 宿主没提供 `resolveModelInfo` 时返回两张空表。
+ */
+export async function collectGatewayModelDetails(
+  llm: GatewayModelSource,
+  groups: readonly GatewayProviderModels[],
+  onError?: (provider: string, error: unknown) => void,
+): Promise<GatewayModelDetails> {
+  return resolveGatewayModelMetadata(llm, groups, onError)
+}
+
+/** 把解析到的窗口合并进目录项（未解析到的不写，不猜）。 */
+export function applyGatewayContextWindows(
+  groups: readonly GatewayProviderModels[],
+  contextWindows: ReadonlyMap<string, number>,
+): GatewayProviderModels[] {
+  if (contextWindows.size === 0) return [...groups]
+  return groups.map(({ provider, models }) => ({
+    provider,
+    models: models.map((model) => {
+      const window = contextWindows.get(toOpenAiModelId(provider, model.id))
+      return window === undefined
+        ? model
+        : { ...model, contextWindow: model.contextWindow ?? window }
+    }),
+  }))
+}
+
+/**
  * 逐个模型解析**档位视图**（key = `provider/model`）。
  *
  * ## 为什么要单独解析
@@ -200,10 +246,11 @@ export async function resolveGatewayModelMetadata(
   llm: GatewayModelSource,
   groups: readonly GatewayProviderModels[],
   onError?: (provider: string, error: unknown) => void,
-): Promise<{ groups: readonly GatewayProviderModels[]; effortViews: Map<string, GatewayEffortView> }> {
+): Promise<GatewayModelDetails & { groups: readonly GatewayProviderModels[] }> {
   const effortViews = new Map<string, GatewayEffortView>()
+  const contextWindows = new Map<string, number>()
   const resolve = llm?.resolveModelInfo
-  if (typeof resolve !== 'function') return { groups, effortViews }
+  if (typeof resolve !== 'function') return { groups, effortViews, contextWindows }
   const resolvedGroups = await Promise.all(groups.map(async ({ provider, models }) => ({
     provider,
     models: await Promise.all(models.map(async (model) => {
@@ -221,6 +268,9 @@ export async function resolveGatewayModelMetadata(
         const input = info?.inputModalities
         const contextWindow = info?.context?.contextWindow ?? info?.contextWindow
         const maxTokens = info?.defaultMaxTokens ?? info?.maxTokens
+        if (typeof contextWindow === 'number' && Number.isSafeInteger(contextWindow) && contextWindow > 0) {
+          contextWindows.set(toOpenAiModelId(provider, model.id), contextWindow)
+        }
         return {
           ...model,
           ...Array.isArray(input) && input.length > 0 && input.every(value => typeof value === 'string')
@@ -239,7 +289,7 @@ export async function resolveGatewayModelMetadata(
       }
     })),
   })))
-  return { groups: resolvedGroups, effortViews }
+  return { groups: resolvedGroups, effortViews, contextWindows }
 }
 
 /** 将 DSH 的 provider 分组目录转换为 OpenAI models 响应中的 data 项。 */

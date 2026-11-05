@@ -1,5 +1,7 @@
 import {prepareProfileMigration, commitProfileMigration, migrationReceipt, restoreProfileMigration} from './profile-migration.mjs';
 import {checkPluginInheritance} from './plugin-inheritance.mjs';
+import {withSystemProxy} from './system-proxy.mjs';
+import {migrateJetHubManifest, JETHUB_PACKAGE, JETHUB_LEGACY_PACKAGE, isJetHubPackage} from './jethub-profile.mjs';
 import {EventEmitter} from 'node:events';
 import {readFile, writeFile, mkdir, rename, rm, lstat, symlink} from 'node:fs/promises';
 import {spawn, execFile} from 'node:child_process';
@@ -69,16 +71,32 @@ export async function prepareProfile(home, runtime, {beforeCommit} = {}) {
   try {
     try { original = await readFile(manifestFile, 'utf8'); }
     catch (error) { if (error.code !== 'ENOENT') throw error; }
-    const manifest = original === null ? structuredClone(bundle.profile) : JSON.parse(original);
+    let manifest = original === null ? structuredClone(bundle.profile) : JSON.parse(original);
     if (!Array.isArray(manifest.dsh?.profile?.bundles)) throw Error('已有 DSH 配置无法识别，已保留原文件。');
     manifest.dependencies ??= {};
+    // 旧包名与新包名属于同一插件；升级时统一身份，保留账号与 Cordis 行 id。
+    const migrateJetHub = bundle.plugins.includes(JETHUB_PACKAGE) && (original === null ||
+      Object.keys(manifest.dependencies).some(isJetHubPackage) || manifest.dsh.profile.bundles.some(isJetHubPackage));
+    if (migrateJetHub) manifest = migrateJetHubManifest(manifest, modules);
     profileMigration = await prepareProfileMigration(profile, modules);
     const names = bundle.plugins.filter(name => original === null || name in manifest.dependencies || manifest.dsh.profile.bundles.includes(name));
     for (const name of names) await checkPluginInheritance(name,
       path.join(modules, name), path.join(profile, 'node_modules', name));
+    if (migrateJetHub) await checkPluginInheritance(JETHUB_PACKAGE,
+      path.join(modules, JETHUB_PACKAGE), path.join(profile, 'node_modules', JETHUB_LEGACY_PACKAGE));
     backup = path.join(home, 'backups', `mac-app-${bundle.version}-${randomUUID()}`);
     await mkdir(backup, {recursive: true, mode: 0o700});
     if (original !== null) await writeFile(path.join(backup, 'package.json'), original, {mode: 0o600});
+    if (migrateJetHub) {
+      const target = path.join(profile, 'node_modules', JETHUB_LEGACY_PACKAGE);
+      const saved = path.join(backup, 'modules', JETHUB_LEGACY_PACKAGE);
+      try {
+        await lstat(target);
+        await mkdir(path.dirname(saved), {recursive: true});
+        await rename(target, saved);
+        swaps.push({target, saved, existed: true});
+      } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    }
     for (const name of names) {
       const source = path.join(modules, name), target = path.join(profile, 'node_modules', name);
       await readFile(path.join(source, 'package.json'));
@@ -316,7 +334,7 @@ export class Backend extends EventEmitter {
 }
 
 export function backendEnvironment(node, home, platform = process.platform, source = process.env) {
-  const env = {...source, DSH_HOME: home};
+  const env = {...withSystemProxy(source, platform), DSH_HOME: home};
   delete env.ELECTRON_RUN_AS_NODE;
   if (platform === 'win32') {
     // Windows environment keys are case-insensitive; duplicate PATH/Path drops entries in spawn.

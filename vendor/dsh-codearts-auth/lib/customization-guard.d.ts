@@ -11,5 +11,11 @@ export declare function inheritCustomizationContract(installedDir: string, candi
     ok: boolean;
     family: string;
     requiredProviders: string[];
+    reviewedFrom: string;
+} | {
+    ok: boolean;
+    family: string;
+    requiredProviders: string[];
+    reviewedFrom?: undefined;
 };
 //# sourceMappingURL=customization-guard.d.ts.map

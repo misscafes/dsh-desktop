@@ -19,3 +19,9 @@
 ## JetHub 桌面增量跟进（2026-10-21）
 
 固定上游 `iJetLi/deepseek-harness-codearts@78dc506cf42bb1821a20cd4378f2b81cd8de8ded`（`dsh-providers-hub@0.2.1-rc.2`），在既有增强代码上三方合并；桌面核心保持 `0.2.1-alpha.4`，不替换其它插件或用户数据。兼容性和保留策略见 `vendor/dsh-codearts-auth/docs/desktop-local-integration.md`。源文件中的个人账号示例已脱敏；未发布本地私有备份与验证夹具。
+
+## 2026-11-05 桌面维护
+
+Jet Hub 更新至 `iJetLi/deepseek-harness-codearts@104f0fc3dd1e07df21fbc18ecba49b0a857d23d4`，以已有定制基础三方合并，保留原渠道、ChatGPT、账号轮换及手机边界。复核说明位于 `vendor/dsh-codearts-auth/docs/desktop-20261105-integration.md`。
+
+Codex 订阅登录桥来源为 [ccch1mneyyy/dsh-Go](https://github.com/ccch1mneyyy/dsh-Go)，固定提交 `aa0daddb25b107ab47eeb78d8facc136af0e4aa9`，仅采用文件头明确声明 MIT 的 auth bridge 与对应测试，来源记录见 `desktop-chatgpt/vendor/dsh-go-auth/NOTICE.txt`。请求与授权由已有固定 DSH 引擎负责。原会员授权方式同时参考 [OpenAI 官方接入说明](https://developers.openai.com/siwc/token-sharing-open-source)。

@@ -86,21 +86,21 @@ describe('sanitizePanelEntry', () => {
     expect(sanitizePanelEntry('settings')).toBe('settings')
   })
 
-  it('缺键 / null / 脏值一律回默认「仅侧栏」', () => {
+  it('缺键 / null / 脏值一律回桌面默认「仅设置页」', () => {
     // ⚠️ 方向不能反：丢键 / 脏值都必须回到**默认仅侧栏**。反过来会让任何一次
     // 读取失败都变成「侧栏入口被静默藏起来」，而用户从来没改过它。
-    expect(sanitizePanelEntry(undefined)).toBe('sidebar')
-    expect(sanitizePanelEntry(null)).toBe('sidebar')
-    expect(sanitizePanelEntry('off')).toBe('sidebar')
-    expect(sanitizePanelEntry(0)).toBe('sidebar')
-    expect(sanitizePanelEntry({})).toBe('sidebar')
+    expect(sanitizePanelEntry(undefined)).toBe('settings')
+    expect(sanitizePanelEntry(null)).toBe('settings')
+    expect(sanitizePanelEntry('off')).toBe('settings')
+    expect(sanitizePanelEntry(0)).toBe('settings')
+    expect(sanitizePanelEntry({})).toBe('settings')
   })
 
   it('⚠️ 老布尔迁移：只有明确 false 才是「仅设置页」', () => {
     expect(sanitizePanelEntry(undefined, false)).toBe('settings')
     expect(sanitizePanelEntry(undefined, true)).toBe('sidebar')
     // 脏值不当 false 用：字符串 'false' 是脏数据，不是用户意图。
-    expect(sanitizePanelEntry(undefined, 'false')).toBe('sidebar')
+    expect(sanitizePanelEntry(undefined, 'false')).toBe('settings')
     // 新键优先：两个都在时以新枚举为准。
     expect(sanitizePanelEntry('settings', true)).toBe('settings')
   })
@@ -170,14 +170,14 @@ describe('后端选路', () => {
     expect(store.load()?.panelEntry).toBe('settings')
   })
 
-  it('⚠️ 老契约后端：没有新键也没有旧键时经 schema 回默认「仅侧栏」', () => {
+  it('⚠️ 老契约后端：没有新键也没有旧键时经 schema 回默认「仅设置页」', () => {
     const raw: unknown = { accounts: [], disabledModels: {} }
     const store = createJetHubStore(makeCtx({
       register: () => ({ get: () => storeSchema(raw), replace: async () => {} }),
       describe: () => [],
     }))
 
-    expect(store.load()?.panelEntry).toBe('sidebar')
+    expect(store.load()?.panelEntry).toBe('settings')
   })
 })
 
@@ -216,7 +216,7 @@ describe('老契约后端（SettingsStore）', () => {
       // save 未携带会话负载均衡开关 → 写出启用（缺省），读回同值。
       sessionBalanceEnabled: true,
       // save 未携带面板入口 → 写出「仅侧栏」（缺省），读回同值。
-      panelEntry: 'sidebar',
+      panelEntry: 'settings',
       // save 未携带顺序 → 写出空数组（未自定义），读回同值。
       providerOrder: [],
       // 关闭意图缺省空表（没有任何供应商被关闭）：读回同值（Gitee IKP8OF）。
@@ -383,8 +383,8 @@ describe('文件后端（FileStore）', () => {
       nativeWebSearchEnabled: true,
       // 会话负载均衡开关缺省启用 —— 与 2026-10-30 要求的方向一致
       sessionBalanceEnabled: true,
-      // 面板入口缺省「仅侧栏」—— 与升级前行为一致
-      panelEntry: 'sidebar',
+      // 面板入口缺省「仅设置页」—— 与升级前行为一致
+      panelEntry: 'settings',
       // 顺序缺省空数组（未自定义）—— 与升级前行为一致
       providerOrder: [],
       // 关闭意图缺省空表（没有任何供应商被关闭）：读回同值（Gitee IKP8OF）。
@@ -517,24 +517,24 @@ describe('文件后端（FileStore）', () => {
     expect(reader.load()?.panelEntry).toBe('settings')
   })
 
-  it('老文档没有面板入口键时缺省为「仅侧栏」', () => {
+  it('老文档没有面板入口键时缺省为「仅设置页」', () => {
     mkdirSync(join(dir, 'jet-hub'), { recursive: true })
     writeFileSync(
       join(dir, 'jet-hub', 'state.json'),
       JSON.stringify({ accounts: [], disabledModels: {} }),
       'utf-8',
     )
-    expect(createJetHubStore(makeCtx(undefined)).load()?.panelEntry).toBe('sidebar')
+    expect(createJetHubStore(makeCtx(undefined)).load()?.panelEntry).toBe('settings')
   })
 
-  it('面板入口落盘时脏值被归一化为「仅侧栏」', () => {
+  it('面板入口落盘时脏值被归一化为「仅设置页」', () => {
     mkdirSync(join(dir, 'jet-hub'), { recursive: true })
     writeFileSync(
       join(dir, 'jet-hub', 'state.json'),
       JSON.stringify({ accounts: [], disabledModels: {}, panelEntry: 'off' }),
       'utf-8',
     )
-    expect(createJetHubStore(makeCtx(undefined)).load()?.panelEntry).toBe('sidebar')
+    expect(createJetHubStore(makeCtx(undefined)).load()?.panelEntry).toBe('settings')
   })
 
   it('⚠️ 老文档只有布尔键时跨实例读回映射成枚举', () => {
@@ -570,7 +570,7 @@ describe('文件后端（FileStore）', () => {
     const writer = createJetHubStore(makeCtx(undefined))
     await writer.save({ accounts: [], disabledModels: {}, panelEntry: 'GARBAGE' as never })
     const raw = JSON.parse(readFileSync(join(dir, 'jet-hub', 'state.json'), 'utf-8')) as Record<string, unknown>
-    expect(raw.panelEntry, '脏值被原样写进了 state.json ⇒ 写侧缺 sanitize').toBe('sidebar')
+    expect(raw.panelEntry, '脏值被原样写进了 state.json ⇒ 写侧缺 sanitize').toBe('settings')
   })
 
   /**
@@ -828,7 +828,7 @@ describe('文件后端（FileStore）', () => {
       // 会话负载均衡开关同理：写盘时缺省即启用，读回同值。
       sessionBalanceEnabled: true,
       // 面板入口同理：写盘时缺省即「仅侧栏」，读回同值。
-      panelEntry: 'sidebar',
+      panelEntry: 'settings',
       // 顺序缺省空数组（未自定义）：读回同值。
       providerOrder: [],
       // 关闭意图缺省空表（没有任何供应商被关闭）：读回同值（Gitee IKP8OF）。
@@ -859,6 +859,30 @@ describe('归一化', () => {
     expect(accounts[0]!.enabled).toBe(true)
     expect(accounts[0]!.refreshable).toBe(true)
     expect(accounts[0]!.nickname).toBe('a')
+  })
+
+  /**
+   * ★ 封禁标记的取值闸（Gitee issue IKS2MV）。
+   *
+   * 备份文件是**用户可编辑**的输入，而封禁是**账号级**、且不自动过期：
+   * 一条脏的 `policyBlockedAtMs`（`'x'` / `1e308`）若被当成真值，
+   * 那个账号会**永久**从选号里消失，用户只能靠手动重置捞回来 ——
+   * 比逐模型的限流脏值更狠（那种最多只挡一个模型）。
+   */
+  it('★ 封禁标记的脏值必须被丢弃（账号级 + 不自动过期，容错窗口为零）', () => {
+    const base = { id: 'a', provider: 'buddy', credentialRef: 'BUDDY_ACCOUNT_A' }
+    for (const bad of ['not-a-number', null, -1, 0, Number.NaN, 1e308, Number.POSITIVE_INFINITY]) {
+      const entry = sanitizeAccounts([{ ...base, policyBlockedAtMs: bad }])[0]!
+      expect(entry.policyBlockedAtMs, String(bad)).toBeUndefined()
+    }
+    const good = sanitizeAccounts([{ ...base, policyBlockedAtMs: 1_700_000_000_000 }])[0]!
+    expect(good.policyBlockedAtMs).toBe(1_700_000_000_000)
+    // 报文只保留非空字符串并截断（展示用；不参与任何判据）
+    expect(sanitizeAccounts([{ ...base, policyBlockedMessage: '  ' }])[0]!.policyBlockedMessage).toBeUndefined()
+    expect(sanitizeAccounts([{ ...base, policyBlockedMessage: 'x'.repeat(500) }])[0]!.policyBlockedMessage)
+      .toHaveLength(200)
+    expect(sanitizeAccounts([{ ...base, policyBlockedMessage: '账号存在异常行为' }])[0]!.policyBlockedMessage)
+      .toBe('账号存在异常行为')
   })
 
   it('文件文档里非对象内容按空处理', () => {

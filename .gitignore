@@ -11,6 +11,8 @@ desktop-runtime/.install-lock/
 *.p12
 *.apk
 *.aab
+*.pkg
+*.dmg
 *.tar
 my-qq*.json
 **/credentials*

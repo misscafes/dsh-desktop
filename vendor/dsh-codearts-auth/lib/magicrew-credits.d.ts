@@ -24,6 +24,29 @@
 import { type MagicrewProduct } from './magicrew-product.js';
 import type { CreditBalance } from './credits.js';
 /**
+ * Magicrew 业务 API 的请求头 —— **全仓唯一一份**。
+ *
+ * ⚠️ 导出（2026-11-01）：签到（`magicrew-checkin.ts`）与积分走同一个 Go 服务、
+ * 同一套网关校验。此前 `magicrew-auth.ts` 与本文各有一份私有实现
+ *（`magicrewHeaders` / `headersOf`），形状已经**几乎**一样但 UA 取值不同 ——
+ * 再复制第三份就是「一份语义三处实现」。签到侧复用本函数。
+ *
+ * ⚠️ `origin` 必带：网关会看 Origin，缺了偶发 403。
+ * ⚠️ `organization-code` 只在非空时附 —— 国际站缺了会被上游拒绝，所以**调用方**
+ * 必须保证 `organizationCode` 真的取到了（不是这里补空串）。
+ *
+ * ⚠️ **形态以实测为准，别抄「HTTP 500 + 裸文本」**（2026-11-01 二审纠错）：那是
+ * **聊天网关**（`/v1/*`）的旧观察且至今未定（见 `magicrew-product.ts` 的
+ * `needsOrgOnGateway` 说明）；**业务 API**（本文件与签到共用的 Go 服务）缺组织码时
+ * 回的是 `{"code":2182,"message":"用户所在组织不存在"}` —— 见
+ * `src/magicrew-checkin.ts` 的实测记录，两处不得写成同一种形态。
+ */
+export declare function magicrewApiHeaders(params: {
+    jwt: string;
+    organizationCode: string;
+    product: MagicrewProduct;
+}): Record<string, string>;
+/**
  * 解析 `2026-11-27 13:47:42`（**无时区**）为毫秒时间戳，按 UTC+8 解释。
  *
  * 解析不出来返回 `undefined`（**不编造**）。
@@ -89,7 +112,7 @@ export declare function fetchMagicrewModelPoints(params: {
  * {@link UNUSABLE}」⇒ 该渠道在聚合候选表里**静默消失**（本仓库复发过三次的形态）。
  *
  * - 有余额 + 有到期批次 ⇒ 最早那个批次的时刻（`rankCandidates` 据此排先后）
- * - 有余额但无到期批次 ⇒ {@link NEVER}（**长期积分**：排最后但**不剔除**）
+ * - 有余额但无到期批次 ⇒ {@link NEVER}（**永久积分**：排最后但**不剔除**）
  * - 余额为 0 / 取数失败（`fetchMagicrewBalance` 返回 `undefined`） ⇒ {@link UNUSABLE}（**剔除**）
  *
  * ⚠️ 「有余额但无到期时间」必须是 `NEVER` 而**不是** `UNUSABLE`：

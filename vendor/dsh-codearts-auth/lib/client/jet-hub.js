@@ -32,16 +32,16 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// plugin-src/client/index.js
-var index_exports = {};
-__export(index_exports, {
+// vendor/dsh-codearts-auth/plugin-src/client/index.js
+var client_exports = {};
+__export(client_exports, {
   apply: () => apply,
   inject: () => inject,
   name: () => name
 });
-module.exports = __toCommonJS(index_exports);
+module.exports = __toCommonJS(client_exports);
 
-// plugin-src/management-rpc.mjs
+// vendor/dsh-codearts-auth/plugin-src/management-rpc.mjs
 var ENDPOINT = "manage";
 function callManagementRpc(connection, channel, method, payload, signal) {
   return connection.rpc.call(channel, ENDPOINT, { method, payload }, signal);
@@ -56,7 +56,7 @@ function unwrapRpcResult(result) {
   return result;
 }
 
-// plugin-src/client/jet-hub-styles.js
+// vendor/dsh-codearts-auth/plugin-src/client/jet-hub-styles.js
 var STYLES = `
 .dim-jh-page { display: flex; flex-direction: column; height: 100%; }
 /* 「侧栏」面板的宿主（main 槽）：中央面板自己不留白，只给顶部一条 28px 的
@@ -121,6 +121,13 @@ var STYLES = `
 .dim-jh-providerIcon { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 9px; box-shadow: 0 1px 3px rgb(31 35 41 / 7%); overflow: hidden; }
 .dim-jh-providerIcon img { display: block; width: 20px; height: 20px; border-radius: 2px; }
 .dim-jh-providerIcon.codearts { background: white; }
+/* MonkeyCode（国内站 / 国际站）：官方 logo 是透明底 + 黑绿猴子头像 ⇒ 白底容器。
+   ⚠️ 两个站点共用同一个 logoClass 之外的图标素材，但 logoClass 各自是
+      monkeycode / monkeycode —— 国际站的 logoClass 也是 monkeycode（见 registry），
+      故这里一条规则覆盖两行。 */
+.dim-jh-providerIcon.monkeycode { background: white; }
+/* 百智云：官方 favicon 是透明底 + 深灰单色图形（已去掉 dark-mode 变白）⇒ 白底容器。 */
+.dim-jh-providerIcon.baizhi { background: white; }
 .dim-jh-providerIcon.buddy { background: white; }
 .dim-jh-providerIcon.workbuddy { background: white; }
 .dim-jh-providerIcon.lobsterai { background: white; }
@@ -211,6 +218,26 @@ var STYLES = `
 .dim-jh-chatgptNotice { color: #b45309; }
 .dim-jh-chatgptWelcome { position: fixed; inset: 0; z-index: 1100; background: #0006; display: grid; place-items: center; padding: 20px; }
 .dim-jh-chatgptWelcome > div { max-width: 440px; width: 100%; box-sizing: border-box; }
+.dim-jh-codex { width: 100%; box-sizing: border-box; }
+.dim-jh-codex > .dim-jh-chatgptIntro { margin: 0 0 20px; }
+.dim-jh-codexConnection { padding: 18px; margin-bottom: 26px; }
+.dim-jh-codexIdentity { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.dim-jh-codexMark { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: 12px; background: var(--dsw-alias-bg-layer-2, #f3f5f7); color: var(--dsw-alias-label-primary, #20242b); font: 650 22px/1 system-ui, sans-serif; }
+.dim-jh-codexStatus { display: flex; align-items: center; gap: 7px; font-size: 14px; }
+.dim-jh-codexStatus[data-connected="true"]::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--dsw-alias-success-primary, #19966b); }
+.dim-jh-codexIdentity p { margin: 3px 0 0; }
+.dim-jh-codex .dim-jh-chatgptActions { margin: 16px 0 0; }
+.dim-jh-codex .dim-jh-btn { min-height: 34px; font-size: 12px; }
+.dim-jh-codexCount { flex-shrink: 0; border-radius: 20px; padding: 3px 9px; font-size: 12px; color: var(--dsw-alias-label-secondary, #646a73); background: var(--dsw-alias-bg-layer-2, #f3f5f7); }
+.dim-jh-codexCatalog > .dim-jh-chatgptHint { margin: 6px 0 14px; }
+.dim-jh-codexSearch { width: 100%; box-sizing: border-box; min-height: 38px; padding: 8px 12px; margin: 0 0 14px; border: 1px solid var(--dsw-alias-border-default, #e5e5e5); border-radius: 9px; color: var(--dsw-alias-label-primary, #20242b); background: var(--dsw-alias-bg-layer-3, #fff); font: inherit; font-size: 13px; }
+.dim-jh-codexSearch:focus-visible { outline: 2px solid var(--dsw-alias-brand-primary, #1677ff); outline-offset: 2px; }
+.dim-jh-codexGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+.dim-jh-codexModel { display: flex; flex-direction: column; gap: 7px; min-width: 0; padding: 14px 16px; border: 1px solid var(--dsw-alias-border-l2, #eef0f3); border-radius: 11px; background: var(--dsw-alias-bg-layer-3, #fff); }
+.dim-jh-codexModel strong { font-size: 13px; line-height: 20px; color: var(--dsw-alias-label-primary, #20242b); overflow-wrap: anywhere; }
+.dim-jh-codexModel code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 11px/18px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--dsw-alias-label-secondary, #646a73); user-select: text; }
+.dim-jh-codexEmpty { display: grid; justify-items: center; gap: 12px; padding: 28px; border: 1px dashed var(--dsw-alias-border-default, #e5e5e5); border-radius: 11px; color: var(--dsw-alias-label-secondary, #646a73); font-size: 13px; }
+.dim-jh-codexCatalog > .dim-jh-codexFootnote { margin: 12px 0 24px; font-size: 12px; }
 .dim-jh-empty { text-align: center; padding: 40px; color: var(--dsw-alias-label-tertiary, #888); }
 .dim-jh-empty p { margin: 8px 0; font-size: 14px; }
 
@@ -339,6 +366,8 @@ var STYLES = `
 .dim-jh-creditPoolSep { font-size: 11px; color: var(--dsw-alias-label-tertiary, #8f959e); }
 /* 已失效额度：弱化的橙色提示，与主数值的蓝色明确区分 */
 .dim-jh-creditExpired { font-size: 11px; color: #b45309; }
+/* 用量（本月消耗）—— 三审 F🟡-8：与「已失效额度」同级但中性色，不得混成橙色警告 */
+.dim-jh-creditUsage { font-size: 11px; color: #6b7280; }
 /* 独立池（AStudio 星火积分等）：与上方三档分桶并列的事实标注。
    用中性灰而**不是** warn 橙 —— 它不是「快过期」的告警，而是「这笔钱不能混用」
    的说明；用橙色会与临期档抢注意力。 */
@@ -347,6 +376,16 @@ var STYLES = `
 /* 限额重置徽章行 */
 .dim-jh-rateLimits { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .dim-jh-rateLimitsLabel { font-size: 12px; line-height: 18px; color: var(--dsw-alias-label-tertiary, #8f959e); }
+
+/* 账号级封禁横幅（Gitee issue IKS2MV，2026-11-01）。
+   ⚠️ 必须与「限流」视觉上**明显不同**：限流是黄字徽章（.dim-jh-ttlBadge，会自己好），
+   封禁是**整块红色**底纹（整个账号不可用、只能重新登录）—— 用户报障的核心就是
+   「8 个被封的号在面板上和好号长得一样」。
+   ⚠️ 危险色用设计变量而不是硬编码红，深色模式下才不刺眼。 */
+.dim-jh-policyBlocked { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; margin-top: 8px; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--dsw-alias-border-danger, #f3b1ad); background: var(--dsw-alias-bg-danger, #fdecea); }
+.dim-jh-policyBlockedLabel { font-size: 12px; line-height: 18px; font-weight: 600; color: var(--dsw-alias-label-danger, #b3261e); }
+.dim-jh-policyBlockedMsg { font-size: 11px; line-height: 18px; color: var(--dsw-alias-label-danger, #b3261e); opacity: 0.85; }
+.dim-jh-policyBlockedHint { flex-basis: 100%; font-size: 11px; line-height: 16px; color: var(--dsw-alias-label-tertiary, #8f959e); }
 
 /* 操作按钮：横向一行，右对齐。
    ⚠️ flex-wrap: nowrap 是**有意**的（2026-10-26 之前就是），理由是账号卡片
@@ -431,6 +470,32 @@ var STYLES = `
 .dim-jh-btn[data-kind="danger"] { color: #d93025; border-color: color-mix(in srgb, #d93025 35%, var(--dsw-alias-border-l2, #dfe1e5)); }
 .dim-jh-btn[data-kind="danger"]:hover:not(:disabled) { color: #b3261e; border-color: #d93025; background: rgb(217 48 37 / 6%); }
 .dim-jh-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* 「一键签到 ▾」的展开配置面板（用户 2026-10-18 要求：每天两次定时签到，
+   配置入口就放在原一键签到按钮上）。
+   ⚠️ 用**绝对定位的下拉卡**而不是居中模态框：它是按钮的附属配置，不是独立任务，
+   模态框会把用户的注意力与页面滚动静止，而这里改完还要顺手点旁边的「一键签到」。
+   ⚠️ 必须 position: relative 挂在容器上（.dim-jh-checkinWrap），否则下拉会以
+   最近的非 static 祖先定位 —— 实测会跑到页头外面去。 */
+.dim-jh-checkinWrap { position: relative; display: inline-flex; align-items: center; }
+.dim-jh-checkinMain { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.dim-jh-checkinCaret { padding: 4px 7px; border-left: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: -1px; }
+.dim-jh-checkinPanel { position: absolute; top: calc(100% + 6px); left: 0; z-index: 40; width: 300px; padding: 12px; border: 1px solid var(--dsw-alias-border-l2, #dfe1e5); border-radius: 10px; background: var(--dsw-alias-bg-layer-3, #fff); box-shadow: 0 8px 24px rgb(15 23 42 / 12%); display: flex; flex-direction: column; gap: 10px; }
+.dim-jh-checkinPanelTitle { font-size: 12px; line-height: 18px; font-weight: 600; color: var(--dsw-alias-label-primary, #1f2329); }
+.dim-jh-checkinRow { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 18px; color: var(--dsw-alias-label-secondary, #4e5969); }
+.dim-jh-checkinRow > label { flex: none; }
+/* 开关 + 紧邻文字的可点区（用户 2026-10-31：「按钮范围有点大啊」）。
+   ⚠️ 只包开关和文字、**不包整行**：label 的语义是「点任意位置都切换 input」，
+   包整行会让行尾空白也变成命中区。inline-flex 让可点区贴合内容。 */
+.dim-jh-checkinToggle { flex: none; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.dim-jh-checkinTime { width: 92px; padding: 4px 8px; border: 1px solid var(--dsw-alias-border-l2, #dfe1e5); border-radius: 6px; background: var(--dsw-alias-bg-layer-1, #fff); color: var(--dsw-alias-label-primary, #1f2329); font: inherit; font-size: 12px; }
+.dim-jh-checkinTime:focus { outline: none; border-color: #1677ff; box-shadow: 0 0 0 2px color-mix(in srgb, #1677ff 20%, transparent); }
+.dim-jh-checkinHint { font-size: 11px; line-height: 1.6; color: var(--dsw-alias-label-tertiary, #8f959e); }
+.dim-jh-checkinStatus { margin-top: 2px; padding: 6px 8px; border-radius: 6px; background: var(--dsw-alias-bg-layer-2, #f7f8fa); font-size: 11px; line-height: 1.6; color: var(--dsw-alias-label-secondary, #4e5969); }
+/* 「还没读回来」的骨架：**固定高度、无文字**（2026-11-01 审计 P3-1）。
+   旧实现渲染一句「状态读取中…」，RPC 回来后替换成真值 ⇒ 用户看到文字闪一下
+   （原始报障）。骨架保持同样高度，替换时不产生跳动。 */
+.dim-jh-checkinStatusLoading { min-height: 34px; background: var(--dsw-alias-bg-layer-2, #f7f8fa); opacity: 0.6; }
 
 
 /* 纯图标按钮（如「领取新手任务」的礼物图标）。
@@ -1876,10 +1941,10 @@ function ensureJetHubStyles() {
   return true;
 }
 
-// plugin-src/client/jet-hub.js
-var React9 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/jet-hub.js
+var React12 = __toESM(require("react"), 1);
 
-// plugin-src/client/autoclaw-login.js
+// vendor/dsh-codearts-auth/plugin-src/client/autoclaw-login.js
 var React = __toESM(require("react"), 1);
 function AutoclawLogin({ rpcCall, onClose, onSuccess }) {
   const phoneRef = React.useRef(null);
@@ -1934,43 +1999,43 @@ function AutoclawLogin({ rpcCall, onClose, onSuccess }) {
       if (live.current) setBusy(false);
     }
   };
-  const h3 = React.createElement;
-  return h3(
+  const h4 = React.createElement;
+  return h4(
     "div",
     { className: "dim-jh-modalOverlay dim-jh-modalOverlay--top", style: { padding: 12, boxSizing: "border-box" }, onClick: (e) => {
       if (e.target === e.currentTarget && !busy) onClose();
     } },
-    h3(
+    h4(
       "section",
       { className: "dim-jh-modal", role: "dialog", "aria-modal": true, "aria-label": "登录 AutoClaw", style: { width: "min(440px, 100%)", boxSizing: "border-box", maxHeight: "calc(100dvh - 24px)", overflowY: "auto" } },
-      h3("div", { className: "dim-jh-modalHead" }, h3("strong", null, "登录 AutoClaw（澳龙）"), h3("button", { className: "dim-jh-btn", style: { minHeight: 44 }, disabled: busy, onClick: onClose, "aria-label": "关闭登录" }, "关闭")),
-      h3(
+      h4("div", { className: "dim-jh-modalHead" }, h4("strong", null, "登录 AutoClaw（澳龙）"), h4("button", { className: "dim-jh-btn", style: { minHeight: 44 }, disabled: busy, onClick: onClose, "aria-label": "关闭登录" }, "关闭")),
+      h4(
         "form",
         { className: "dim-jh-modalBody", onSubmit: (e) => {
           e.preventDefault();
           void run(true);
         }, style: { padding: "20px 0 0", display: "grid", gap: 16 } },
-        h3("p", { className: "dim-jh-hint" }, "使用你自己的智谱 AutoClaw 账号。登录后读取该账号的模型和积分，手机可独立使用。"),
-        h3("label", { style: { display: "grid", gap: 8 } }, "手机号", h3("input", { ref: phoneRef, type: "tel", inputMode: "tel", autoComplete: "tel-national", placeholder: "输入手机号", maxLength: 11, disabled: busy, required: true, style: { width: "100%", boxSizing: "border-box", padding: 12, fontSize: 16, border: "1px solid #ddd", borderRadius: 10 }, onChange: () => setSent(false) })),
-        h3(
+        h4("p", { className: "dim-jh-hint" }, "使用你自己的智谱 AutoClaw 账号。登录后读取该账号的模型和积分，手机可独立使用。"),
+        h4("label", { style: { display: "grid", gap: 8 } }, "手机号", h4("input", { ref: phoneRef, type: "tel", inputMode: "tel", autoComplete: "tel-national", placeholder: "输入手机号", maxLength: 11, disabled: busy, required: true, style: { width: "100%", boxSizing: "border-box", padding: 12, fontSize: 16, border: "1px solid #ddd", borderRadius: 10 }, onChange: () => setSent(false) })),
+        h4(
           "div",
           { style: { display: "flex", gap: 8, flexWrap: "wrap" } },
-          h3("input", { ref: codeRef, type: "text", inputMode: "numeric", autoComplete: "one-time-code", "aria-label": "短信验证码", placeholder: "短信验证码", maxLength: 8, disabled: busy, style: { flex: "1 1 120px", minWidth: 0, padding: 12, fontSize: 16, border: "1px solid #ddd", borderRadius: 10 } }),
-          h3("button", { type: "button", className: "dim-jh-btn", style: { minHeight: 44 }, disabled: busy || seconds > 0, onClick: () => void run(false) }, seconds ? `${seconds} 秒后重发` : "获取验证码")
+          h4("input", { ref: codeRef, type: "text", inputMode: "numeric", autoComplete: "one-time-code", "aria-label": "短信验证码", placeholder: "短信验证码", maxLength: 8, disabled: busy, style: { flex: "1 1 120px", minWidth: 0, padding: 12, fontSize: 16, border: "1px solid #ddd", borderRadius: 10 } }),
+          h4("button", { type: "button", className: "dim-jh-btn", style: { minHeight: 44 }, disabled: busy || seconds > 0, onClick: () => void run(false) }, seconds ? `${seconds} 秒后重发` : "获取验证码")
         ),
-        sent ? h3("p", { role: "status", className: "dim-jh-hint" }, "验证码已发送，请查看短信。") : null,
-        error ? h3("p", { role: "alert", style: { color: "#c33", overflowWrap: "anywhere" } }, error) : null,
-        h3("button", { type: "submit", className: "dim-jh-btn", style: { minHeight: 44 }, "data-kind": "primary", disabled: busy || !sent }, busy ? "处理中…" : "登录并添加账号"),
-        h3("p", { className: "dim-jh-hint" }, "继续登录表示你同意 AutoClaw 的 ", h3("a", { href: "https://autoglm.aminer.cn/web/md2html/index.html?md=autoclaw_agreement&favicon=autoglm", target: "_blank", rel: "noopener noreferrer" }, "用户协议"), " 和 ", h3("a", { href: "https://autoglm.aminer.cn/web/md2html/index.html?md=autoclaw_privacy&favicon=autoglm", target: "_blank", rel: "noopener noreferrer" }, "隐私政策"), "。")
+        sent ? h4("p", { role: "status", className: "dim-jh-hint" }, "验证码已发送，请查看短信。") : null,
+        error ? h4("p", { role: "alert", style: { color: "#c33", overflowWrap: "anywhere" } }, error) : null,
+        h4("button", { type: "submit", className: "dim-jh-btn", style: { minHeight: 44 }, "data-kind": "primary", disabled: busy || !sent }, busy ? "处理中…" : "登录并添加账号"),
+        h4("p", { className: "dim-jh-hint" }, "继续登录表示你同意 AutoClaw 的 ", h4("a", { href: "https://autoglm.aminer.cn/web/md2html/index.html?md=autoclaw_agreement&favicon=autoglm", target: "_blank", rel: "noopener noreferrer" }, "用户协议"), " 和 ", h4("a", { href: "https://autoglm.aminer.cn/web/md2html/index.html?md=autoclaw_privacy&favicon=autoglm", target: "_blank", rel: "noopener noreferrer" }, "隐私政策"), "。")
       )
     )
   );
 }
 
-// plugin-src/client/zcode-sources.js
+// vendor/dsh-codearts-auth/plugin-src/client/zcode-sources.js
 var React3 = __toESM(require("react"), 1);
 
-// plugin-src/client/zcode-reset.js
+// vendor/dsh-codearts-auth/plugin-src/client/zcode-reset.js
 var React2 = __toESM(require("react"), 1);
 var names = { FIVE_HOUR: "5 小时", WEEK: "每周" };
 function ZcodeResetPanel({ account, sources, rpcCall, onChanged, embedded = false }) {
@@ -2119,7 +2184,7 @@ function ZcodeResetPanel({ account, sources, rpcCall, onChanged, embedded = fals
   );
 }
 
-// plugin-src/client/zcode-sources.js
+// vendor/dsh-codearts-auth/plugin-src/client/zcode-sources.js
 function ZcodeSourcePanel({ account, rpcCall, onChanged }) {
   const [snapshot, setSnapshot] = React3.useState(null);
   const [busy, setBusy] = React3.useState(false);
@@ -2194,14 +2259,20 @@ function ZcodeSourcePanel({ account, rpcCall, onChanged }) {
   );
 }
 
-// plugin-src/client/chatgpt-plan-panel.js
-var React4 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/chatgpt-plan-panel.js
+var React5 = __toESM(require("react"), 1);
 
-// plugin-src/client/chatgpt-plan-rpc.js
+// vendor/dsh-codearts-auth/plugin-src/client/chatgpt-plan-rpc.js
 function createChatGptCall(connection) {
-  return async (action, extra = {}, signal) => unwrapRpcResult(
-    await connection.rpc.call("/phone-chatgpt", "manage", { ...extra, action }, signal)
-  );
+  return async (action, extra = {}, signal) => {
+    const codex = action.startsWith("codex.");
+    return unwrapRpcResult(await connection.rpc.call(
+      codex ? "/desktop-codex" : "/phone-chatgpt",
+      "manage",
+      { ...extra, action: codex ? action.slice(6) : action },
+      signal
+    ));
+  };
 }
 function chatGptAuthorizationUrl(status) {
   if (status?.attempt?.phase !== "waiting-browser") return null;
@@ -2213,20 +2284,186 @@ function chatGptAuthorizationUrl(status) {
   }
 }
 
-// plugin-src/client/chatgpt-plan-panel.js
+// vendor/dsh-codearts-auth/plugin-src/client/codex-plan-panel.js
+var React4 = __toESM(require("react"), 1);
 var h = React4.createElement;
-var pending = (state) => ["waiting-browser", "exchanging"].includes(state?.attempt?.phase);
-function ChatGptPlanPanel({ chatGptCall, navigate = (url) => window.location.assign(url) }) {
+var terminal = /* @__PURE__ */ new Set(["done", "failed", "cancelled"]);
+function codexAuthorizationUrl(attempt) {
+  try {
+    const url = new URL(attempt?.url);
+    return url.origin === "https://auth.openai.com" && !url.username && !url.password && ["/oauth/authorize", "/api/accounts/authorize", "/codex/device"].includes(url.pathname) && !url.hash ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+function CodexPlanPanel({ chatGptCall, navigate = (url) => window.location.assign(url) }) {
   const [state, setState] = React4.useState(null);
-  const [notice, setNotice] = React4.useState(null);
+  const [error, setError] = React4.useState(null);
   const [busy, setBusy] = React4.useState(false);
-  const [catalog, setCatalog] = React4.useState(null);
-  const [catalogError, setCatalogError] = React4.useState(null);
-  const [refresh, setRefresh] = React4.useState(0);
+  const [answer, setAnswer] = React4.useState("");
+  const [models, setModels] = React4.useState(null);
+  const [query, setQuery] = React4.useState("");
   const life = React4.useRef(null);
   const acting = React4.useRef(false);
-  const revision = React4.useRef(0);
+  const openNext = React4.useRef(false);
+  const navigation = React4.useRef(navigate);
+  navigation.current = navigate;
+  const accept = React4.useCallback((value) => {
+    setState(value);
+    const url2 = codexAuthorizationUrl(value?.attempt);
+    if (openNext.current && url2) {
+      openNext.current = false;
+      navigation.current(url2);
+    }
+  }, []);
   React4.useEffect(() => {
+    const controller = new AbortController();
+    life.current = controller;
+    let loading = false;
+    const load = async () => {
+      if (loading || acting.current) return;
+      loading = true;
+      try {
+        const value = await chatGptCall("codex.status", {}, controller.signal);
+        if (!controller.signal.aborted) accept(value);
+      } catch (caught) {
+        if (!controller.signal.aborted) setError(caught.message);
+      } finally {
+        loading = false;
+      }
+    };
+    void load();
+    const timer = setInterval(load, 1500);
+    return () => {
+      controller.abort();
+      clearInterval(timer);
+    };
+  }, [chatGptCall, accept]);
+  React4.useEffect(() => {
+    const controller = new AbortController();
+    setModels(null);
+    if (state?.signedIn) {
+      void chatGptCall("codex.models", {}, controller.signal).then((value) => {
+        if (!controller.signal.aborted) setModels(value.models ?? []);
+      }).catch((caught) => {
+        if (!controller.signal.aborted) setError(caught.message);
+      });
+    }
+    return () => controller.abort();
+  }, [chatGptCall, state?.signedIn]);
+  const act = async (action, extra = {}) => {
+    const controller = life.current;
+    if (!controller || controller.signal.aborted || acting.current) return;
+    acting.current = true;
+    setBusy(true);
+    setError(null);
+    if (action === "login") openNext.current = true;
+    if (action === "cancel" || action === "logout") openNext.current = false;
+    try {
+      const value = await chatGptCall("codex." + action, extra, controller.signal);
+      if (!controller.signal.aborted) {
+        accept(value);
+        if (action === "answer") setAnswer("");
+      }
+    } catch (caught) {
+      openNext.current = false;
+      if (!controller.signal.aborted) setError(caught.message);
+    } finally {
+      acting.current = false;
+      if (!controller.signal.aborted) setBusy(false);
+    }
+  };
+  const attempt = state?.attempt;
+  const waiting = attempt && !terminal.has(attempt.phase);
+  const url = codexAuthorizationUrl(attempt);
+  const terms = query.normalize("NFKC").toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const visibleModels = (models ?? []).filter((model) => terms.every((term) => `${model.name} ${model.id}`.normalize("NFKC").toLowerCase().includes(term)));
+  const button = (text, onClick, disabled = busy) => h("button", { type: "button", className: "dim-jh-btn", onClick, disabled }, text);
+  return h(
+    "section",
+    { className: "dim-jh-chatgpt dim-jh-codex", "aria-label": "ChatGPT 会员 Codex 登录" },
+    h("h2", null, "ChatGPT 会员"),
+    h("p", { className: "dim-jh-chatgptIntro" }, "连接 ChatGPT 订阅，在 DSH 中使用 Codex 模型。"),
+    h(
+      "div",
+      { className: "dim-jh-accountCard dim-jh-codexConnection" },
+      h(
+        "div",
+        { className: "dim-jh-codexIdentity" },
+        h("span", { className: "dim-jh-codexMark", "aria-hidden": true }, "C"),
+        h(
+          "div",
+          null,
+          h("strong", { className: "dim-jh-codexStatus", "data-connected": Boolean(state?.signedIn), role: "status" }, !state ? "正在读取登录状态…" : state.signedIn ? "已连接 ChatGPT" : "尚未连接 ChatGPT"),
+          h("p", { className: "dim-jh-chatgptHint" }, state?.signedIn ? state.account || "Codex 授权已就绪" : "通过官方登录页完成授权")
+        )
+      ),
+      h(
+        "div",
+        { className: "dim-jh-chatgptActions" },
+        button(state?.signedIn ? "重新登录 ChatGPT" : "通过 ChatGPT 登录 Codex", () => void act("login"), busy || !state || waiting),
+        url ? button("打开官方登录页", () => navigate(url)) : null,
+        waiting ? button("取消登录", () => void act("cancel")) : null,
+        state?.signedIn ? button("退出 Codex 连接", () => {
+          if (window.confirm("退出当前 Codex 连接？原会员授权方式的账号会保留。")) void act("logout");
+        }) : null
+      ),
+      !state?.signedIn && attempt?.message ? h("p", { className: "dim-jh-chatgptHint", role: "status" }, attempt.message) : null,
+      attempt?.userCode ? h("p", null, "授权代码：", h("strong", null, attempt.userCode)) : null,
+      waiting && (attempt.phase === "prompt" || attempt.placeholder) ? h(
+        "div",
+        null,
+        h("p", null, "如果登录后没有自动返回，请粘贴浏览器地址栏中的完整回调网址。"),
+        h("input", { className: "dim-jh-chatgptAccounts", "aria-label": "Codex 授权回调网址", value: answer, autoComplete: "off", onChange: (event) => setAnswer(event.target.value) }),
+        button("完成登录", () => void act("answer", { value: answer }), busy || !answer.trim())
+      ) : null,
+      error || attempt?.error ? h("p", { role: "alert" }, error ?? attempt.error) : null
+    ),
+    state?.signedIn ? h(
+      "div",
+      { className: "dim-jh-codexCatalog" },
+      h(
+        "div",
+        { className: "dim-jh-chatgptCatalogHeader" },
+        h("h3", null, "Codex 模型目录"),
+        models !== null ? h("span", { className: "dim-jh-codexCount", role: "status" }, terms.length ? `${visibleModels.length} / ${models.length}` : `${models.length} 个模型`) : null
+      ),
+      h("p", { className: "dim-jh-chatgptHint" }, "在对话底部的模型菜单中选择使用。"),
+      h("input", { className: "dim-jh-codexSearch", type: "search", "aria-label": "搜索 Codex 模型", placeholder: "搜索模型名称或 ID…", autoComplete: "off", value: query, onChange: (event) => setQuery(event.target.value) }),
+      models === null ? h("p", { className: "dim-jh-chatgptHint", role: "status" }, "正在读取模型目录…") : visibleModels.length ? h(
+        "ul",
+        { className: "dim-jh-codexGrid", "aria-label": "Codex 模型" },
+        visibleModels.map((model) => h(
+          "li",
+          { className: "dim-jh-codexModel", key: model.id },
+          h("strong", { title: model.name }, model.name),
+          h("code", { title: "openai-codex/" + model.id }, "openai-codex/" + model.id)
+        ))
+      ) : h(
+        "div",
+        { className: "dim-jh-codexEmpty", role: "status" },
+        models.length ? "没有匹配的模型" : "暂时没有模型",
+        query ? button("清除搜索", () => setQuery("")) : null
+      ),
+      h("p", { className: "dim-jh-chatgptHint dim-jh-codexFootnote" }, "实际可用模型与额度以当前订阅和请求结果为准。")
+    ) : null
+  );
+}
+
+// vendor/dsh-codearts-auth/plugin-src/client/chatgpt-plan-panel.js
+var h2 = React5.createElement;
+var pending = (state) => ["waiting-browser", "exchanging"].includes(state?.attempt?.phase);
+function LegacyChatGptPlanPanel({ chatGptCall, navigate = (url) => window.location.assign(url) }) {
+  const [state, setState] = React5.useState(null);
+  const [notice, setNotice] = React5.useState(null);
+  const [busy, setBusy] = React5.useState(false);
+  const [catalog, setCatalog] = React5.useState(null);
+  const [catalogError, setCatalogError] = React5.useState(null);
+  const [refresh, setRefresh] = React5.useState(0);
+  const life = React5.useRef(null);
+  const acting = React5.useRef(false);
+  const revision = React5.useRef(0);
+  React5.useEffect(() => {
     const controller = new AbortController();
     life.current = controller;
     let loading = false;
@@ -2259,7 +2496,7 @@ function ChatGptPlanPanel({ chatGptCall, navigate = (url) => window.location.ass
   }, [chatGptCall]);
   const active = state?.active;
   const enabled = state?.planEnabled && !state?.welcomeNeeded;
-  React4.useEffect(() => {
+  React5.useEffect(() => {
     const controller = new AbortController();
     setCatalog(null);
     setCatalogError(null);
@@ -2299,23 +2536,23 @@ function ChatGptPlanPanel({ chatGptCall, navigate = (url) => window.location.ass
   };
   const waiting = pending(state);
   const models = catalog?.active === active && enabled ? catalog.models : null;
-  const button = (text, onClick, disabled = busy, kind) => h("button", {
+  const button = (text, onClick, disabled = busy, kind) => h2("button", {
     type: "button",
     className: "dim-jh-btn",
     "data-kind": kind,
     onClick,
     disabled
   }, text);
-  return h(
+  return h2(
     "section",
     { className: "dim-jh-chatgpt", "aria-label": "ChatGPT 会员账号" },
-    h("h2", null, "ChatGPT 会员"),
-    h("p", { className: "dim-jh-chatgptIntro" }, "连接你的 ChatGPT 账号，在 DSH 聊天或通过本机网关调用官方可用模型。"),
-    h(
+    h2("h2", null, "ChatGPT 会员"),
+    h2("p", { className: "dim-jh-chatgptIntro" }, "连接你的 ChatGPT 账号，在 DSH 聊天或通过本机网关调用官方可用模型。"),
+    h2(
       "div",
       { className: "dim-jh-accountCard" },
-      h("p", { role: "status" }, !state ? "正在读取账号状态…" : state.planEnabled ? "已连接 · 使用 ChatGPT 会员方案" : state.signedIn ? "已登录 · 尚未授权使用会员方案" : "尚未登录 ChatGPT"),
-      state?.profiles?.length ? h(
+      h2("p", { role: "status" }, !state ? "正在读取账号状态…" : state.planEnabled ? "已连接 · 使用 ChatGPT 会员方案" : state.signedIn ? "已登录 · 尚未授权使用会员方案" : "尚未登录 ChatGPT"),
+      state?.profiles?.length ? h2(
         "select",
         {
           className: "dim-jh-chatgptAccounts",
@@ -2324,14 +2561,14 @@ function ChatGptPlanPanel({ chatGptCall, navigate = (url) => window.location.ass
           disabled: busy || waiting,
           onChange: (event) => void act("switch", { id: event.target.value })
         },
-        !active ? h("option", { value: "", disabled: true }, "选择账号或工作区") : null,
-        state.profiles.map((profile) => h(
+        !active ? h2("option", { value: "", disabled: true }, "选择账号或工作区") : null,
+        state.profiles.map((profile) => h2(
           "option",
           { value: profile.id, key: profile.id },
           profile.label + (profile.connected ? "" : " · 待登录")
         ))
       ) : null,
-      h(
+      h2(
         "div",
         { className: "dim-jh-chatgptActions" },
         button(state?.planEnabled ? "重新授权" : "Continue with ChatGPT", () => void act("login"), busy || waiting || !state, "primary"),
@@ -2342,45 +2579,53 @@ function ChatGptPlanPanel({ chatGptCall, navigate = (url) => window.location.ass
           if (window.confirm("退出当前 ChatGPT 连接？其他账号会保留。")) void act("logout");
         }, busy || waiting, "danger") : null
       ),
-      h("p", { className: "dim-jh-chatgptHint" }, "可添加多个账号；模型请求自动依次轮换，只使用支持该模型且已授权的连接。限流账号暂时跳过。"),
-      state?.attempt?.message ? h("p", { role: "status" }, state.attempt.message) : null
+      h2("p", { className: "dim-jh-chatgptHint" }, "可添加多个账号；模型请求自动依次轮换，只使用支持该模型且已授权的连接。限流账号暂时跳过。"),
+      state?.attempt?.message ? h2("p", { role: "status" }, state.attempt.message) : null
     ),
-    notice ? h("p", { role: notice.error ? "alert" : "status", className: "dim-jh-chatgptNotice" }, notice.text) : null,
-    h(
+    notice ? h2("p", { role: notice.error ? "alert" : "status", className: "dim-jh-chatgptNotice" }, notice.text) : null,
+    h2(
       "div",
       { className: "dim-jh-accountCard" },
-      h(
+      h2(
         "div",
         { className: "dim-jh-chatgptCatalogHeader" },
-        h("h3", null, "官方可用模型"),
+        h2("h3", null, "官方可用模型"),
         button("刷新模型", () => setRefresh((value) => value + 1), busy || !enabled || !models && !catalogError)
       ),
-      catalogError ? h("p", { role: "alert" }, catalogError) : h("p", { role: "status" }, !enabled ? "完成会员授权后可获取模型。" : !models ? "正在读取官方模型…" : models.length ? `当前账号有 ${models.length} 个可用模型。` : "官方暂未返回可用模型，请检查账号权益后重试。"),
-      (models ?? []).map((model) => h(
+      catalogError ? h2("p", { role: "alert" }, catalogError) : h2("p", { role: "status" }, !enabled ? "完成会员授权后可获取模型。" : !models ? "正在读取官方模型…" : models.length ? `当前账号有 ${models.length} 个可用模型。` : "官方暂未返回可用模型，请检查账号权益后重试。"),
+      (models ?? []).map((model) => h2(
         "div",
         { className: "dim-jh-chatgptModel", key: model.id },
-        h("strong", null, model.name),
-        h("code", null, "chatgpt-plan/" + model.id)
+        h2("strong", null, model.name),
+        h2("code", null, "chatgpt-plan/" + model.id)
       )),
-      h("p", { className: "dim-jh-chatgptHint" }, "墨听等程序使用 Jet Hub 的网关地址和密钥；模型 ID 如上，也可通过网关模型列表获取。")
+      h2("p", { className: "dim-jh-chatgptHint" }, "墨听等程序使用 Jet Hub 的网关地址和密钥；模型 ID 如上，也可通过网关模型列表获取。")
     ),
-    h("p", { className: "dim-jh-chatgptHint" }, "调用使用你的 ChatGPT 会员方案或可用积分。模型以当前账号的官方返回为准，此会员接口目前不支持生图。"),
-    h("a", { href: "https://chatgpt.com/settings/usage" }, "管理 ChatGPT 用量和应用授权"),
-    state?.welcomeNeeded ? h(
+    h2("p", { className: "dim-jh-chatgptHint" }, "调用使用你的 ChatGPT 会员方案或可用积分。模型以当前账号的官方返回为准，此会员接口目前不支持生图。"),
+    h2("a", { href: "https://chatgpt.com/settings/usage" }, "管理 ChatGPT 用量和应用授权"),
+    state?.welcomeNeeded ? h2(
       "div",
       { className: "dim-jh-chatgptWelcome", role: "dialog", "aria-modal": true, "aria-labelledby": "dim-jh-chatgptWelcomeTitle" },
-      h(
+      h2(
         "div",
         { className: "dim-jh-accountCard" },
-        h("h3", { id: "dim-jh-chatgptWelcomeTitle" }, "正在使用你的 ChatGPT 会员方案"),
-        h("p", null, "符合条件的模型请求使用你的会员方案或可用积分。你可以在 ChatGPT 设置中管理用量和应用授权。"),
+        h2("h3", { id: "dim-jh-chatgptWelcomeTitle" }, "正在使用你的 ChatGPT 会员方案"),
+        h2("p", null, "符合条件的模型请求使用你的会员方案或可用积分。你可以在 ChatGPT 设置中管理用量和应用授权。"),
         button("知道了", () => void act("welcome"), busy, "primary")
       )
     ) : null
   );
 }
+function ChatGptPlanPanel(props) {
+  return h2(
+    "div",
+    null,
+    h2(CodexPlanPanel, props),
+    h2("details", null, h2("summary", null, "其他登录方式：原会员授权"), h2(LegacyChatGptPlanPanel, props))
+  );
+}
 
-// src/provider-registry.ts
+// vendor/dsh-codearts-auth/src/provider-registry.ts
 var PROVIDER_REGISTRY = Object.freeze([
   { id: "orcaterm", label: "腾讯 OrcaTerm (腾讯云)", displayName: "腾讯 OrcaTerm (腾讯云)", logoClass: "orcaterm", credits: { balance: false, dailyCheckin: false }, channel: true },
   {
@@ -2994,9 +3239,8 @@ var PROVIDER_REGISTRY = Object.freeze([
      *    全部复用国内版那一套，只有 `AUTOCLAW_INTL` 配置不同
      *    （与 `minimaxintl` 同纪律：复制会让同类缺陷修两遍）。
      *
-     * ⚠️ **当前登录尚未接入**：Z.ai OAuth 的 `state.nh` 来源未知
-     *    （`client_id` 与 `state.dh = SHA256(deviceId)` 已逆向确认）。
-     *    在打通之前本渠道只能手工注入 token 使用。
+     * ⚠️ **登录**：Z.ai OAuth，**已于 2026-11-02 接入**（此前写的是「尚未接入、只能手工注入 token」）。
+     *    `state.nh` 仍未解，实现改为不生成 state、只透传（见 `AUTOCLAW_INTL` 的注释）。
      */
     id: "autoclawintl",
     label: "AutoClaw (国际版)",
@@ -3199,6 +3443,142 @@ var PROVIDER_REGISTRY = Object.freeze([
     credits: { balance: true, dailyCheckin: true }
   },
   {
+    /**
+     * **MonkeyCode 国内站**（`monkeycode`，`monkeycode-ai.com`，2026-11-02）。
+     *
+     * ⚠️⚠️ **这里只有一条通道**：`proxy.monkeycode-ai.com` + `oma_…`（36 位）
+     *    + `signing_secret`（48 位）+ `X-OhMyAgent-Signature`（HMAC-SHA256）。
+     *    本 provider **不认识** `sk-` 开头的白泽 Key —— 白泽已独立成
+     *    `baizhi` provider（见本文件末尾那条）。2026-11-02 拆站前这里曾是
+     *    「双通道 + `channel` 字段」，那套设计连同 `channel` 一起删除了。
+     *
+     * ⚠️ 只提供 Anthropic Messages（`POST /v1/messages`）：网关的
+     *    `/v1/chat/completions` 与 `/v1/responses` 实测 404、`GET /v1/models`
+     *    返回 405（SPEC §2）。故协议层直接复用 `src/minimax-messages.ts` 的
+     *    SSE 解析与消息序列化（本仓唯一一份 Anthropic Messages 实现）。
+     *
+     * ⚠️ `credits.balance: true` 的依据：平台有 `GET /api/v1/users/wallet`
+     *    （余额、当日额度、额度上限）与 `GET /api/v1/users/subscription`
+     *    （`basic` / `pro` / `ultra` 档位）。
+     * ⚠️ **但这两个接口只认 web 会话 cookie，不认 API Key**（带 Key 请求
+     *    恒 401）⇒ 凭据里的 `session_cookie` **可缺省**：缺省时推理照常、
+     *    余额读取如实返回「未配置会话」。**别把「没 cookie」写成「没有余额
+     *    接口」** —— 那是两件事，前者用户能自己补。
+     *
+     * ⚠️ `credits.dailyCheckin: true` 的依据：`POST /api/v1/users/wallet/checkin`
+     *    带 `captcha_token`（PoW 验证凭证）。PoW 是**纯本地计算**
+     *    （`challenge` → 解 50 个子谜题 → `redeem`），实测约 0.12s，
+     *    不拉起浏览器、也不吃第三方 captcha 配额 ⇒ **不登记**
+     *    `autoCheckinExcluded`（与 zcode 的阿里云 captcha 不同源）。
+     */
+    id: "monkeycode",
+    label: "MonkeyCode",
+    displayName: "MonkeyCode",
+    logoClass: "monkeycode",
+    credits: { balance: true, dailyCheckin: true },
+    /**
+     * ⚠️ **rateLimit 省略（= true）**：适配器**确实会写** `modelRateLimits`
+     *    （`src/monkeycode-adapter.ts` 的 `markLimited`：429 冷却 1 小时、
+     *    额度耗尽对齐**次 UTC+8 零点**，`nextUtc8DayStartMs`）⇒ 账号卡片上的
+     *    「重测 / 重置」两个按钮都该保留。与 modelscope 的 `rateLimit: false`
+     *    （用户取舍关闭入口）**不同源**，不要照抄成 false。
+     *
+     * ⚠️ 2026-11-02 三审 F🟡-3 更正：此处原写「接线层注入了 `markLimited`」，
+     *    **不准确** —— `MonkeycodeAdapterOptions` 根本没有这个字段，适配器只认
+     *    `accountPool` 并直接调 `pool.updateModelRateLimit`（`src/index.ts:4458`）。
+     *    baizhi 那个 `markLimited?` 只是**单测注入通道**，生产同样走 `accountPool`
+     *    回退。⇒ 不要照 baizhi 的样子给 monkeycode 加一个 `markLimited` 再注入，
+     *    那会变成「同一语义两套判据」。
+     *
+     * ⚠️ 不登记 `accountTest`：探活要真发一次补全请求（会消耗额度）。
+     * ⚠️ 不登记 `creditPackages` / `permanentLock` / `usesExpiryWindow`：
+     *    平台只下发一个总余额读数，**没有**资源包/到期分桶信息 —— 登记了
+     *    会让卡片 hover 显示我们编造的明细。
+     * ⚠️ 不登记 `subscriptionQuota`：它的语义是 Cline 那种「5 小时 / 周 / 月」
+     *    多窗口配额；MonkeyCode 的档位（basic/pro/ultra）是**每日总额度**，
+     *    形状不同，硬套会渲染成错误的窗口数。档位改由余额读数的副标题体现。
+     * ⚠️ 不登记 `settingsNamespace`：它不在老契约（≤0.1.6）的 namespace 清单里。
+     */
+    channel: true
+  },
+  {
+    /**
+     * MonkeyCode 国际站（`monkeycode-ai.net`，2026-11-02）。
+     *
+     * ⚠️ 与国内站是**独立部署**（2026-11-02 实测）：国内 cookie 打国际站回 401、
+     *    两站的账号池与网关凭据互不通用 ⇒ **必须两个 provider id**。实现完全
+     *    共用（`MonkeycodeAuth` / `MonkeycodeAdapter` / `monkeycode-credits`），
+     *    只在 `product` 上分叉 —— `MONKEYCODE_PRODUCTS` 是唯一真相源。
+     *
+     * ⚠️ 除 id / label / displayName 外，**所有能力标记与国内站逐项一致**：
+     *    积分端点（wallet / checkin）、签到（PoW 50 题）、推理（Anthropic
+     *    Messages + `X-OhMyAgent-Signature`）是同一套代码。
+     * ⚠️ 两站必须**各自一行**：`provider-runtime-wiring.spec.ts` 与续期 /
+     *    积分 / 探测三条链路都按 provider id 取实例（与 minimaxintl 同型）。
+     */
+    id: "monkeycodeintl",
+    label: "MonkeyCode 国际站",
+    displayName: "MonkeyCode 国际站",
+    logoClass: "monkeycode",
+    credits: { balance: true, dailyCheckin: true },
+    channel: true
+  },
+  {
+    /**
+     * 百智云（`ai-models.app.baizhi.cloud`，2026-11-02）。
+     *
+     * ⚠️ 与 MonkeyCode 两站是**不同产品线**，只是共用 Anthropic Messages 协议：
+     *    · 认证是 `x-api-key: sk-…`（**不**用 web cookie、**不**签 HMAC）；
+     *    · 模型网关按量付费（`/v1/messages` 的 usage 直接结算），网关本身没有积分接口；
+     *    · **但主站控制台** `baizhi.cloud` 有完整积分体系（钱包 / 每日临时积分），见下。
+     *
+     * ⚠️ **刻意不登记**下面这些格（登记了都是「点了必然失败」的假入口）：
+     *    · `creditPackages` / `permanentLock` / `usesExpiryWindow` —— 无分桶余额；
+     *    · `subscriptionQuota` —— 无配额窗口概念。
+     *
+     * 📌 2026-11-02 三审 F🟡-2 更正（原文自相矛盾）：本段原写
+     *    「`credits` 刻意不登记 —— 三家格全无接口」，与下面 `credits:` 字段
+     *    （`balance: true`）以及「二版更正」整段**正面冲突**。真相是
+     *    **balance 已接**（主站控制台 × 钱包接口）；`dailyCheckin` 于
+     *    2026-11-03 补全 Cap 验证码后也已接（见下）；`onboardingTasks` 确实不登记。
+     *    原文还说「聚合**不进** `AGGREGATE_CHANNELS`」—— 也已过期：
+     *    `AGGREGATE_CHANNELS`（`aggregate-adapter.ts`）与本表
+     *    `WIRED_EXPIRY_PROVIDERS` 均已含 `'baizhi'`。
+     *
+     * ⚠️ **rateLimit 省略（= true）**：`src/baizhi-adapter.ts` **确实会写**
+     *    `modelRateLimits`（429 冷却 / 402 额度耗尽对齐 UTC+8 次日零点），
+     *    ⇒ 账号卡片的「重测 / 重置」两个按钮都该保留。
+     *    ⚠️ 四审自查：本处原写「接线层注入了 `markLimited`」—— **生产不注入**，
+     *    适配器自己回退到 `accountPool.updateModelRateLimit`（注入只是单测通道）。
+     *    不要照抄 modelscope / magicrew 的 `rateLimit: false`。
+     *
+     * ⚠️ 不登记 `accountTest`：探活要真发一次补全请求（会消耗真实额度）。
+     */
+    id: "baizhi",
+    label: "百智云",
+    displayName: "百智云",
+    logoClass: "baizhi",
+    // ⚠️ `credits` 是 `ProviderDescriptor` 的必填字段（省略会直接类型错）。
+    //    2026-11-02 **二版更正**：百智云确实有积分，但不在模型网关 ——
+    //    `ai-models.app.baizhi.cloud` 除了 `/v1/models` / `/v1/messages` 全 404
+    //    （那条实测没错），积分在**主站控制台** `baizhi.cloud`：
+    //    `GET /api/v1/user/wallet/balance` →
+    //    `{available_credit_cents:23505, temporary_credit_cents:9821,
+    //      permanent_credit_cents:13684, frozen_credit_cents:0}`（单位 1/100 积分，
+    //    与用户控制台截图 235.05 / 98.21 / 136.84 逐位吻合）。
+    //    ⚠️ 控制台接口只认**网页登录态 cookie**；`x-api-key` 打过去 401
+    //    ⇒ 只填了 `sk-` 的账号能发消息但查不到积分（降级成可行动提示，不报错）。
+    //    ⚠️ `dailyCheckin: true`（2026-11-03 真机取证）：签到入口就是控制台
+    //    顶栏「每日领积分 +100」按钮；领取要过 Cap 验证码，但那是**纯本地
+    //    PoW**（`challenge → 解 50 题 → redeem`，与 MonkeyCode 同一套协议），
+    //    实测完整跑通、到账 100 积分 ⇒ 不再是「做不成一键签到」。
+    credits: { balance: true, dailyCheckin: true },
+    // ⚠️ `channel: true`（**不是** false）：它真的持有账号与凭据、是一个普通渠道
+    //    —— `false` 只留给 `aggregate`（聚合层不持有账号）。`AGGREGATE_CHANNELS`
+    //    是按 id 显式列出的另一张表，两者不是一回事。
+    channel: true
+  },
+  {
     // Magicrew（超级麦吉国内站，2026-10-29 接入）。
     // ⚠️ 位置要求（用户明确）：**排在 aggregate 之前 = 倒数第二**。
     //    守因为未自定义 `providerOrder` 时，左栏完全按本表的**声明序**渲染
@@ -3209,21 +3589,59 @@ var PROVIDER_REGISTRY = Object.freeze([
     label: "超级麦吉",
     displayName: "超级麦吉",
     logoClass: "magicrew",
-    // 余额来自 `quota/points/total`；签到端点**存在**但本轮刻意不接
-    //（会消耗真实积分，且用户未要求）。
-    credits: { balance: true },
+    // 余额来自 `quota/points/total`。
+    // ⚠️ 2026-11-01 用户要求：补上**签到**（`POST /api/v1/login-gift`）与
+    //    **新人奖励**（`onboarding/tasks`）。原先这里写「刻意不接，会消耗真实积分」
+    //    是**误判** —— `login-gift` 是发放登录积分，不消耗东西。
+    credits: { balance: true, dailyCheckin: true, onboardingTasks: true },
     /**
      * ⚠️ `creditPackages: true`（2026-10-29，I3）：本家余额**确实**由多个包构成、
-     * 且临期批次带 `deductionEndTime` ⇒ 账号卡片 hover 该列包。
-     * `fetchMagicrewBalance` 会**合成一个「长期积分」包**让 `sum(remaining) === total`
-     * （上游只下发临期批次，实测 total 1093 / 批次和 93），否则 hover 会显示
-     * 「只列 93、合计 1093」让用户以为丢了积分。
-     * ⚠️ **刻意不登记**另外两项：
-     *   · `usesExpiryWindow` —— 判据是「是否走 `splitBuddyCreditsByExpiry`」，
-     *     本家不走那个函数（用自己的 `packages`），登记了会让锁定路径读到错误的 `windowDays`；
-     *   · `permanentLock` —— 本家**没有**「锁定永久积分」这个能力
-     *     （上游端点里没有对应概念），登记了等于凭空给用户一个点了会失败的操作。
+     * 且批次带 `deductionEndTime` ⇒ 账号卡片 hover 该列包。
+     * `fetchMagicrewBalance` 会**合成一个「永久积分」包**让 `sum(remaining) === total`
+     *（上游的 `expiring_quota_details` 只覆盖**带到期时间的批次**：国内实测
+     *  total 2661 / 批次和 1661 / 残差 1000，国际 347 / 247 / 100 ——
+     *  残差就是上游不给到期时间的永久积分，取证见 `magicrew-credits.ts`）。
+     * 否则 hover 会显示「只列 1661、合计 2661」让用户以为丢了积分。
+     *
+     * ⚠️⚠️ **字段本身原先漏了**（2026-11-01 三审实测发现）：上面这段注释从
+     * 2026-10-29 起就写着「已登记 `creditPackages: true`」，但**字段根本不存在**
+     * ⇒ `supportsCreditPackageList('magicrew')` 恒 false ⇒ 国内站账号卡片 hover
+     * **看不到**资源包明细（国际站因为登记了所以看得到 —— 两站此前不同构）。
+     * 「注释说已登记、实现里没有」比单纯漏登记更难查：读注释的人以为已经有了。
      */
+    creditPackages: true,
+    /**
+     * ✅ `usesExpiryWindow: true` + `permanentLock: true`（2026-11-01 用户要求）。
+     *
+     * ## 为什么现在**能**登记（原先两条拒绝理由都已被取证推翻）
+     *
+     * · 旧理由「本家不走 `splitBuddyCreditsByExpiry`，登记了会让锁定路径读到
+     *   错误的 `windowDays`」—— 现在是**真的走**：两站都接 `BuddyBalanceSelector`
+     *  （泛型化，非 buddy product **必填** `fetchBalance`），而
+     *   `fetchMagicrewBalance` 返回的正是它要的 `CreditBalance`，判据
+     *  （`packages[].deductionEndTime` 距今天数）与 buddy 系**逐格一致**
+     *   ⇒ 窗口天数对它同样成立。原先「用自己的 `packages`」只是**没接线**，不是不适用。
+     * · 旧理由「本家没有锁定永久积分这个能力」—— 已实测**证伪**：上游确实存在
+     *   「没有到期时间」的积分（见 `creditPackages` 那段的两站残差 1000 / 100），
+     *   而锁定要保护的正是它。
+     *
+     * ## 三档在两站怎么落地
+     *
+     * | 桶 | 判据 | 前端 |
+     * |---|---|---|
+     * | 永久 | **没有** `deductionEndTime`（合成的「永久积分」包） | 绿（`permanent`） |
+     * | 长期 | 有到期时间，且距扣费截止 **≥ 窗口**（默认 15 天） | 黄（`longTerm`） |
+     * | 临期 | 有到期时间，且距扣费截止 **< 窗口** | 红 + 倒计时（`expiring`） |
+     *
+     * ⚠️ 后端只分**两桶**（`splitBuddyCreditsByExpiry` 的 expiring / permanent，
+     *    longTerm 被并进 permanent），三档是**前端**用同一份 `packages` 再拆的
+     *    —— 与 buddy 系完全同构。故 `windowDays` 必须由 `credits.balances` 与
+     *    `credits.permanentLock` **两个 RPC 都回传**（缺一个 ⇒ 该行静默不渲染）。
+     * ⚠️ 两个 id **各自登记**：白名单 `PERMANENT_LOCK_PROVIDERS` 由本表派生，
+     *    漏一个的症状是「那一站的按钮不渲染、`credits.permanentLock` 直接 bad-request」。
+     */
+    usesExpiryWindow: true,
+    permanentLock: true,
     // ⚠️⚠️ **`rateLimit: false` 必须显式写**（2026-10-29 最终审查 I1）：本家
     //    **零 `updateModelRateLimit` 写点**、也不在 `probeById` 里 ⇒「重测 / 重置」
     //    两个按钮点下去是**零请求、零清除**（`account.retest` 走 `adapterForProbe`
@@ -3231,7 +3649,75 @@ var PROVIDER_REGISTRY = Object.freeze([
     //    ⚠️ 原先省略它的理由是「默认关闭会让老用户失去按钮」—— 那条**对全新
     //    provider 不成立**（无存量用户、无功能回退可言，见 providers-accio 笔记）。
     rateLimit: false,
-    // ⚠️ 不登记 `onboardingTasks`：新手奖励是 magpie 侧功能，本轮不做。
+    // ⚠️ 2026-11-01 用户要求补上签到与新人奖励 ⇒ 现在**两个能力都登记**
+    //   （原先这两格都缺，注释写的是「刻意不接 / 本轮不做」）：
+    //   · `dailyCheckin` —— `POST /api/v1/login-gift`（**请求体存在且为空串**、幂等、
+    //     国内 +200/天）。原先记的理由「会消耗真实积分」是**误判**：该端点是**发放**
+    //     登录积分，不消耗任何东西（见 `provider-credits.ts` 的 magicrew 段注释）。
+    //   · `onboardingTasks` —— 8 项新手引导任务，每号一辈子一次；
+    //     第 8 项 `first_ai_work` 不支持手动完成（服务端 9303），原语归 `manualRequired`
+    //     （**不是** `skipped` —— 那个语义是「此前已完成」）。
+    //     ⚠️⚠️ **刻意不写总分**：参考实现 `magpie-magicrew-auth/README.md:179` 的标题
+    //     写「8 项，合计 500 积分」，而**同一页的逐项表相加只有 450**（100 + 7×50）
+    //     —— 两个数字自相矛盾，无法判定哪个对。
+    //     ⇒ 本仓一律以**上游 `tasks[].points` 现场累加**为准（见
+    //     `magicrew-checkin.ts` 的 `fetchMagicrewOnboardingStatus`），
+    //     任何注释与用户文案都不得写死金额。
+    //   上面 `credits` 字段的 `balance: true` 保持不变。
+    channel: true
+  },
+  {
+    /**
+     * **MagiCrew 国际站**（`magicrewintl`，2026-11-01 用户要求）。
+     *
+     * ⚠️⚠️ **为什么是独立 provider 而不是 magicrew 的站点参数**
+     *    （判据与 `minimaxintl` / `autoclawintl` 完全同款）：
+     *
+     * | 判据 | 国内（超级麦吉） | 国际（MagiCrew） |
+     * |---|---|---|
+     * | 网页 | `www.letsmagic.cn` | `www.magicrew.ai` |
+     * | API host | `i-magic-service.letsmagic.cn` | `magic-service.magicrew.ai` |
+     * | 登录体系 | 手机号 / 短信验证码 | 邮箱 / OAuth |
+     * | 每日签到 | +200 / 天 | **+50 / 天** |
+     * | 强制 org | 否 | **是**（业务 API 缺了回 `code 2182`） |
+     *
+     *    两站是同一个 Go 服务的两个**数据面**，账号体系物理隔离（凭据前缀
+     *    `MAGICREW_*` / `MAGICREWINTL_*` 也不同）⇒ 合并成一个 provider 会让
+     *    选号器与余额按错误的 host 取数。
+     *
+     * ⚠️ **实现零复制**：`MagicrewAuth` / `MagicrewService` / 目录 / 积分 / 签到 /
+     *    新人奖励全部复用国内版那一套，只有 `MAGICREW_INTL` 常量不同
+     *    （与 `autoclawintl` 同纪律：复制会让同类缺陷修两遍）。
+     *
+     * ⚠️⚠️ **国际站新人奖励预期拿不到**：该站 `GET /onboarding/tasks` 恒返回
+     *    `{participant_type: null, tasks: []}` —— 是「账号没被登记进引导计划」，
+     *    **不是**「已领完」⇒ UI 会显示「无新人任务」（如实，不是失败）。
+     *    代码照样登记，因为「万一登记了就能领」。
+     */
+    id: "magicrewintl",
+    label: "MagiCrew (国际版)",
+    displayName: "MagiCrew (国际版)",
+    // ⚠️ 与国内版共用同一份图标资产（同一个 Go 服务、同一个品牌的两个站点）。
+    logoClass: "magicrew",
+    credits: { balance: true, dailyCheckin: true, onboardingTasks: true },
+    /**
+     * ⚠️ `creditPackages: true` 必须与国内版同格：两站共用同一份
+     *    `magicrew-credits.ts`，`fetchMagicrewBalance` 同样会合成「永久积分」包
+     *    （国际站实测 total 347 / 批次和 247 / 残差 100）。
+     *    漏了它 ⇒ 国际站账号卡片 hover 看不到资源包明细（与 `autoclawintl`
+     *    2026-10-20 那次用户报障同型）。
+     * ⚠️ `usesExpiryWindow` / `permanentLock` **与国内版同格登记**（2026-11-01
+     *    用户要求）：两站共用同一个余额原语与同一个选号器类，判据逐格一致；
+     *    「为什么原先两条拒绝理由已被推翻」见国内版那一段的长注释，不重复。
+     *    ⚠️ 两站**必须各写一行**（不能靠国内版继承）：`PERMANENT_LOCK_PROVIDERS`
+     *    是 `PROVIDER_REGISTRY.filter(permanentLock === true)` 派生的 ⇒
+     *    漏一站的症状是「那一站按钮不渲染 + `credits.permanentLock` bad-request」。
+     */
+    creditPackages: true,
+    usesExpiryWindow: true,
+    permanentLock: true,
+    // ⚠️ 同国内版：本家零 `updateModelRateLimit` 写点、不在 `probeById` 里。
+    rateLimit: false,
     channel: true
   },
   {
@@ -3268,7 +3754,7 @@ function creditCapabilitiesOf() {
   return out;
 }
 
-// plugin-src/client/credits-capabilities.js
+// vendor/dsh-codearts-auth/plugin-src/client/credits-capabilities.js
 var CREDITS_CAPABILITIES = Object.freeze(creditCapabilitiesOf());
 var RATE_LIMIT_CAPABILITIES = Object.freeze(
   Object.fromEntries(
@@ -3335,7 +3821,7 @@ function supportsSubscriptionQuota(provider) {
   return CREDITS_CAPABILITIES[provider]?.subscriptionQuota === true;
 }
 
-// plugin-src/client/account-order.js
+// vendor/dsh-codearts-auth/plugin-src/client/account-order.js
 function orderAfterDrop(ids, sourceId, targetId, position = "before") {
   const from = ids.indexOf(sourceId);
   const to = ids.indexOf(targetId);
@@ -3351,8 +3837,75 @@ function dropPositionFromPointer(clientY, rect) {
   return clientY > rect.top + rect.height / 2 ? "after" : "before";
 }
 
-// plugin-src/client/opencode-proxy-modal.js
-var React5 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/checkin-panel-logic.js
+function formatNextRunAt(at, nowMs = Date.now()) {
+  if (typeof at !== "number" || Number.isNaN(at)) {
+    return "未知（宿主版本较旧，重启 DSH 后才会显示）";
+  }
+  if (at <= 0) return "不会执行（开关已关闭）";
+  const diff = at - nowMs;
+  if (diff <= 1e3) return "马上执行（有时段待补）";
+  const d = new Date(at);
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  const today = new Date(nowMs);
+  const sameDay = d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate();
+  const hours = Math.floor(diff / 36e5);
+  const mins = Math.round(diff % 36e5 / 6e4);
+  const away = hours > 0 ? `${hours} 小时 ${mins} 分后` : `${mins} 分后`;
+  return `${sameDay ? "今天" : "明天"} ${hh}:${mm}（${away}）`;
+}
+function needsHostRestartNotice(state) {
+  return state !== null && state !== void 0 && !Array.isArray(state.times);
+}
+function isInsideCheckinDock({ contains, target, isNode }) {
+  if (!isNode) return false;
+  if (target === null || target === void 0) return false;
+  return contains(target);
+}
+function checkinCommitPlan({ hostTimes, hostJitter, draftTimes, draftJitterOn, draftJitterMinutes }) {
+  if (!Array.isArray(hostTimes) || hostTimes.length !== 2) return null;
+  if (!Array.isArray(draftTimes) || draftTimes.length !== 2) return null;
+  const timesDirty = draftTimes.some((value, index) => value !== hostTimes[index]);
+  const wantJitter = draftJitterOn ? Math.max(0, Number(draftJitterMinutes) || 0) : 0;
+  const hostJitterValue = typeof hostJitter === "number" ? hostJitter : 0;
+  if (!timesDirty && hostJitterValue === wantJitter) return null;
+  return { times: [...draftTimes], jitterMinutes: wantJitter };
+}
+
+// vendor/dsh-codearts-auth/plugin-src/client/account-status.js
+var MAX_DATE_MS = 864e13;
+function policyBlockedInfo(account) {
+  const at = account?.policyBlockedAtMs;
+  const blocked = typeof at === "number" && Number.isFinite(at) && at > 0 && at <= MAX_DATE_MS;
+  const message = typeof account?.policyBlockedMessage === "string" ? account.policyBlockedMessage : "";
+  return { blocked, message };
+}
+function activeRateLimits(account, nowMs = Date.now()) {
+  const limits = account?.modelRateLimits;
+  if (limits === null || typeof limits !== "object") return [];
+  return Object.entries(limits).filter(([, resetAt]) => typeof resetAt === "number" && resetAt > nowMs).map(([modelId, resetAt]) => ({ modelId, resetAt }));
+}
+function accountLimitActionState(account, nowMs = Date.now()) {
+  const { blocked } = policyBlockedInfo(account);
+  const hasModelMarkers = account?.modelRateLimits !== null && typeof account?.modelRateLimits === "object" && Object.keys(account.modelRateLimits).length > 0;
+  return {
+    /** 「重置」可用（有任一标记，含已过期的）。 */
+    canReset: blocked || hasModelMarkers,
+    /** 「重测」可用（有逐模型标记 —— 它只测这些模型）。 */
+    canRetest: hasModelMarkers,
+    /** 卡片上是否要显示「限流」那一行（只显示未到期的）。 */
+    activeRateLimits: activeRateLimits(account, nowMs),
+    policyBlocked: blocked
+  };
+}
+function policyBlockedHint(canTest) {
+  const base = "上游以「账号存在异常行为」拒绝了该账号（code 11140，全部模型都不可用）。";
+  return base + (canTest ? "点「测试」确认已恢复（会用掉一点额度），或「重置」直接清除这条标记。" : "点「重置」清除这条标记（本渠道没有探活按钮，重置不会验证账号是否真的恢复）。");
+}
+
+// vendor/dsh-codearts-auth/plugin-src/client/opencode-proxy-modal.js
+var React6 = __toESM(require("react"), 1);
 var LOCAL_PORT_PRESETS = [
   { port: 7897, label: "7897", url: "http://127.0.0.1:7897", hint: "Clash / mihomo 混合端口" },
   { port: 7890, label: "7890", url: "http://127.0.0.1:7890", hint: "Clash 旧版 HTTP 端口" },
@@ -3371,12 +3924,12 @@ var MODES = [
   { id: "socks5", label: "SOCKS5", hint: "形如 socks5://user:pass@host:port" }
 ];
 function OpencodeProxyModal({ ctx, accountId, current, onClose }) {
-  const [mode, setMode] = React5.useState(guessMode(current));
-  const [url, setUrl] = React5.useState(current || "");
-  const [busy, setBusy] = React5.useState(false);
-  const [testing, setTesting] = React5.useState(false);
-  const [error, setError] = React5.useState("");
-  const [result, setResult] = React5.useState(null);
+  const [mode, setMode] = React6.useState(guessMode(current));
+  const [url, setUrl] = React6.useState(current || "");
+  const [busy, setBusy] = React6.useState(false);
+  const [testing, setTesting] = React6.useState(false);
+  const [error, setError] = React6.useState("");
+  const [result, setResult] = React6.useState(null);
   const close = () => {
     if (onClose) onClose();
   };
@@ -3406,7 +3959,7 @@ function OpencodeProxyModal({ ctx, accountId, current, onClose }) {
     }
   };
   const activeHint = (MODES.find((m) => m.id === mode) || {}).hint || "";
-  return React5.createElement(
+  return React6.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -3414,7 +3967,7 @@ function OpencodeProxyModal({ ctx, accountId, current, onClose }) {
         if (e.target === e.currentTarget) close();
       }
     },
-    React5.createElement(
+    React6.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -3422,34 +3975,34 @@ function OpencodeProxyModal({ ctx, accountId, current, onClose }) {
         "aria-modal": "true",
         style: { maxWidth: "520px" }
       },
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React5.createElement("div", { className: "dim-jh-modalTitle" }, "设置出口代理"),
-        React5.createElement(
+        React6.createElement("div", { className: "dim-jh-modalTitle" }, "设置出口代理"),
+        React6.createElement(
           "span",
           { className: "dim-jh-modalSubtitle" },
           current ? "当前：已配置" : "当前：直连（本机出口）"
         )
       ),
       // ⚠️ 这段提示是本功能的存在理由，必须说清「多账号 ≠ 多配额」。
-      React5.createElement(
+      React6.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "OpenCode 的免费通道按出口 IP 限流。不设代理时，本账号与其它未设代理的账号（以及匿名通道）共用同一个出口，也就是共用同一份额度；设置代理后该账号走独立出口。"
       ),
       // ⚠️ 内容必须放进 modalBody（flex:1; min-height:0; overflow-y:auto），
       // 否则弹窗较高时内容会被裁掉（见 jet-hub.js 既有 modal 的注释）。
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React5.createElement(
+        React6.createElement(
           "div",
           { className: "dim-jh-fieldRow" },
-          MODES.map((m) => React5.createElement(
+          MODES.map((m) => React6.createElement(
             "label",
             { key: m.id, className: "dim-jh-radio" },
-            React5.createElement("input", {
+            React6.createElement("input", {
               type: "radio",
               name: "opencode-proxy-mode",
               checked: mode === m.id,
@@ -3462,11 +4015,11 @@ function OpencodeProxyModal({ ctx, accountId, current, onClose }) {
             m.label
           ))
         ),
-        React5.createElement("p", { className: "dim-jh-hint" }, activeHint),
-        mode === "local" && React5.createElement(
+        React6.createElement("p", { className: "dim-jh-hint" }, activeHint),
+        mode === "local" && React6.createElement(
           "div",
           { className: "dim-jh-presetRow" },
-          LOCAL_PORT_PRESETS.map((p) => React5.createElement("button", {
+          LOCAL_PORT_PRESETS.map((p) => React6.createElement("button", {
             key: p.port,
             type: "button",
             className: "dim-jh-btn",
@@ -3478,7 +4031,7 @@ function OpencodeProxyModal({ ctx, accountId, current, onClose }) {
             }
           }, p.label))
         ),
-        React5.createElement("input", {
+        React6.createElement("input", {
           className: "dim-jh-input",
           placeholder: mode === "socks5" ? "socks5://user:pass@host:port" : "http://user:pass@host:port",
           value: url,
@@ -3489,47 +4042,47 @@ function OpencodeProxyModal({ ctx, accountId, current, onClose }) {
             setResult(null);
           }
         }),
-        result && React5.createElement(
+        result && React6.createElement(
           "p",
           { className: "dim-jh-hint" },
           `出口 IP ${result.exitIp}（${result.country || "未知地区"}）· ${result.latencyMs}ms`
         ),
-        error && React5.createElement("p", { className: "dim-jh-error" }, error)
+        error && React6.createElement("p", { className: "dim-jh-error" }, error)
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalActions" },
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: testing || busy || url.trim().length === 0,
           onClick: test
         }, testing ? "测试中…" : "测试连接"),
         // 只有已配置过才显示「清除」：没配过就没有可清除的东西。
-        current ? React5.createElement("button", {
+        current ? React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: busy,
           onClick: () => save("")
         }, "清除代理") : null,
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn dim-jh-btnPrimary",
           disabled: busy || url.trim().length === 0,
           onClick: () => save(url)
         }, "保存"),
-        React5.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
+        React6.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
       )
     )
   );
 }
 function GeminiProxyModal({ ctx, accountId, current, onClose }) {
-  const [mode, setMode] = React5.useState(guessMode(current));
-  const [url, setUrl] = React5.useState(current || "");
-  const [busy, setBusy] = React5.useState(false);
-  const [testing, setTesting] = React5.useState(false);
-  const [error, setError] = React5.useState("");
-  const [result, setResult] = React5.useState(null);
+  const [mode, setMode] = React6.useState(guessMode(current));
+  const [url, setUrl] = React6.useState(current || "");
+  const [busy, setBusy] = React6.useState(false);
+  const [testing, setTesting] = React6.useState(false);
+  const [error, setError] = React6.useState("");
+  const [result, setResult] = React6.useState(null);
   const close = () => {
     if (onClose) onClose();
   };
@@ -3559,7 +4112,7 @@ function GeminiProxyModal({ ctx, accountId, current, onClose }) {
     }
   };
   const activeHint = (MODES.find((m) => m.id === mode) || {}).hint || "";
-  return React5.createElement(
+  return React6.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -3567,7 +4120,7 @@ function GeminiProxyModal({ ctx, accountId, current, onClose }) {
         if (e.target === e.currentTarget) close();
       }
     },
-    React5.createElement(
+    React6.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -3575,11 +4128,11 @@ function GeminiProxyModal({ ctx, accountId, current, onClose }) {
         "aria-modal": "true",
         style: { maxWidth: "520px" }
       },
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React5.createElement("div", { className: "dim-jh-modalTitle" }, "设置 Gemini 出口代理"),
-        React5.createElement(
+        React6.createElement("div", { className: "dim-jh-modalTitle" }, "设置 Gemini 出口代理"),
+        React6.createElement(
           "span",
           { className: "dim-jh-modalSubtitle" },
           current ? "当前：已配置" : "当前：直连（本机出口）"
@@ -3587,21 +4140,21 @@ function GeminiProxyModal({ ctx, accountId, current, onClose }) {
       ),
       // ⚠️ 这段提示是本功能的存在理由，且必须**诚实**：不说清「系统代理不生效」，
       // 用户会以为自己开着 Clash 系统代理就万事大吉（浏览器能用 ≠ 插件能用）。
-      React5.createElement(
+      React6.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "Google 的登录与接口都在墙外。浏览器能打开授权页，是因为浏览器读系统代理；插件进程不读，所以「浏览器授权成功、面板里账号却一直不出现」是同一个原因。设置这里的代理后，该账号的登录、续期、积分与对话都会走它。"
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React5.createElement(
+        React6.createElement(
           "div",
           { className: "dim-jh-fieldRow" },
-          MODES.map((m) => React5.createElement(
+          MODES.map((m) => React6.createElement(
             "label",
             { key: m.id, className: "dim-jh-radio" },
-            React5.createElement("input", {
+            React6.createElement("input", {
               type: "radio",
               name: "gemini-proxy-mode",
               checked: mode === m.id,
@@ -3614,11 +4167,11 @@ function GeminiProxyModal({ ctx, accountId, current, onClose }) {
             m.label
           ))
         ),
-        React5.createElement("p", { className: "dim-jh-hint" }, activeHint),
-        mode === "local" && React5.createElement(
+        React6.createElement("p", { className: "dim-jh-hint" }, activeHint),
+        mode === "local" && React6.createElement(
           "div",
           { className: "dim-jh-presetRow" },
-          LOCAL_PORT_PRESETS.map((p) => React5.createElement("button", {
+          LOCAL_PORT_PRESETS.map((p) => React6.createElement("button", {
             key: p.port,
             type: "button",
             className: "dim-jh-btn",
@@ -3630,7 +4183,7 @@ function GeminiProxyModal({ ctx, accountId, current, onClose }) {
             }
           }, p.label))
         ),
-        React5.createElement("input", {
+        React6.createElement("input", {
           className: "dim-jh-input",
           placeholder: mode === "socks5" ? "socks5://user:pass@host:port" : "http://user:pass@host:port",
           value: url,
@@ -3643,48 +4196,48 @@ function GeminiProxyModal({ ctx, accountId, current, onClose }) {
         }),
         // ⚠️ **不说「出口 IP」**：这里测的是「能不能连上 Google」，
         // 回显 HTTP 状态码（400 也是通的，见宿主侧注释）。
-        result && React5.createElement(
+        result && React6.createElement(
           "p",
           { className: "dim-jh-hint" },
           `已连通 Google（HTTP ${result.status}）· ${result.latencyMs}ms`
         ),
-        error && React5.createElement("p", { className: "dim-jh-error" }, error)
+        error && React6.createElement("p", { className: "dim-jh-error" }, error)
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalActions" },
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: testing || busy || url.trim().length === 0,
           onClick: test
         }, testing ? "测试中…" : "测试连接"),
         // 只有已配置过才显示「清除」：没配过就没有可清除的东西。
-        current ? React5.createElement("button", {
+        current ? React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: busy,
           onClick: () => save("")
         }, "清除代理") : null,
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn dim-jh-btnPrimary",
           disabled: busy || url.trim().length === 0,
           onClick: () => save(url)
         }, "保存"),
-        React5.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
+        React6.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
       )
     )
   );
 }
 function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
   const isCn = provider === "qodercn";
-  const [mode, setMode] = React5.useState(guessMode(current));
-  const [url, setUrl] = React5.useState(current || "");
-  const [busy, setBusy] = React5.useState(false);
-  const [testing, setTesting] = React5.useState(false);
-  const [error, setError] = React5.useState("");
-  const [result, setResult] = React5.useState(null);
+  const [mode, setMode] = React6.useState(guessMode(current));
+  const [url, setUrl] = React6.useState(current || "");
+  const [busy, setBusy] = React6.useState(false);
+  const [testing, setTesting] = React6.useState(false);
+  const [error, setError] = React6.useState("");
+  const [result, setResult] = React6.useState(null);
   const close = () => {
     if (onClose) onClose();
   };
@@ -3718,7 +4271,7 @@ function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
     }
   };
   const activeHint = (MODES.find((m) => m.id === mode) || {}).hint || "";
-  return React5.createElement(
+  return React6.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -3726,7 +4279,7 @@ function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
         if (e.target === e.currentTarget) close();
       }
     },
-    React5.createElement(
+    React6.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -3734,15 +4287,15 @@ function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
         "aria-modal": "true",
         style: { maxWidth: "520px" }
       },
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React5.createElement(
+        React6.createElement(
           "div",
           { className: "dim-jh-modalTitle" },
           isCn ? "设置 Qoder（中国版）出口代理" : "设置 Qoder 出口代理"
         ),
-        React5.createElement(
+        React6.createElement(
           "span",
           { className: "dim-jh-modalSubtitle" },
           current ? "当前：已配置" : "当前：直连（本机出口）"
@@ -3751,21 +4304,21 @@ function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
       // ⚠️ 提示必须**分站诚实**：国际版在中国大陆基本连不上，中国版不设代理
       // 反而更快。写成一句通用话术会让中国版用户白配一条代理（多一跳、更慢），
       // 也会让国际版用户以为「不设置也能凑合」。
-      React5.createElement(
+      React6.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         isCn ? "中国版（openapi.qoder.com.cn）通常直连就通，不设代理反而少一跳。只有在直连被限速或需要固定出口时才需要配这里。" : "Qoder 国际版（openapi.qoder.sh）在中国大陆被阻断：TCP 能连、TLS 握手被丢，表现为「转十秒然后 fetch failed」。插件进程不读系统代理，所以浏览器能用 ≠ 这里能用。设置代理后，该账号的登录、续期、积分与对话都会走它；也可以改用中国版账号（直连即可）。"
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React5.createElement(
+        React6.createElement(
           "div",
           { className: "dim-jh-fieldRow" },
-          MODES.map((m) => React5.createElement(
+          MODES.map((m) => React6.createElement(
             "label",
             { key: m.id, className: "dim-jh-radio" },
-            React5.createElement("input", {
+            React6.createElement("input", {
               type: "radio",
               name: "qoder-proxy-mode",
               checked: mode === m.id,
@@ -3778,11 +4331,11 @@ function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
             m.label
           ))
         ),
-        React5.createElement("p", { className: "dim-jh-hint" }, activeHint),
-        mode === "local" && React5.createElement(
+        React6.createElement("p", { className: "dim-jh-hint" }, activeHint),
+        mode === "local" && React6.createElement(
           "div",
           { className: "dim-jh-presetRow" },
-          LOCAL_PORT_PRESETS.map((p) => React5.createElement("button", {
+          LOCAL_PORT_PRESETS.map((p) => React6.createElement("button", {
             key: p.port,
             type: "button",
             className: "dim-jh-btn",
@@ -3794,7 +4347,7 @@ function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
             }
           }, p.label))
         ),
-        React5.createElement("input", {
+        React6.createElement("input", {
           className: "dim-jh-input",
           placeholder: mode === "socks5" ? "socks5://user:pass@host:port" : "http://user:pass@host:port",
           value: url,
@@ -3807,47 +4360,47 @@ function QoderProxyModal({ ctx, accountId, current, provider, onClose }) {
         }),
         // ⚠️ **不说「出口 IP」**：这里测的是「能不能连上该站的余额端点」，
         // 回显 HTTP 状态码（401 也是通的 —— 没带 Token 而已，见宿主侧注释）。
-        result && React5.createElement(
+        result && React6.createElement(
           "p",
           { className: "dim-jh-hint" },
           `已连通 ${result.host || (isCn ? "openapi.qoder.com.cn" : "openapi.qoder.sh")}（HTTP ${result.status}）· ${result.latencyMs}ms`
         ),
-        error && React5.createElement("p", { className: "dim-jh-error" }, error)
+        error && React6.createElement("p", { className: "dim-jh-error" }, error)
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalActions" },
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: testing || busy || url.trim().length === 0,
           onClick: test
         }, testing ? "测试中…" : "测试连接"),
         // 只有已配置过才显示「清除」：没配过就没有可清除的东西。
-        current ? React5.createElement("button", {
+        current ? React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: busy,
           onClick: () => save("")
         }, "清除代理") : null,
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn dim-jh-btnPrimary",
           disabled: busy || url.trim().length === 0,
           onClick: () => save(url)
         }, "保存"),
-        React5.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
+        React6.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
       )
     )
   );
 }
 function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
-  const [mode, setMode] = React5.useState(guessMode(current));
-  const [url, setUrl] = React5.useState(current || "");
-  const [busy, setBusy] = React5.useState(false);
-  const [testing, setTesting] = React5.useState(false);
-  const [error, setError] = React5.useState("");
-  const [result, setResult] = React5.useState(null);
+  const [mode, setMode] = React6.useState(guessMode(current));
+  const [url, setUrl] = React6.useState(current || "");
+  const [busy, setBusy] = React6.useState(false);
+  const [testing, setTesting] = React6.useState(false);
+  const [error, setError] = React6.useState("");
+  const [result, setResult] = React6.useState(null);
   const close = () => {
     if (onClose) onClose();
   };
@@ -3877,7 +4430,7 @@ function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
     }
   };
   const activeHint = (MODES.find((m) => m.id === mode) || {}).hint || "";
-  return React5.createElement(
+  return React6.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -3885,7 +4438,7 @@ function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
         if (e.target === e.currentTarget) close();
       }
     },
-    React5.createElement(
+    React6.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -3893,11 +4446,11 @@ function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
         "aria-modal": "true",
         style: { maxWidth: "520px" }
       },
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React5.createElement("div", { className: "dim-jh-modalTitle" }, "设置 MiniMax 国际站出口代理"),
-        React5.createElement(
+        React6.createElement("div", { className: "dim-jh-modalTitle" }, "设置 MiniMax 国际站出口代理"),
+        React6.createElement(
           "span",
           { className: "dim-jh-modalSubtitle" },
           current ? "当前：已配置" : "当前：直连（本机出口）"
@@ -3905,27 +4458,27 @@ function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
       ),
       // ⚠️ 这段提示是本功能的存在理由，且必须**诚实**：本家的失败不是「连不上」
       // 而是「连上了却被转到中国站」，与另两家的措辞不同，别照抄。
-      React5.createElement(
+      React6.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "国际站（agent.minimax.io）按出口 IP 所在国家分流：中国大陆来源会被转到中国站，而中国站不认国际站账号 ⇒ 报出与「凭据失效」一模一样的错误，凭据本身却是好的。设置这里的代理后，该账号的登录、续期、积分与对话都会走它。"
       ),
       // ⚠️ 必须说清与 XFF 的关系：两者可叠加，但 XFF 是兜底而非替代。
-      React5.createElement(
+      React6.createElement(
         "p",
         { className: "dim-jh-hint" },
         "另有「MiniMax 国际站分流设置」（X-Forwarded-For）：它只是**声明**一个海外 IP，上游不认即失效；本设置是**真正**换出口，两者可叠加。"
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React5.createElement(
+        React6.createElement(
           "div",
           { className: "dim-jh-fieldRow" },
-          MODES.map((m) => React5.createElement(
+          MODES.map((m) => React6.createElement(
             "label",
             { key: m.id, className: "dim-jh-radio" },
-            React5.createElement("input", {
+            React6.createElement("input", {
               type: "radio",
               name: "minimaxintl-proxy-mode",
               checked: mode === m.id,
@@ -3938,11 +4491,11 @@ function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
             m.label
           ))
         ),
-        React5.createElement("p", { className: "dim-jh-hint" }, activeHint),
-        mode === "local" && React5.createElement(
+        React6.createElement("p", { className: "dim-jh-hint" }, activeHint),
+        mode === "local" && React6.createElement(
           "div",
           { className: "dim-jh-presetRow" },
-          LOCAL_PORT_PRESETS.map((p) => React5.createElement("button", {
+          LOCAL_PORT_PRESETS.map((p) => React6.createElement("button", {
             key: p.port,
             type: "button",
             className: "dim-jh-btn",
@@ -3954,7 +4507,7 @@ function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
             }
           }, p.label))
         ),
-        React5.createElement("input", {
+        React6.createElement("input", {
           className: "dim-jh-input",
           placeholder: mode === "socks5" ? "socks5://user:pass@host:port" : "http://user:pass@host:port",
           value: url,
@@ -3965,42 +4518,42 @@ function MinimaxIntlProxyModal({ ctx, accountId, current, onClose }) {
             setResult(null);
           }
         }),
-        result && React5.createElement("p", {
+        result && React6.createElement("p", {
           className: "dim-jh-hint",
           // ⚠️⚠️ **被分流时不能显示成正常的绿**：那是用户真正想问的答案。
           style: result.geoRouted ? { color: "var(--dim-warn, #d9a441)" } : void 0
         }, result.geoRouted ? `代理可用，但出口仍被判定为中国大陆（HTTP ${result.status}）· ${result.latencyMs}ms —— 换个海外出口的代理再试` : `出口已在海外，未被分流（HTTP ${result.status}）· ${result.latencyMs}ms`),
-        error && React5.createElement("p", { className: "dim-jh-error" }, error)
+        error && React6.createElement("p", { className: "dim-jh-error" }, error)
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalActions" },
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: testing || busy || url.trim().length === 0,
           onClick: test
         }, testing ? "测试中…" : "测试连接"),
         // 只有已配置过才显示「清除」：没配过就没有可清除的东西。
-        current ? React5.createElement("button", {
+        current ? React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: busy,
           onClick: () => save("")
         }, "清除代理") : null,
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn dim-jh-btnPrimary",
           disabled: busy || url.trim().length === 0,
           onClick: () => save(url)
         }, "保存"),
-        React5.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
+        React6.createElement("button", { type: "button", className: "dim-jh-btn", onClick: close }, "取消")
       )
     )
   );
 }
 function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, onClose }) {
-  const [mode, setMode] = React5.useState("key");
+  const [mode, setMode] = React6.useState("key");
   const submit = () => {
     if (mode === "anonymous") {
       onSubmitAnonymous();
@@ -4010,7 +4563,7 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
     if (String(value).trim() === "") return;
     onSubmit(value);
   };
-  return React5.createElement(
+  return React6.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -4018,7 +4571,7 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
         if (e.target === e.currentTarget && !busy && onClose) onClose();
       }
     },
-    React5.createElement(
+    React6.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -4026,22 +4579,22 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
         "aria-modal": "true",
         style: { maxWidth: "520px" }
       },
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React5.createElement("div", { className: "dim-jh-modalTitle" }, "添加 OpenCode 账号")
+        React6.createElement("div", { className: "dim-jh-modalTitle" }, "添加 OpenCode 账号")
       ),
       // 两种身份：API key 账号 / 匿名通道（无需凭据）。
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-fieldRow" },
         [
           { id: "key", label: "API key 账号" },
           { id: "anonymous", label: "匿名通道" }
-        ].map((m) => React5.createElement(
+        ].map((m) => React6.createElement(
           "label",
           { key: m.id, className: "dim-jh-radio" },
-          React5.createElement("input", {
+          React6.createElement("input", {
             type: "radio",
             name: "opencode-add-mode",
             checked: mode === m.id,
@@ -4050,10 +4603,10 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
           m.label
         ))
       ),
-      mode === "key" ? React5.createElement(
-        React5.Fragment,
+      mode === "key" ? React6.createElement(
+        React6.Fragment,
         null,
-        React5.createElement(
+        React6.createElement(
           "p",
           { className: "dim-jh-modalHint" },
           // ⚠️ 前缀**两种都要提**：opencode 2026-10-22 起签发 `oc_sk_…`
@@ -4063,13 +4616,13 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
         ),
         // ⚠️ 内容必须在 modalBody 里（flex:1; min-height:0; overflow-y:auto），
         // 否则弹窗内容会被裁掉（见 jet-hub.js 既有 modal 的注释）。
-        React5.createElement(
+        React6.createElement(
           "div",
           { className: "dim-jh-modalBody" },
-          React5.createElement(
+          React6.createElement(
             "div",
             { className: "dim-jh-formRows" },
-            React5.createElement("input", {
+            React6.createElement("input", {
               ref: inputRef,
               className: "dim-jh-input",
               // ⚠️ password 类型：API key 是凭据，不该在屏幕上裸显。
@@ -4087,12 +4640,12 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
           ),
           // ⚠️ 错误留在弹窗内：把整个账号列表切成错误态会让用户刚填的 key
           // 与错误信息一起消失，只能刷新重试。
-          error ? React5.createElement("p", { className: "dim-jh-error", role: "alert" }, "添加失败：" + error) : null
+          error ? React6.createElement("p", { className: "dim-jh-error", role: "alert" }, "添加失败：" + error) : null
         )
-      ) : React5.createElement(
+      ) : React6.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React5.createElement(
+        React6.createElement(
           "p",
           { className: "dim-jh-modalHint" },
           "匿名通道无需任何凭据（上游认字面量 public），用于免费模型。可以添加多条，每条可单独设置出口代理。"
@@ -4101,23 +4654,23 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
         // （实测：换 key、换伪装头、换指纹全部无效）。要多份额度只能给
         // 不同匿名通道配**不同代理**；指纹分离的价值是防关联。
         // 不说清楚的话，用户加 5 条匿名通道却只看到一份额度，会以为坏了。
-        React5.createElement(
+        React6.createElement(
           "p",
           { className: "dim-jh-hint" },
           "注意：匿名通道的额度按「出口 IP」计算。多条匿名通道若共用同一个出口，额度不会增加；给它们分别配置不同代理，才会各自获得独立额度。"
         ),
-        error ? React5.createElement("p", { className: "dim-jh-error", role: "alert" }, "添加失败：" + error) : null
+        error ? React6.createElement("p", { className: "dim-jh-error", role: "alert" }, "添加失败：" + error) : null
       ),
-      React5.createElement(
+      React6.createElement(
         "div",
         { className: "dim-jh-modalActions" },
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn dim-jh-btnPrimary",
           disabled: busy,
           onClick: submit
         }, busy ? "添加中…" : "添加"),
-        React5.createElement("button", {
+        React6.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: busy,
@@ -4130,21 +4683,21 @@ function OpencodeKeyModal({ error, busy, inputRef, onSubmit, onSubmitAnonymous, 
   );
 }
 
-// plugin-src/client/opencode-local-panel.js
-var React6 = __toESM(require("react"), 1);
-var h2 = React6.createElement;
+// vendor/dsh-codearts-auth/plugin-src/client/opencode-local-panel.js
+var React7 = __toESM(require("react"), 1);
+var h3 = React7.createElement;
 function OpencodeLocalPanel({ rpcCall, showModelList }) {
-  const [state, setState] = React6.useState(null);
-  const [notice, setNotice] = React6.useState(null);
-  const [busy, setBusy] = React6.useState(false);
-  const [baseUrl, setBaseUrl] = React6.useState("http://127.0.0.1:4096");
-  const [username, setUsername] = React6.useState("opencode");
-  const [password, setPassword] = React6.useState("");
-  const alive = React6.useRef(false);
-  const acting = React6.useRef(false);
-  const revision = React6.useRef(0);
-  const dirty = React6.useRef(false);
-  React6.useEffect(() => {
+  const [state, setState] = React7.useState(null);
+  const [notice, setNotice] = React7.useState(null);
+  const [busy, setBusy] = React7.useState(false);
+  const [baseUrl, setBaseUrl] = React7.useState("http://127.0.0.1:4096");
+  const [username, setUsername] = React7.useState("opencode");
+  const [password, setPassword] = React7.useState("");
+  const alive = React7.useRef(false);
+  const acting = React7.useRef(false);
+  const revision = React7.useRef(0);
+  const dirty = React7.useRef(false);
+  React7.useEffect(() => {
     alive.current = true;
     const current = ++revision.current;
     void rpcCall("opencode.local.status", {}).then((value) => {
@@ -4182,244 +4735,61 @@ function OpencodeLocalPanel({ rpcCall, showModelList }) {
     }
   };
   const controlStyle = { width: "100%", minWidth: 0, minHeight: 44, boxSizing: "border-box", border: "1px solid var(--dsw-alias-border-default, #dfe1e5)", borderRadius: 8, padding: "8px 10px", color: "inherit", background: "var(--dsw-alias-bg-layer-3, #fff)" };
-  return h2(
+  return h3(
     "section",
     { "aria-label": "OpenCode 本地服务", style: { minWidth: 0 } },
-    h2(
+    h3(
       "div",
       { className: "dim-jh-panelHead" },
-      h2("h2", { className: "dim-jh-panelTitle" }, "OpenCode 本地服务"),
-      h2(
+      h3("h2", { className: "dim-jh-panelTitle" }, "OpenCode 本地服务"),
+      h3(
         "div",
         { className: "dim-jh-headerActions", style: { flexWrap: "wrap" } },
-        h2("button", { className: "dim-jh-btn", disabled: busy, onClick: () => void act("start") }, busy ? "连接中…" : "启动/重连"),
-        h2("button", { className: "dim-jh-btn", disabled: busy, onClick: () => void act("refresh") }, "刷新模型"),
-        h2("button", { className: "dim-jh-btn", disabled: busy || !(state?.modelCount > 0), onClick: showModelList }, "显示列表")
+        h3("button", { className: "dim-jh-btn", disabled: busy, onClick: () => void act("start") }, busy ? "连接中…" : "启动/重连"),
+        h3("button", { className: "dim-jh-btn", disabled: busy, onClick: () => void act("refresh") }, "刷新模型"),
+        h3("button", { className: "dim-jh-btn", disabled: busy || !(state?.modelCount > 0), onClick: showModelList }, "显示列表")
       )
     ),
-    h2("p", null, "使用本机 OpenCode 服务中的免费模型。DSH 会按需启动服务，并保持连接；模型目录来自当前服务。"),
-    h2(
+    h3("p", null, "使用本机 OpenCode 服务中的免费模型。DSH 会按需启动服务，并保持连接；模型目录来自当前服务。"),
+    h3(
       "div",
       { role: "status", style: { overflowWrap: "anywhere", marginBlock: 16 } },
       state ? state.healthy ? `已连接 · OpenCode ${state.version} · 目录 ${state.modelCount} 个免费模型` : "本地服务尚未连接" : "正在检查本地服务…",
-      state?.error ? h2("p", null, state.error) : null
+      state?.error ? h3("p", null, state.error) : null
     ),
-    notice ? h2("div", { className: "dim-jh-probeNotice", "data-tone": notice.error ? "error" : "success", role: notice.error ? "alert" : "status" }, notice.text) : null,
-    h2(
+    notice ? h3("div", { className: "dim-jh-probeNotice", "data-tone": notice.error ? "error" : "success", role: notice.error ? "alert" : "status" }, notice.text) : null,
+    h3(
       "details",
       { style: { marginBlock: 20 } },
-      h2("summary", { style: { minHeight: 44, cursor: "pointer" } }, "服务地址与访问密码"),
-      h2(
+      h3("summary", { style: { minHeight: 44, cursor: "pointer" } }, "服务地址与访问密码"),
+      h3(
         "div",
         { style: { display: "grid", gap: 12, maxWidth: 600, marginTop: 12 } },
-        h2("label", null, "本机服务地址", h2("input", { "aria-label": "本机服务地址", style: controlStyle, value: baseUrl, disabled: busy, onChange: (e) => {
+        h3("label", null, "本机服务地址", h3("input", { "aria-label": "本机服务地址", style: controlStyle, value: baseUrl, disabled: busy, onChange: (e) => {
           dirty.current = true;
           setBaseUrl(e.target.value);
         } })),
-        h2("label", null, "服务用户名", h2("input", { "aria-label": "服务用户名", autoComplete: "off", style: controlStyle, value: username, disabled: busy, onChange: (e) => setUsername(e.target.value) })),
-        h2("label", null, "服务访问密码", h2("input", { "aria-label": "服务访问密码", type: "password", autoComplete: "new-password", placeholder: "留空保留已保存的密码", style: controlStyle, value: password, disabled: busy, onChange: (e) => setPassword(e.target.value) })),
-        h2("button", { className: "dim-jh-btn", disabled: busy || state?.activeRequests > 0, onClick: () => void act("configure", { baseUrl, username, password }) }, "保存连接设置")
+        h3("label", null, "服务用户名", h3("input", { "aria-label": "服务用户名", autoComplete: "off", style: controlStyle, value: username, disabled: busy, onChange: (e) => setUsername(e.target.value) })),
+        h3("label", null, "服务访问密码", h3("input", { "aria-label": "服务访问密码", type: "password", autoComplete: "new-password", placeholder: "留空保留已保存的密码", style: controlStyle, value: password, disabled: busy, onChange: (e) => setPassword(e.target.value) })),
+        h3("button", { className: "dim-jh-btn", disabled: busy || state?.activeRequests > 0, onClick: () => void act("configure", { baseUrl, username, password }) }, "保存连接设置")
       )
     ),
-    h2("p", { style: { opacity: 0.8 } }, "免费模型不需要在 JetHub 添加 Zen API Key。已有账号记录保持保留。"),
-    h2("ul", { style: { paddingLeft: 20, overflowWrap: "anywhere" } }, (state?.models ?? []).map((model) => h2(
+    h3("p", { style: { opacity: 0.8 } }, "免费模型不需要在 JetHub 添加 Zen API Key。已有账号记录保持保留。"),
+    h3("ul", { style: { paddingLeft: 20, overflowWrap: "anywhere" } }, (state?.models ?? []).map((model) => h3(
       "li",
       { key: model.id, style: { marginBlock: 8 } },
-      h2("strong", null, model.name),
-      h2("span", null, ` · ${model.id}`),
-      model.inputModalities?.includes("image") ? h2("span", null, " · 支持图片") : null
+      h3("strong", null, model.name),
+      h3("span", null, ` · ${model.id}`),
+      model.inputModalities?.includes("image") ? h3("span", null, " · 支持图片") : null
     ))),
-    state?.healthy && state.modelCount === 0 ? h2("p", null, "服务已连接，尚未读取模型目录；点击刷新模型。") : null
+    state?.healthy && state.modelCount === 0 ? h3("p", null, "服务已连接，尚未读取模型目录；点击刷新模型。") : null
   );
 }
 
-// plugin-src/client/modelscope-key-modal.js
-var React7 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/modelscope-key-modal.js
+var React8 = __toESM(require("react"), 1);
 var TOKEN_URL = "https://modelscope.cn/my/myaccesstoken";
 function ModelscopeKeyModal({ error, busy, inputRef, onSubmit, onClose }) {
-  const submit = () => {
-    const value = inputRef && inputRef.current ? inputRef.current.value : "";
-    if (String(value).trim() === "") {
-      if (onClose) onClose();
-      return;
-    }
-    onSubmit(value);
-  };
-  return React7.createElement(
-    "div",
-    {
-      className: "dim-jh-modalOverlay",
-      onClick: (e) => {
-        if (e.target === e.currentTarget && !busy && onClose) onClose();
-      }
-    },
-    React7.createElement(
-      "div",
-      {
-        className: "dim-jh-modal",
-        role: "dialog",
-        "aria-modal": "true",
-        style: { maxWidth: "520px" }
-      },
-      React7.createElement(
-        "div",
-        { className: "dim-jh-modalHead" },
-        React7.createElement("div", { className: "dim-jh-modalTitle" }, "添加 ModelScope 账号")
-      ),
-      // ⚠️ 内容必须放进 modalBody（flex:1; min-height:0; overflow-y:auto），
-      // 否则弹窗较高时内容会被裁掉（见 jet-hub.js 既有 modal 的注释）。
-      React7.createElement(
-        "div",
-        { className: "dim-jh-modalBody" },
-        React7.createElement(
-          "p",
-          { className: "dim-jh-modalHint" },
-          "在 " + TOKEN_URL + " 生成访问令牌（形如 ms-…）后粘贴到下方。"
-        ),
-        // ⚠️ 这一句是**用户会踩的坑**：魔搭控制台的令牌有「有效期」一栏，
-        // 选短期会让账号过一阵就失效，而本插件**无法续期**（没有 refresh 端点）。
-        React7.createElement(
-          "p",
-          { className: "dim-jh-hint" },
-          "建议把令牌有效期设为「永久」—— 本插件无法自动续期，短期令牌过期后需要回到这里重新粘贴。"
-        ),
-        React7.createElement(
-          "div",
-          { className: "dim-jh-formRows" },
-          React7.createElement("input", {
-            ref: inputRef,
-            className: "dim-jh-input",
-            // ⚠️ password 类型：API Key 是凭据，不该在屏幕上裸显。
-            type: "password",
-            placeholder: "ms-…",
-            autoFocus: true,
-            // Enter 直接提交：粘贴 Key 后最自然的动作就是回车。
-            onKeyDown: (e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                submit();
-              }
-            }
-          })
-        ),
-        // ⚠️ 错误留在弹窗内：把整个账号列表切成错误态会让用户刚填的 Key
-        // 与错误信息一起消失，只能刷新重试。
-        error ? React7.createElement("p", { className: "dim-jh-error", role: "alert" }, "添加失败：" + error) : null
-      ),
-      React7.createElement(
-        "div",
-        { className: "dim-jh-modalActions" },
-        React7.createElement("button", {
-          type: "button",
-          className: "dim-jh-btn dim-jh-btnPrimary",
-          disabled: busy,
-          onClick: submit
-        }, busy ? "添加中…" : "添加"),
-        React7.createElement("button", {
-          type: "button",
-          className: "dim-jh-btn",
-          disabled: busy,
-          onClick: () => {
-            if (onClose) onClose();
-          }
-        }, "取消")
-      )
-    )
-  );
-}
-function ModelscopeKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onClose }) {
-  const submit = () => {
-    const value = inputRef && inputRef.current ? inputRef.current.value : "";
-    if (String(value).trim() === "") {
-      if (onClose) onClose();
-      return;
-    }
-    onSubmit(value);
-  };
-  return React7.createElement(
-    "div",
-    {
-      className: "dim-jh-modalOverlay",
-      onClick: (e) => {
-        if (e.target === e.currentTarget && !busy && onClose) onClose();
-      }
-    },
-    React7.createElement(
-      "div",
-      {
-        className: "dim-jh-modal",
-        role: "dialog",
-        "aria-modal": "true",
-        style: { maxWidth: "520px" }
-      },
-      React7.createElement(
-        "div",
-        { className: "dim-jh-modalHead" },
-        React7.createElement("div", { className: "dim-jh-modalTitle" }, "编辑 API Key")
-      ),
-      React7.createElement(
-        "div",
-        { className: "dim-jh-modalBody" },
-        React7.createElement(
-          "p",
-          { className: "dim-jh-modalHint" },
-          "在 " + TOKEN_URL + " 生成访问令牌（形如 ms-…）后粘贴到下方。" + (currentMasked ? "当前：" + currentMasked : "当前：尚未设置")
-        ),
-        React7.createElement(
-          "div",
-          { className: "dim-jh-formRows" },
-          React7.createElement("input", {
-            ref: inputRef,
-            className: "dim-jh-input",
-            // ⚠️ password 类型：API Key 是凭据，不该在屏幕上裸显。
-            type: "password",
-            placeholder: "ms-…",
-            autoFocus: true,
-            disabled: !!busy,
-            // Enter 直接提交：粘贴 Key 后最自然的动作就是回车。
-            onKeyDown: (e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                submit();
-              }
-            }
-          })
-        ),
-        React7.createElement(
-          "p",
-          { className: "dim-jh-modalHint" },
-          "注意：换一把 Key 会同时更换该账号的标识（它由 Key 尾段派生），昵称与停用状态会保留。同一把 Key 只对应一个账号。"
-        ),
-        // ⚠️ 错误留在弹窗内：把账号列表切成错误态会让用户刚填的 Key
-        // 与错误信息一起消失，只能刷新重试。
-        error ? React7.createElement("p", { className: "dim-jh-error", role: "alert" }, "保存失败：" + error) : null
-      ),
-      React7.createElement(
-        "div",
-        { className: "dim-jh-modalActions" },
-        React7.createElement("button", {
-          type: "button",
-          className: "dim-jh-btn dim-jh-btnPrimary",
-          disabled: !!busy,
-          onClick: submit
-        }, busy ? "保存中…" : "保存"),
-        React7.createElement("button", {
-          type: "button",
-          className: "dim-jh-btn",
-          disabled: !!busy,
-          onClick: () => {
-            if (onClose) onClose();
-          }
-        }, "取消")
-      )
-    )
-  );
-}
-
-// plugin-src/client/qiniu-key-modal.js
-var React8 = __toESM(require("react"), 1);
-var TOKEN_URL2 = "https://portal.qiniu.com/ai-inference/api-key";
-function QiniuKeyModal({ error, busy, inputRef, onSubmit, onClose }) {
   const submit = () => {
     const value = inputRef && inputRef.current ? inputRef.current.value : "";
     if (String(value).trim() === "") {
@@ -4447,7 +4817,7 @@ function QiniuKeyModal({ error, busy, inputRef, onSubmit, onClose }) {
       React8.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React8.createElement("div", { className: "dim-jh-modalTitle" }, "添加 Qiniu (七牛云) 账号")
+        React8.createElement("div", { className: "dim-jh-modalTitle" }, "添加 ModelScope 账号")
       ),
       // ⚠️ 内容必须放进 modalBody（flex:1; min-height:0; overflow-y:auto），
       // 否则弹窗较高时内容会被裁掉（见 jet-hub.js 既有 modal 的注释）。
@@ -4457,13 +4827,14 @@ function QiniuKeyModal({ error, busy, inputRef, onSubmit, onClose }) {
         React8.createElement(
           "p",
           { className: "dim-jh-modalHint" },
-          "在 " + TOKEN_URL2 + " 生成 API Key 后粘贴到下方。"
+          "在 " + TOKEN_URL + " 生成访问令牌（形如 ms-…）后粘贴到下方。"
         ),
-        // ⚠️ Key 形状宽松：至少 16 位，可含字母、数字与 _ . -（无固定前缀）。
+        // ⚠️ 这一句是**用户会踩的坑**：魔搭控制台的令牌有「有效期」一栏，
+        // 选短期会让账号过一阵就失效，而本插件**无法续期**（没有 refresh 端点）。
         React8.createElement(
           "p",
           { className: "dim-jh-hint" },
-          "Key 至少 16 位字符，可含字母、数字与 _ . -（无固定前缀）。"
+          "建议把令牌有效期设为「永久」—— 本插件无法自动续期，短期令牌过期后需要回到这里重新粘贴。"
         ),
         React8.createElement(
           "div",
@@ -4473,7 +4844,7 @@ function QiniuKeyModal({ error, busy, inputRef, onSubmit, onClose }) {
             className: "dim-jh-input",
             // ⚠️ password 类型：API Key 是凭据，不该在屏幕上裸显。
             type: "password",
-            placeholder: "API Key（≥16 位）",
+            placeholder: "ms-…",
             autoFocus: true,
             // Enter 直接提交：粘贴 Key 后最自然的动作就是回车。
             onKeyDown: (e) => {
@@ -4509,7 +4880,7 @@ function QiniuKeyModal({ error, busy, inputRef, onSubmit, onClose }) {
     )
   );
 }
-function QiniuKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onClose }) {
+function ModelscopeKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onClose }) {
   const submit = () => {
     const value = inputRef && inputRef.current ? inputRef.current.value : "";
     if (String(value).trim() === "") {
@@ -4545,7 +4916,7 @@ function QiniuKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onC
         React8.createElement(
           "p",
           { className: "dim-jh-modalHint" },
-          "在 " + TOKEN_URL2 + " 生成 API Key 后粘贴到下方。" + (currentMasked ? "当前：" + currentMasked : "当前：尚未设置")
+          "在 " + TOKEN_URL + " 生成访问令牌（形如 ms-…）后粘贴到下方。" + (currentMasked ? "当前：" + currentMasked : "当前：尚未设置")
         ),
         React8.createElement(
           "div",
@@ -4555,7 +4926,7 @@ function QiniuKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onC
             className: "dim-jh-input",
             // ⚠️ password 类型：API Key 是凭据，不该在屏幕上裸显。
             type: "password",
-            placeholder: "API Key（≥16 位）",
+            placeholder: "ms-…",
             autoFocus: true,
             disabled: !!busy,
             // Enter 直接提交：粘贴 Key 后最自然的动作就是回车。
@@ -4570,7 +4941,7 @@ function QiniuKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onC
         React8.createElement(
           "p",
           { className: "dim-jh-modalHint" },
-          "注意：换一把 Key 会同时更换该账号的标识（它由 Key 派生），昵称与停用状态会保留。同一把 Key 只对应一个账号。"
+          "注意：换一把 Key 会同时更换该账号的标识（它由 Key 尾段派生），昵称与停用状态会保留。同一把 Key 只对应一个账号。"
         ),
         // ⚠️ 错误留在弹窗内：把账号列表切成错误态会让用户刚填的 Key
         // 与错误信息一起消失，只能刷新重试。
@@ -4598,7 +4969,479 @@ function QiniuKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onC
   );
 }
 
-// plugin-src/client/notice-shape.js
+// vendor/dsh-codearts-auth/plugin-src/client/qiniu-key-modal.js
+var React9 = __toESM(require("react"), 1);
+var TOKEN_URL2 = "https://portal.qiniu.com/ai-inference/api-key";
+function QiniuKeyModal({ error, busy, inputRef, onSubmit, onClose }) {
+  const submit = () => {
+    const value = inputRef && inputRef.current ? inputRef.current.value : "";
+    if (String(value).trim() === "") {
+      if (onClose) onClose();
+      return;
+    }
+    onSubmit(value);
+  };
+  return React9.createElement(
+    "div",
+    {
+      className: "dim-jh-modalOverlay",
+      onClick: (e) => {
+        if (e.target === e.currentTarget && !busy && onClose) onClose();
+      }
+    },
+    React9.createElement(
+      "div",
+      {
+        className: "dim-jh-modal",
+        role: "dialog",
+        "aria-modal": "true",
+        style: { maxWidth: "520px" }
+      },
+      React9.createElement(
+        "div",
+        { className: "dim-jh-modalHead" },
+        React9.createElement("div", { className: "dim-jh-modalTitle" }, "添加 Qiniu (七牛云) 账号")
+      ),
+      // ⚠️ 内容必须放进 modalBody（flex:1; min-height:0; overflow-y:auto），
+      // 否则弹窗较高时内容会被裁掉（见 jet-hub.js 既有 modal 的注释）。
+      React9.createElement(
+        "div",
+        { className: "dim-jh-modalBody" },
+        React9.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          "在 " + TOKEN_URL2 + " 生成 API Key 后粘贴到下方。"
+        ),
+        // ⚠️ Key 形状宽松：至少 16 位，可含字母、数字与 _ . -（无固定前缀）。
+        React9.createElement(
+          "p",
+          { className: "dim-jh-hint" },
+          "Key 至少 16 位字符，可含字母、数字与 _ . -（无固定前缀）。"
+        ),
+        React9.createElement(
+          "div",
+          { className: "dim-jh-formRows" },
+          React9.createElement("input", {
+            ref: inputRef,
+            className: "dim-jh-input",
+            // ⚠️ password 类型：API Key 是凭据，不该在屏幕上裸显。
+            type: "password",
+            placeholder: "API Key（≥16 位）",
+            autoFocus: true,
+            // Enter 直接提交：粘贴 Key 后最自然的动作就是回车。
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submit();
+              }
+            }
+          })
+        ),
+        // ⚠️ 错误留在弹窗内：把整个账号列表切成错误态会让用户刚填的 Key
+        // 与错误信息一起消失，只能刷新重试。
+        error ? React9.createElement("p", { className: "dim-jh-error", role: "alert" }, "添加失败：" + error) : null
+      ),
+      React9.createElement(
+        "div",
+        { className: "dim-jh-modalActions" },
+        React9.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn dim-jh-btnPrimary",
+          disabled: busy,
+          onClick: submit
+        }, busy ? "添加中…" : "添加"),
+        React9.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn",
+          disabled: busy,
+          onClick: () => {
+            if (onClose) onClose();
+          }
+        }, "取消")
+      )
+    )
+  );
+}
+function QiniuKeyEditModal({ error, busy, currentMasked, inputRef, onSubmit, onClose }) {
+  const submit = () => {
+    const value = inputRef && inputRef.current ? inputRef.current.value : "";
+    if (String(value).trim() === "") {
+      if (onClose) onClose();
+      return;
+    }
+    onSubmit(value);
+  };
+  return React9.createElement(
+    "div",
+    {
+      className: "dim-jh-modalOverlay",
+      onClick: (e) => {
+        if (e.target === e.currentTarget && !busy && onClose) onClose();
+      }
+    },
+    React9.createElement(
+      "div",
+      {
+        className: "dim-jh-modal",
+        role: "dialog",
+        "aria-modal": "true",
+        style: { maxWidth: "520px" }
+      },
+      React9.createElement(
+        "div",
+        { className: "dim-jh-modalHead" },
+        React9.createElement("div", { className: "dim-jh-modalTitle" }, "编辑 API Key")
+      ),
+      React9.createElement(
+        "div",
+        { className: "dim-jh-modalBody" },
+        React9.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          "在 " + TOKEN_URL2 + " 生成 API Key 后粘贴到下方。" + (currentMasked ? "当前：" + currentMasked : "当前：尚未设置")
+        ),
+        React9.createElement(
+          "div",
+          { className: "dim-jh-formRows" },
+          React9.createElement("input", {
+            ref: inputRef,
+            className: "dim-jh-input",
+            // ⚠️ password 类型：API Key 是凭据，不该在屏幕上裸显。
+            type: "password",
+            placeholder: "API Key（≥16 位）",
+            autoFocus: true,
+            disabled: !!busy,
+            // Enter 直接提交：粘贴 Key 后最自然的动作就是回车。
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submit();
+              }
+            }
+          })
+        ),
+        React9.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          "注意：换一把 Key 会同时更换该账号的标识（它由 Key 派生），昵称与停用状态会保留。同一把 Key 只对应一个账号。"
+        ),
+        // ⚠️ 错误留在弹窗内：把账号列表切成错误态会让用户刚填的 Key
+        // 与错误信息一起消失，只能刷新重试。
+        error ? React9.createElement("p", { className: "dim-jh-error", role: "alert" }, "保存失败：" + error) : null
+      ),
+      React9.createElement(
+        "div",
+        { className: "dim-jh-modalActions" },
+        React9.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn dim-jh-btnPrimary",
+          disabled: !!busy,
+          onClick: submit
+        }, busy ? "保存中…" : "保存"),
+        React9.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn",
+          disabled: !!busy,
+          onClick: () => {
+            if (onClose) onClose();
+          }
+        }, "取消")
+      )
+    )
+  );
+}
+
+// vendor/dsh-codearts-auth/plugin-src/client/baizhi-key-modal.js
+var React10 = __toESM(require("react"), 1);
+var TOKEN_URL3 = "https://ai-models.app.baizhi.cloud/console/keys";
+function BaizhiKeyModal({
+  error,
+  busy,
+  inputRef,
+  onSubmit,
+  onClose,
+  currentMasked,
+  editing: editingProp,
+  onDismissError
+}) {
+  const editing = typeof editingProp === "boolean" ? editingProp : typeof currentMasked === "string" && currentMasked !== "";
+  const submit = () => {
+    const value = inputRef && inputRef.current ? inputRef.current.value : "";
+    if (String(value).trim() === "") {
+      if (onClose) onClose();
+      return;
+    }
+    onSubmit(value);
+  };
+  return React10.createElement(
+    "div",
+    {
+      className: "dim-jh-modalOverlay",
+      onClick: (e) => {
+        if (e.target === e.currentTarget && !busy && onClose) onClose();
+      }
+    },
+    React10.createElement(
+      "div",
+      {
+        className: "dim-jh-modal",
+        role: "dialog",
+        "aria-modal": "true",
+        // 与 monkeycode 弹窗对齐（三审 E🟢-12）：`role="dialog"` 只有可访问名
+        // 被屏幕阅读器念出来才有意义，缺 aria-label 等于没标。
+        "aria-label": (editing ? "更新 " : "添加 ") + "百智云 账号",
+        style: { maxWidth: "520px" }
+      },
+      React10.createElement(
+        "div",
+        { className: "dim-jh-modalHead" },
+        React10.createElement(
+          "div",
+          { className: "dim-jh-modalTitle" },
+          editing ? "更新 百智云 账号的 API Key" : "添加 百智云 账号"
+        )
+      ),
+      // ⚠️ 内容必须放进 modalBody（flex:1; min-height:0; overflow-y:auto），
+      // 否则弹窗较高时内容会被裁掉（见 jet-hub.js 既有 modal 的注释）。
+      React10.createElement(
+        "div",
+        { className: "dim-jh-modalBody" },
+        React10.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          editing ? "当前 Key：" + (currentMasked === "" ? "（未记录打码值）" : currentMasked) + "。粘贴新 Key 后点「更新」——控制台登录态（积分/用量）会保留，不需要重新登录。" : "在 " + TOKEN_URL3 + " 控制台的「API Key」页创建 Key 后粘贴到下方。"
+        ),
+        React10.createElement(
+          "p",
+          { className: "dim-jh-hint" },
+          "百智云按量计费：积分与用量在控制台可见（用「浏览器登录」接入后本卡片会显示），没有每日签到。调用直接结算到该 Key 所属账户。"
+        ),
+        React10.createElement(
+          "div",
+          { className: "dim-jh-formRows" },
+          React10.createElement("input", {
+            ref: inputRef,
+            className: "dim-jh-input",
+            // ⚠️ password 类型：API Key 是凭据，不该在屏幕上裸显。
+            type: "password",
+            placeholder: "API Key（sk-…）",
+            autoFocus: true,
+            /**
+             * ⚠️ 输入即清掉宿主那条「更新失败」红字（三审 E🟢-15）：它是**上一次**
+             * 提交的结论，用户一改就已经过时；不清的话会一直挂到下次提交。
+             */
+            onChange: () => {
+              if (error && onDismissError) onDismissError();
+            },
+            // Enter 直接提交：粘贴 Key 后最自然的动作就是回车。
+            onKeyDown: (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                submit();
+              }
+            }
+          })
+        ),
+        // ⚠️ 错误留在弹窗内：把整个账号列表切成错误态会让用户刚填的 Key
+        // 与错误信息一起消失，只能刷新重试。
+        error ? React10.createElement(
+          "p",
+          { className: "dim-jh-error", role: "alert" },
+          (editing ? "更新失败：" : "添加失败：") + error
+        ) : null
+      ),
+      React10.createElement(
+        "div",
+        { className: "dim-jh-modalActions" },
+        React10.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn dim-jh-btnPrimary",
+          disabled: busy,
+          onClick: submit
+        }, busy ? editing ? "更新中…" : "添加中…" : editing ? "更新" : "添加"),
+        React10.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn",
+          disabled: busy,
+          onClick: () => {
+            if (onClose) onClose();
+          }
+        }, "取消")
+      )
+    )
+  );
+}
+
+// vendor/dsh-codearts-auth/plugin-src/client/monkeycode-key-modal.js
+var React11 = __toESM(require("react"), 1);
+function siteOf(provider) {
+  return provider === "monkeycodeintl" ? { name: "MonkeyCode 国际站", base: "https://monkeycode-ai.net" } : { name: "MonkeyCode", base: "https://monkeycode-ai.com" };
+}
+function MonkeycodeKeyModal({
+  provider,
+  error,
+  busy,
+  inputRef,
+  onSubmit,
+  onClose,
+  currentMasked,
+  editing: editingProp,
+  onDismissError
+}) {
+  const editing = typeof editingProp === "boolean" ? editingProp : typeof currentMasked === "string" && currentMasked !== "";
+  const secretRef = React11.useRef(null);
+  const cookieRef = React11.useRef(null);
+  const site = siteOf(provider);
+  const [inlineError, setInlineError] = React11.useState("");
+  const clearInlineError = () => {
+    if (inlineError !== "") setInlineError("");
+    if (error && onDismissError) onDismissError();
+  };
+  const submit = () => {
+    const read = (ref) => {
+      if (!ref || !ref.current) return "";
+      return String(ref.current.value == null ? "" : ref.current.value).trim();
+    };
+    const apiKey = inputRef && inputRef.current ? String(inputRef.current.value == null ? "" : inputRef.current.value).trim() : "";
+    const signingSecret = read(secretRef);
+    const sessionCookie = read(cookieRef);
+    if (apiKey === "") {
+      if (!editing || sessionCookie === "") {
+        if (onClose) onClose();
+        return;
+      }
+      onSubmit({ apiKey: "", signingSecret, sessionCookie });
+      return;
+    }
+    if (!editing && signingSecret === "") {
+      setInlineError("signing_secret 必填：它与 API Key 在同一页面生成，缺了它网关会拒绝每一次请求。");
+      return;
+    }
+    setInlineError("");
+    onSubmit({ apiKey, signingSecret, sessionCookie });
+  };
+  const onInputKeyDown = (e) => {
+    if (e && e.key === "Enter") {
+      e.preventDefault();
+      submit();
+    }
+  };
+  return React11.createElement(
+    "div",
+    {
+      className: "dim-jh-modalOverlay",
+      onClick: (e) => {
+        if (e.target === e.currentTarget && !busy && onClose) onClose();
+      }
+    },
+    React11.createElement(
+      "div",
+      {
+        className: "dim-jh-modal",
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-label": (editing ? "更新 " : "添加 ") + site.name + " 账号",
+        style: { maxWidth: "560px" }
+      },
+      React11.createElement(
+        "div",
+        { className: "dim-jh-modalHead" },
+        React11.createElement(
+          "div",
+          { className: "dim-jh-modalTitle" },
+          (editing ? "更新 " : "添加 ") + site.name + " 账号"
+        )
+      ),
+      // ⚠️ 内容必须放进 modalBody（flex:1; min-height:0; overflow-y:auto），
+      // 否则弹窗较高时内容会被裁掉。
+      React11.createElement(
+        "div",
+        { className: "dim-jh-modalBody" },
+        React11.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          editing ? "当前 Key：" + (currentMasked === "" ? "（未记录打码值）" : currentMasked) + "。只需重填要换的字段，留空的字段保持原值（包括 signing_secret 与已攒下的会话 cookie）；只想补网页登录态时，可以把 API Key 留空、只填 session cookie。" : "API Key 与 signing_secret 在 " + site.base + " 站内「OhMyAgent」页面生成（Key 形如 oma_…）。推荐直接用「浏览器登录」自动获取；只有手里已经有 Key 时才需要填这里。"
+        ),
+        React11.createElement(
+          "div",
+          { className: "dim-jh-formRows" },
+          React11.createElement("input", {
+            ref: inputRef,
+            className: "dim-jh-input",
+            type: "password",
+            autoFocus: true,
+            spellCheck: false,
+            autoComplete: "off",
+            placeholder: "API Key（oma_…）",
+            onChange: clearInlineError,
+            disabled: busy || void 0,
+            onKeyDown: onInputKeyDown
+          }),
+          React11.createElement(
+            "p",
+            { className: "dim-jh-hint" },
+            "signing_secret 与 API Key 同时生成（48 位随机串）。缺了它，网关会以 403 invalid ohmyagent request 拒绝每一次请求。"
+          ),
+          React11.createElement("input", {
+            ref: secretRef,
+            className: "dim-jh-input",
+            type: "password",
+            spellCheck: false,
+            autoComplete: "off",
+            // 编辑模式下它**可以留空**（宿主 `signingSecret ?? previous?.signing_secret`
+            // 会沿用旧值），写「必填」会让人以为必须重填。
+            placeholder: editing ? "signing_secret（留空保持原值）" : "signing_secret（必填）",
+            onChange: clearInlineError,
+            disabled: busy || void 0,
+            onKeyDown: onInputKeyDown
+          }),
+          React11.createElement("input", {
+            ref: cookieRef,
+            className: "dim-jh-input",
+            type: "password",
+            spellCheck: false,
+            autoComplete: "off",
+            placeholder: "session cookie（选填，用于积分与签到）",
+            onChange: clearInlineError,
+            disabled: busy || void 0,
+            onKeyDown: onInputKeyDown
+          })
+        ),
+        React11.createElement(
+          "p",
+          { className: "dim-jh-hint" },
+          "session cookie 只影响积分 / 每日额度 / 签到，不影响推理。留空时余额面板显示「未配置会话」——事后可以点账号卡片上的「改 Key」补填这一栏，不必删除重建。"
+        ),
+        // ⚠️ `role="alert"`：屏幕阅读器要能读到这条（百智那个弹窗一直有，本弹窗漏了）。
+        error || inlineError ? React11.createElement(
+          "div",
+          { className: "dim-jh-error", role: "alert" },
+          error || inlineError
+        ) : null
+      ),
+      React11.createElement(
+        "div",
+        { className: "dim-jh-modalFoot" },
+        React11.createElement("button", {
+          className: "dim-jh-btn",
+          type: "button",
+          disabled: busy ? "disabled" : void 0,
+          onClick: () => {
+            if (onClose) onClose();
+          }
+        }, "取消"),
+        React11.createElement("button", {
+          className: "dim-jh-btn dim-jh-btnPrimary",
+          type: "button",
+          disabled: busy ? "disabled" : void 0,
+          onClick: submit
+        }, busy ? editing ? "更新中…" : "提交中…" : editing ? "更新" : "确定")
+      )
+    )
+  );
+}
+
+// vendor/dsh-codearts-auth/plugin-src/client/notice-shape.js
 function normalizeProbeNotice(next) {
   if (next === null || next === void 0) return null;
   if (typeof next === "string") {
@@ -4622,7 +5465,7 @@ function safeNoticeDetails(details) {
   return Array.isArray(details) ? details : [];
 }
 
-// plugin-src/client/credit-expiry.js
+// vendor/dsh-codearts-auth/plugin-src/client/credit-expiry.js
 var DAY_MS = 24 * 60 * 60 * 1e3;
 function normalizeWindowDays2(windowDays) {
   if (windowDays === void 0 || windowDays === null || windowDays === "") return null;
@@ -4630,8 +5473,8 @@ function normalizeWindowDays2(windowDays) {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 }
 function daysUntilExpiry(pkg, now) {
-  const end = pkg && typeof pkg.deductionEndTime === "number" ? pkg.deductionEndTime : null;
-  if (end === null || !Number.isFinite(end) || end <= 0) return null;
+  const end = packageExpiryMs(pkg);
+  if (end === null) return null;
   const at = typeof now === "number" && Number.isFinite(now) ? now : Date.now();
   return (end - at) / DAY_MS;
 }
@@ -4641,6 +5484,7 @@ function splitCreditsByExpiry(packages, windowDays, now) {
   const windowMs = days * DAY_MS;
   const at = typeof now === "number" && Number.isFinite(now) ? now : Date.now();
   let expiring = 0;
+  let expired = 0;
   let longTerm = 0;
   let permanent = 0;
   let earliestExpiringAt = null;
@@ -4668,6 +5512,10 @@ function splitCreditsByExpiry(packages, windowDays, now) {
       }
       continue;
     }
+    if (end <= at) {
+      expired += remaining;
+      continue;
+    }
     if (end - at < windowMs) {
       expiring += remaining;
       if (end > at && (earliestExpiringAt === null || end < earliestExpiringAt)) {
@@ -4680,24 +5528,36 @@ function splitCreditsByExpiry(packages, windowDays, now) {
       longTerm += remaining;
     }
   }
-  return { expiring, longTerm, permanent, earliestExpiringAt, earliestExpiringAmount, exclusivePoolRemaining };
+  return { expiring, ...expired > 0 ? { expired } : {}, longTerm, permanent, earliestExpiringAt, earliestExpiringAmount, exclusivePoolRemaining };
 }
 function expiryBucketLabel(pkg, windowDays, now) {
   const days = normalizeWindowDays2(windowDays);
   const left = daysUntilExpiry(pkg, now);
   if (left === null) return "到期时间未知";
+  if (left <= 0) return "已过期";
   if (days === null) return null;
   return left < days ? `${Math.ceil(left)} 天内到期` : `还有 ${Math.ceil(left)} 天`;
+}
+function formatExpiryHint(pkg, windowDays, now) {
+  const left = daysUntilExpiry(pkg, now);
+  if (left === null) return "";
+  if (left <= 0) return "已过期";
+  const days = Math.ceil(left);
+  const label = expiryBucketLabel(pkg, windowDays, now);
+  return label ? `距到期 ${days} 天（${label}）` : `距到期 ${days} 天`;
 }
 function formatExpirySplitLine(split, format) {
   if (!split) return null;
   const parts = [];
   const permanent = split.permanent > 0 ? format(split.permanent) : null;
   const longTerm = split.longTerm > 0 ? format(split.longTerm) : null;
+  const expiredAmount = Number.isFinite(split.expired) && split.expired > 0 ? split.expired : 0;
   const expiring = split.expiring > 0 ? format(split.expiring) : null;
+  const expired = expiredAmount > 0 ? format(expiredAmount) : null;
   if (permanent !== null) parts.push(`永久 ${permanent}`);
   if (longTerm !== null) parts.push(`长期 ${longTerm}`);
   if (expiring !== null) parts.push(`临期 ${expiring}`);
+  if (expired !== null) parts.push(`已过期 ${expired}`);
   return parts.length === 0 ? null : parts.join(" · ");
 }
 function expirySplitParts(split, format, now) {
@@ -4705,8 +5565,10 @@ function expirySplitParts(split, format, now) {
   const parts = [];
   const permanent = split.permanent > 0 ? format(split.permanent) : null;
   const longTerm = split.longTerm > 0 ? format(split.longTerm) : null;
+  const expiredAmount = Number.isFinite(split.expired) && split.expired > 0 ? split.expired : 0;
   const expiringAmount = split.expiring > 0 ? split.expiring : 0;
   const expiring = expiringAmount > 0 ? format(expiringAmount) : null;
+  const expiredText = expiredAmount > 0 ? format(expiredAmount) : null;
   if (permanent !== null) parts.push({ key: "permanent", text: `永久 ${permanent}`, tone: "ok" });
   if (longTerm !== null) parts.push({ key: "longTerm", text: `长期 ${longTerm}`, tone: "warn" });
   if (expiring !== null) {
@@ -4721,6 +5583,9 @@ function expirySplitParts(split, format, now) {
       tone: "error",
       ...countdownText.length > 0 ? { countdown: countdownText } : {}
     });
+  }
+  if (expiredText !== null) {
+    parts.push({ key: "expired", text: `已过期 ${expiredText}`, tone: "warn" });
   }
   return parts;
 }
@@ -4787,7 +5652,8 @@ function exclusivePoolRemainingOf(packages) {
   return sum;
 }
 function packageExpiryMs(pkg) {
-  const dedEnd = Number(pkg && pkg.deductionEndTime);
+  const raw = pkg && pkg.deductionEndTime;
+  const dedEnd = typeof raw === "number" || typeof raw === "string" ? Number(raw) : Number.NaN;
   if (Number.isFinite(dedEnd) && dedEnd > 0) return dedEnd;
   const exp = pkg && pkg.expiredTime ? String(pkg.expiredTime) : "";
   if (exp.length > 0) {
@@ -4800,7 +5666,9 @@ function formatPackageExpiry(pkg, now) {
   const end = packageExpiryMs(pkg);
   if (end === null) return "长期";
   const at = Number.isFinite(now) ? now : Date.now();
-  const date = new Date(end).toISOString().slice(0, 10);
+  const local = new Date(end);
+  if (Number.isNaN(local.getTime())) return "长期";
+  const date = `${local.getFullYear()}-${String(local.getMonth() + 1).padStart(2, "0")}-${String(local.getDate()).padStart(2, "0")}`;
   const days = Math.ceil((end - at) / DAY_MS);
   if (days <= 0) return `${date}（已过期）`;
   return `${date}（${days} 天后）`;
@@ -4840,7 +5708,7 @@ function formatPackageTooltip(packages, options = {}) {
   return lines.join("\n");
 }
 
-// plugin-src/client/account-model-link.js
+// vendor/dsh-codearts-auth/plugin-src/client/account-model-link.js
 function disablingLeavesNoEnabledAccount(accounts, accountId, provider) {
   const list = Array.isArray(accounts) ? accounts : [];
   const target = list.find((a) => a?.id === accountId);
@@ -4856,7 +5724,7 @@ function allModelsDisabled(models) {
   return list.every((m) => m?.disabled === true);
 }
 
-// plugin-src/client/new-account.js
+// vendor/dsh-codearts-auth/plugin-src/client/new-account.js
 var PROVIDERS_ASKING_OPTIONS = Object.freeze(["zcode", "accio", "astudio", "autoclaw", "autoclawintl"]);
 function phoneLoginPresentation() {
   return typeof window !== "undefined" && window.__dshPhonePresentation === true;
@@ -4878,7 +5746,7 @@ function buildCreateAccountPayload(provider, zcodeProvider, accioRegion, astudio
   return { provider, autoclawMode: autoclawMode ?? "local" };
 }
 
-// plugin-src/client/model-filter.js
+// vendor/dsh-codearts-auth/plugin-src/client/model-filter.js
 var MODEL_STATUS_FILTERS = Object.freeze(["all", "enabled", "disabled"]);
 function normalizeStatusFilter(status) {
   return MODEL_STATUS_FILTERS.includes(status) ? status : "all";
@@ -4905,7 +5773,7 @@ function isFilterActive(options = {}) {
   return query.length > 0 || normalizeStatusFilter(options.status) !== "all";
 }
 
-// src/openai-gateway/config.ts
+// vendor/dsh-codearts-auth/src/openai-gateway/config.ts
 var INVISIBLE = /[\p{Cf}\p{Cc}\p{Cs}\p{Mn}\p{Me}\p{Zs}\p{Zl}\p{Zp}]/gu;
 function normalizeHostForCompare(host) {
   if (typeof host !== "string") return "";
@@ -5035,7 +5903,7 @@ function isLoopbackHost(host) {
   return mapped && groups[6] >>> 8 === 127;
 }
 
-// plugin-src/client/openai-gateway-panel.js
+// vendor/dsh-codearts-auth/plugin-src/client/openai-gateway-panel.js
 async function copyToClipboard(value) {
   try {
     if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
@@ -5490,7 +6358,7 @@ function gatewayToggleNotice(status, nextEnabled) {
   return "已选择开启，但网关没有在监听，请检查端口是否被占用。";
 }
 
-// plugin-src/client/model-center.js
+// vendor/dsh-codearts-auth/plugin-src/client/model-center.js
 function providerModelSummary(models) {
   const list = Array.isArray(models) ? models : [];
   let disabled = 0;
@@ -5587,7 +6455,7 @@ function centerPendingProviderIds(providers, states) {
   return out;
 }
 
-// plugin-src/client/aggregate-panel-logic.js
+// vendor/dsh-codearts-auth/plugin-src/client/aggregate-panel-logic.js
 function sortModelsForPanel(models) {
   if (!Array.isArray(models)) return [];
   return [...models].sort((a, b) => {
@@ -5834,7 +6702,7 @@ function startExpiryReprobe(options) {
   };
 }
 
-// plugin-src/client/provider-toggle.js
+// vendor/dsh-codearts-auth/plugin-src/client/provider-toggle.js
 function groupProviders(providers, statuses) {
   const list = Array.isArray(providers) ? providers : [];
   const map = statuses && typeof statuses === "object" ? statuses : {};
@@ -6018,7 +6886,7 @@ function providerToggleSummary(providers, statuses) {
   };
 }
 
-// plugin-src/client/model-bulk.js
+// vendor/dsh-codearts-auth/plugin-src/client/model-bulk.js
 function bulkButtonState(models, busy) {
   if (busy || !models || models.length === 0) {
     return { openAllDisabled: true, closeAllDisabled: true };
@@ -6028,7 +6896,7 @@ function bulkButtonState(models, busy) {
   return { openAllDisabled: !anyDisabled, closeAllDisabled: !anyEnabled };
 }
 
-// plugin-src/client/model-groups.js
+// vendor/dsh-codearts-auth/plugin-src/client/model-groups.js
 var BILLING_GROUPS = Object.freeze([
   Object.freeze({ key: "subscription", label: "订阅额度", hint: "Cline Pass 订阅模型（cline-pass/*）" }),
   Object.freeze({ key: "free", label: "免费额度", hint: "Cline 远端 free 集合（含 cline-free/* 与 stealth/*）" }),
@@ -6082,7 +6950,7 @@ function groupBulkStateFor(group, busy) {
   return bulkButtonState(group?.models ?? null, busy);
 }
 
-// plugin-src/client/tokens-per-second.js
+// vendor/dsh-codearts-auth/plugin-src/client/tokens-per-second.js
 var TOKENS_PER_SECOND_UNIT = "tok/s";
 function formatTokensPerSecond(tps) {
   const value = typeof tps === "number" && Number.isFinite(tps) ? tps : 0;
@@ -6103,7 +6971,7 @@ function formatRowTokensPerSecond(row) {
   return value === null ? "—" : `${formatTokensPerSecond(value)} ${TOKENS_PER_SECOND_UNIT}`;
 }
 
-// plugin-src/client/token-ledger-panel.js
+// vendor/dsh-codearts-auth/plugin-src/client/token-ledger-panel.js
 function formatTokenCount(value) {
   const n = typeof value === "number" && Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0;
   if (n >= 1e6) return trimZeros(n / 1e6) + "M";
@@ -6244,7 +7112,7 @@ function hasAnyData(snapshot) {
   return (snapshot?.entries?.length ?? 0) > 0;
 }
 
-// plugin-src/client/backup-crypto.js
+// vendor/dsh-codearts-auth/plugin-src/client/backup-crypto.js
 var KDF_ITERATIONS = 31e4;
 var KEY_LENGTH_BITS = 256;
 var SALT_BYTES = 16;
@@ -6315,7 +7183,7 @@ function fromBase64(value) {
   return bytes;
 }
 
-// plugin-src/client/credits-format.js
+// vendor/dsh-codearts-auth/plugin-src/client/credits-format.js
 function formatCredits(value) {
   if (typeof value !== "number" || !Number.isFinite(value)) return null;
   return Number.isInteger(value) ? String(value) : value.toFixed(2);
@@ -6379,7 +7247,7 @@ function formatQuotaDetail(packages) {
   return lines.length === 0 ? null : lines.join("\n");
 }
 
-// plugin-src/client/quota-format.js
+// vendor/dsh-codearts-auth/plugin-src/client/quota-format.js
 var QUOTA_WINDOWS = Object.freeze([
   ["five_hour", "5 小时"],
   ["weekly", "本周"],
@@ -6422,7 +7290,7 @@ function formatQuotaPercent(percent) {
   return `${Math.round(quotaPercentValue(percent))}%`;
 }
 
-// plugin-src/client/backup-payload.js
+// vendor/dsh-codearts-auth/plugin-src/client/backup-payload.js
 function trimBackupPayload(payload, accountIds) {
   const wanted = new Set(Array.isArray(accountIds) ? accountIds : []);
   const accounts = (Array.isArray(payload?.accounts) ? payload.accounts : []).filter((entry2) => entry2 !== null && typeof entry2 === "object" && wanted.has(entry2.id));
@@ -6469,7 +7337,7 @@ function describeBackupAccounts(payload) {
   }));
 }
 
-// plugin-src/client/backup-convert.js
+// vendor/dsh-codearts-auth/plugin-src/client/backup-convert.js
 var BACKUP_FORMAT = "dsh-codearts-auth/backup";
 var BACKUP_VERSION = 1;
 function decodeJwtPayload(token) {
@@ -6661,7 +7529,7 @@ function createdAtMs(record) {
   return Date.now();
 }
 
-// plugin-src/client/provider-icons.js
+// vendor/dsh-codearts-auth/plugin-src/client/provider-icons.js
 var CODEARTS_ICON = "data:image/png;base64,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";
 var CODEBUDDY_ICON = "data:image/png;base64,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";
 var WORKBUDDY_ICON = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABcVSURBVHhe7Zt3fBRl/scHEtJ3QwSxgIgFhDvb6XlY7myn3nln15PziojtPPVEakJCeu+FQKRJCS2AInqWl9iT7M7M7mzLBkJIQjG0ECG9Zz+/3/eZmWR3Ek+ORe+ffF+vz2unPc88n/d853memd3luJEYiZEYiZEYiZEYiaERZn5/ss763hy99M4qvWnn56HCdrOOL7HohO3S/0R8iYXaoBd3fKE37Vytc7w3J8z5/mRtu3/0GGsquU5v21Wsk3a2hVZ9hNCqD6F3vg+9YzdCHe8NkV5RKNu/W1mW1933DS7Tp3zs8PUMLrtrYLvzfcjt+gh66Z02amuwqeQ6rY8fJfTSzii99d3u0P0fQWfeAR2/FXp+K3T8NiZa1ivL8j71Uz5GXVf3uZfVamg9nmXHGDZhdPkmcOUbEWjcMnCMxznMO0BtpTZT27V+zl98GeurM20v0dd8DJ20AzrjloFG/NQiqATll/YPsbmhDpGHrQjlt8LXUKwA14jaKu1AaM0nIA/cl1/6au15HTpx23Z97SfKSQnO/0Z6fgt8DBsxVdoFoeUU6rvbcbynAzsbD2GCWML2yZCGlmVwyYO4bbvWn1cRwm+O1Nd+PMwJf3oFGTfDz1CMrafqcLirDY72M6hoP4NjPR349+lvcYGwDb4M0tCyqsgLedL6PKcIMW+erpNK+nRSCXT85vOmkGG2aTXcMVzZOsw+UIaj3e0MTGXHGeztaGJq6OnE1lMH4W8sRoCxeEjZAZEXqaSPvGn9/tcRImzeotv/AUKMmxDCk6jh6vIPSXus+7q6rD3Gfb/nPn/jRkwQt6G8pQE1nS0Mzr6OJlR1NGF/RzOqO5txpq8bGfUV4MreRvCQ+pVl4yYwT8LmLVq//1UEWksmhgibu0LMW4cx8NNKx28CV7YWcw8KONHTwTKG4OzvaGJgDnQ2M2gHO1vR1NuD2QdKwZWtGVLPgMiTsLkr0FAyUev7rCNI3PK8rmo3Qvji/7n8jBswQdwKvrUBdZ0tLGuqOwbB1Ha2sO0Hu1pxvLsD33a14Xrbe+DK32ZwtfWRdFXvIYgvfl7r+6wjWNi0Vle1CyH8Rk3l7uvaZe2xZ1Puh0XZ8HJNOetn3LNGBVPX1YpDXa04rKi5rwefNR1DoHEDAowbhj9n1S6QR63vsw4dX/xViHMnghXj9KnV923/of0qTO224cqQQfr8rOkovu1u88yarlaWNTKcNhzpbmPH0PDf4+pH5GEzuNJVQ87PzuOkiW7xV1rfZx0h/EYpxLFdqZAaKTf0h5fddTbHfN8+eRtXvgZ/3PspTvZ0DrmdhgNDI9yx7g409nbhu94u3GDbhVHlaxXwg/WGOEoQImyUtL7POoKFDRJVMrThP52CFEDrTlajsadTyRo3ON0ynPruNgWMPHGkjvxkTwf6XC7s/u4wRpWvQSC/3qNu5k3Y4B2gYMc2BLOK/5PohNpt50c+hrWYZtnBwFDfcrCrZaCvkbOmnWWNJ5hO1ledUjLIBRceq9oDrmwlQtzbSt68ARQorJeCHVuVCtchiF/P5L6unsx9n7qsXVfLeULQ1iPvp22+xrXgvl6GNw8a0dLXw7JmEIz77dQ+kDEMTE/nwO11ureLZZHUdgpBxnXgSt9CgNoG8ias9x4QNfqnkr/xbXDlK9nVvsS0CU9U7YG57RTLjiNdrQqYobdTQ0+HAqZzAMyZ3m4098kiSJa2Rvyl+guMKl/NzkHeyKPW91lHoLBOCnZscTPwttun+7L7Nne5lxtufXCbr3ENuLIitu3BvR+j6MReONtPo6mvm0E43N2qAaNmjZIxPZ5gqByBocxr7etBW38P1PisqR43298FJ70NzrjaO0BBDJDW+PmTDGYFJogb8VpdGb5uPsaMksFjPe1ut1ObBoz77dSpgJHLuYOR4fSio78Pnf196O7vZ5C6+vuw6IQFN9p2eANorRTk2Iwgfu15VwAvgwkT1mP+QQNsbY1sckfG5X5m6O10oqd9WDAkdzCDWdOLdgUMAel29bO5Ua9LhkThcrm8BbQJgTwNkWvdPlXRuvs27fLQ4wkOZ3gLXHkRZu3fA6G1gRmibKHRaTgwatYM18+09fWwUWq4oK0MTH/fABjqi/rdSngFKMADkPfy51eDKyvENMtWbDl1gD15k/HBYVuGowVDWXOqhyZ+MhgSGaegfXua6rHseAWij4iIOiwg+6gdH5w+xJ7H1CAo7mDU8BLQGinQUYxAfvUwItPabcMriF+D0SxrlmPOgS9QQ68lertwqEue22izxrOf8cya9v5eZmxfxxnMrSvDFGkTOEMRA8+VLVNUyM41XlyHp/d/iq+aj2qwDMZ5ALTRw2yAm7Qgvk9c+Qro+NVYccLJ+hnKDoLjCaaN3WYEZzgw1L9Q0L4lh3mECmvAlRZglOEt+POrhpwzgF8FHyNNF5YxWLMPfM7q0YaXgFZLAY6N7ATqiTzkftXK5as2ylCEMcaVrIGB/Cq273KpGHuavkVrf8/A07YHmIGskeEMgulkmUZBHezqE3txhVQMrjQfPsa3WP3DST23+unHr2RlZli2YH9n0/kD5C+skvzs63GncxcWHzIg95gdRSecTPnHHEiplxB+2IgXa77CI/s+wkzHTkyRiqETVoMzLAf3TS5utm+Hvb2RjTJq1hAYedhu8wCjjk4EhkRQKAjubyreBVdWwOol47LkC/H9GtwvX6wCTJE2snOfF0BceYH0bD29/6UHQno4pIdEehZqwbfdrTjaQwblvoKM0mRub8dplDYfw5ZT1Uirl1DZcZqlNu2jMmrWeILpwKnewayhkYmiquMMnq3eo2RnAQJ4yhpvRJmUh/sqd58vQPlS8ncV7HZwtDeiov07ODu+Y6YJxL6O08xEdecZHOhsQm1nM7t9qC8hs9RvyJO9QTDut5NnP9OJpl65n6HhO/6IgLEC9SG58ONXIJAvcpNsOOgspB6nlgvgi8CVZmPVycrzAKgsT3rpuIGZGw4M3c8EpkaBU9fVPJBhh5UsGwQjZ83JgX5GHrbVyV6/y8XmKJsaqjDdQv1MDnwMhQhSoHgaV9eLEEzLAq3Ly+7rnscOiuq9yLQGbTTsewXImC/dVvsBM05QBsFQ1qhwhoKRR6dWDzAet5Nb1tAsl6Ks5Sjur9zFMoYrzx/IFtmgImEFU/Bw4hW5ryvLajkmpS66AEsbrd4BGs0vl/QV6/FN81EGwBPMYNZowQz0M91tGjCDWUOzZ4qDXc34R+3n8DUUMDgByu0UxJMZFchyRbLxEH45QpTPIL4QfsYCBPLLoOOXD0g+ZjlCBPnTE9hy+POFGOtcj7KWY+cOyE8okjjLCqTWm1knqgVD5gbnMwTGM2uGA6MO2y30/dVRMyaI1HFmYYyxEIEMjmxAVbCbWWZeKGQKFZbD10hA83GltAahQiFGGXLYp14jtUwIT5LrJOC+9pW4xurFCzM/YYXEWYtwW8UOlg11GjA0Mskd8HC3UzsDc6pXfUToZM9DNNV/p/EArrdtAleaiVEGuvrLZTEohUzBzIwsnbAMekWhwjKMFZZhjDEHN9o2oLS5ng0GzvZGPLzvXYwuz0KYUMiOIdHxJLU81aXjl8l1O9bAhy/wBtByydexGj6GfPz79EFmVns7DQdGmzXq7WRpa8Aj+3aDK88GV56DAJ6yhuDIUFQwMhzZjCeYAoQJBdDz+Rgr5MPZfkoZrOXo6O/FdMtqBBqzMU4owAVCPi5QylBZkgesilUIEQq9A+TvoAfMLMyq/pi9QjjSrY5OMpzBfkYGo53TUCfc6epD3BEjAo3Uz2TCj6c5TaEMSFiGIEXB7MoSmALomRnZFBmUzeZjnJCPIGMWbnds9ICjxo7GffApT8UEIQ8XKhov5rFyVD5MILhy3aEVK6ETvcqgQsmPMshYwDpDvvU4G5K1WdOgZo0bGHkm3Mcmib+rfAdcaRpGG/MQwC8b0AAcvkCBU6DAkTOEzMhQ8jBeMTtBzEUYn4UZliK0Ks9n2niociuCDKm4RMzFxWIuLhJzMUHIxYWiXA/Vx2BVvAW994DoWYaetzIxp2YP60eO93hmzeCrCOXNXp/81E26x7mDwaGs8WeZo8IpQBCJwSlAiJDPwIQKeRjLDMhGxgu5DAqZvFjMwaViDiaK2QgyJCP/KK9lw0JqPYZxfBouFbMw0ZSNiWIOLhFzWHmq50Ihl9U7rqIIYWK+t4BWYgxfgNFGmpsUQGg9zh4F1BHKfbJHYOiZi0YoitfrvgD3TQr8+Hz4MxGgAgQK+UxBfD6C+XwFTh6DE8bgyAYmMENkjkxmY5KYjctMWZhsysKlQjqmmnNwrLtFy4fF/LqPoDcmYIpy/GUmufylYjaDRfVOqFiOcWLeuQPyFQoGAFEGcGXp+NP+D9mM1310ksHIryQIDr2W+rq5Hlx5FhuKVUAEJ2AInDzohVyECrkIo6sq5uBCZoCMEBgyl4XJYhammDJxhSkTV5kyMNWcgXHGOCys+7eWDYvj3S24TsrB5WIarjRlsHKXmzIZrElilgzKWUjZ6R2gMY63MIbPZ/Lh8zDakI1Pmw4xSGrWqGCoE1dfaD20j2bFdGvlKdlDgPIQKOQhiM9DMJ8HnZDL4IwxpoMrT8ao8mSM5TMYGLo9JolkKBNTTBnM5NWmdEwzp2O6OR0zzGmYbkrFlWICbG31Wj4sXqjeholCPK4xy+Wo/BWmDAbqMpKzAJeasr0BlK8AylOUz7LoDmcJexVB73cIDnWW9LUKwaF5TlXHafgTTGPOACCCEyDkIpDPRTCfixAGJwejDam4vWIDkr8tw5JDn2OqVIAwPoWBuZxdednYNaY0BuXn5lRcZ07FDeYU/EJKwdVCDP5etU7LhsWsvWtxtRiHa82p+BkBNadhmikNVymgplTmY5Ip0xtAedIYR5EboDz48nksM9Y3OBkM9TsnmoOoz1UrT9jBlVHfk8tAkVQ4QQxODnQCPYym4tF9O9hop0Z1RyOukXJxiZDMjEwzE5hUBuZ6cwpuNCfjJikZv5SS8CspCTOlJMwQI1F8wuCGBtjdaMW1pljcLCWx4280p+A6cwqrZ7o5FVNNabi6Mpey01tAK+DL5w5oDJ/LzC869DVrCGUNwZG/VpGNvlr3GbiyZAVQLvyFHAQIOQjicxDM4GRDx2chwJjGRhxtbG6wYqwxGtewK0/GyGAyM/srKRG3Som43ZKIX1sS8BtLAn5ticNMczQia7dh/fGvEXtwJ2ZKsbhVimPHzZQScQsDlcTqIVAEffreHFwtpZ07IJ8hgHLYJwFKrpeH2E4Fjvv3TY9XUf+jZpAMJ5DPQZCQjRAhG3oCJGRgrJCBus4zGjz0dY0Lj1auwWQhBjewjJHB3CYRjATcaYnH3ZZ43GuJw2+tcbjfGof7LLG41RSOW0yLMNMUjnsssbjXGo+7LPH4jSUed1gScKuUgFukRPxCSsL15mRcuzcL06RUbwDlSr6O5QqYQVF2JNcbmRnKGoLTpzxnUfxx304FUA78hWwECNkI5LMRzMBkIVTIRJiQCR9DAlYcFz3gqMG3HMRVwlLcJCVgppSAOyzxuNMSh3sYlFg8YI3F760xeNAagz9YY/BHa7Qsm7xO239njcH91lh2/N2WOAbqdikev5IScJOUiBv3Uucff+6AfHkCVAhfPttDXFkSoo6UMiPql3Hu3zc9U/2Bcotlw1/IQgCfhSAhCyFCFvRCJsYKmRgnZCCUT8FUKReNve1upQdjUe12TBfCmTEyKIORzT9ki8bDtmg8aluKx2xL8bibaJ22P2xbyqARyPutMbjXGou7LHEMNkH/WWUC5lR58eOFMXzOV75OyqChgObUfMxMDObNYEQfKQVXmgg/giNkIZDPQjADlIlQIQNhQgYuFNNxiZgGf0M0Ig99oq2CRX3XadxtpX5mKTP4oDWagSHzj9ui8KQtCn+yR+FpeyRmuelP9kg8ZZf303GPECgbgYrGfdYY3GWJxXRhAcJP7kJbb9e5/wTPV8he61tVBB8+y03Z4EoTEH5Y7qSHi0/O1IErT4KfkIkAPhOBQiaChUyl30nHOCEdE0R6FEjFRDEZE8UE7G0/oa2GRfaR3ZhpWog/WJcyo2T4KVskg/KMfQn+Yl+Cv9oj8Dc3/VXZ/mf7Enbck7ZIPGaLYhn1W0sEfmmah4jazaAe0+VynfuPOEeLWc/7aABxhlT8zLYW7W4/J9EGDfuXSSswypjCAAUJGQgRMqAX0hEmpGG8mIaLxVRMMqVgiikFF/JRmL2/WFsNi5IT3+B205t4xBaFJwiMbQkDQ1CetYdjtj0czznCMcdNtD7bEY6/M1gRDNSTtgjca56LpxxxeK9B7j8p+lyuc/8ZMGfNnugjZHX5mHPgw2cycWUJKDph9TAxXKQeNYArjUUAn4EgIR0hQjpChTRcIKRhgkhP2jQZTMaVpiRMMydiEh+BT0/L3zS4x+IDq3GftIBlwSyWGRH4uwLlecdivOhYjJcci/Cym2j9BcdizHEsxmzHYjxheQNPWheg8Mh2NPYMfnHocrm6XC7Xuf+QnMJHyNjis38FfIwZGMWnswyytA1/O7gHza4nS4UYbUhCsJAOnZCGsUIqxompuEhMwURTMqaYknC1KREzzAmYborGHdZkfHGmEq19nTjZfQYF377H4DxhW4JZLBvCWdaQ8RcVGK9ULMQ/KxbiVTfR+isVizDbNhezrK8hqWY59rcd1DaRAHn3VwQKP3PWdB8pu2+0lA3OmAYfPgMHOk9rzzVsrG+gGXUMgoU06IU0hIkpGC+m4GIxGZeZknCFKRHTzAn4uTkeN0nxuNEchZvNEXjMkYKH7XG4W5qHx23Uj6hwFuN5JUMIDMF4rWIh/lWxYEBvECDHm3jW+g8s2ZcAw2mTtlksXC42q/X+zywUo/n0SJ/aInB8GkYZU+FoP6k937BB49vtznXgDHEIFVJxgZiCC8VkXCImYbIpEVeZEjDdnIDrzHG4WYrFbZYY3GlZijstEXjAEo5HbUvwlC0Cz9ipP6FbhuBQdhAcFch8vOmUNbdiHl60vYx5zoX44MSH6Oof+mMFNVwu1/n5O5Qao4SM7aNrV4Arj8eu7/Zrz/e9UdZyBKMNcQgRknGBkIwJYhIuNSXiclMCrjYlYIY5DjdIsbhFisEdlmjcY43CA9ZIPGRbgidsEZhlD8ff7IvxnGMRXmRwFuA1Bmc+5jrnY55zHuY75+FV+yt43fEq1h9Zj4buBm0zPKIf/ef3D3Usvoz1HWXO3Mbty8Ib9Z9rz/kf47ka+lNJFMaLybhITMJEUyKmmBIw1RyPn5vj8AspBjOlaDbfudcaid9bI/GILQJP2cPxjH0xnmWd7kK8XLFAyRzKGBnMG47X8E/7S8ityUJ16w9fuDM9zSVf4kf4S+ZACAlRl1Wu7Bp8/v7hONrdggmmNATzsbhITMQkUwKuMMVjmpleRcTiJikGt7JbKwr3WSPxB1sEHrOF42n7YvzVvgjPORbiJccC/LNiPl6vmIe5znmYW/EG/mF7AXFVUTB8V6Y95ZDo6uvqPtBR+yP+qdc9vnzj2tKu4xtdLtfg70h+IN7trEGAPREXOdMwuTINV1WmYsbeZNywNwm37EvEr6vicW9VPB7cH4tHq2PwdPVS/O1AFObUROLlmiV4rTYCc2vDsaAuHPNr5yP20FJ80bZHe5ohQW3sd7mKa1prfpq/hbsHgMkul2uOy+Va5XK56L4zu1wuC33fPZxeqNkpBQpR0iQpXrpSipeukeKkay0x0k2WaOk261LpbmuU9IBtifSwI0J60hEu/dmxWHq2YqH0QsUC6RXnfOl153zp1Yp/SanVKdLhjoND6qdz9/f3S/39/V8obZpDbdS2eyRGYiRGYiRGYiRG4v/j/wA7uND5glG+pQAAAABJRU5ErkJggg==";
@@ -6676,6 +7544,8 @@ var MINIMAX_ICON = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iOD
 var ZCODE_ICON = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAgklEQVR42u3XsRGAIAyF4UxgYe0g7j+FpZtgRwN36stLAhruqP+v4ICIdNaybsViy92yCj+CeMW7CO94gwgFRMUrIgFTAPbzgPe/Aa5nAInTAGicAtDE1QBtXAVgxGEAeuIpAFYYArDj81xEoQDLd+A1ID8k3wTkXDDEaDbEcBo1nl/XXoK4yMqvMgAAAABJRU5ErkJggg==";
 var MODELSCOPE_ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iIzYyNEFGRiIvPjxwYXRoIGQ9Ik02IDE3VjdoMi42bDMuNCA1LjJMMTUuNCA3SDE4djEwaC0yLjR2LTZsLTMgNC42aC0uMmwtMy00LjZ2Nkg2eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==";
 var QINI_ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iIzBBNkNGRiIvPjxwYXRoIGQ9Ik0xMiA1LjZjLTIuOSAwLTUuMSAyLjItNS4xIDUuMXYyLjZjMCAyLjkgMi4yIDUuMSA1LjEgNS4xIDEuMyAwIDIuNS0uNSAzLjQtMS4zbDEuOSAxLjkgMS4yLTEuMi0xLjktMS45Yy44LS45IDEuMy0yLjEgMS4zLTMuNHYtMS44YzAtMi45LTIuMi01LjEtNS4xLTUuMXptMy41IDUuMXYxLjhjMCAuNy0uMiAxLjMtLjUgMS45bC0yLjMtMi4zIDEuMi0xLjIgMi4zIDIuM2MtLjItLjEtLjQtLjItLjctLjJ2LTIuM2MwLTEuNy0xLjMtMy0zLTNzLTMgMS4zLTMgM3YyLjZjMCAxLjcgMS4zIDMgMyAzIC45IDAgMS43LS40IDIuMy0xbDEuMiAxLjJjLS45LjgtMi4xIDEuMy0zLjUgMS4zLTIuNCAwLTQuMy0xLjktNC4zLTQuM3YtMi42YzAtMi40IDEuOS00LjMgNC4zLTQuM3M0LjMgMS45IDQuMyA0LjN6IiBmaWxsPSIjZmZmIi8+PC9zdmc+";
+var MONKEYCODE_ICON = "data:image/png;base64,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";
+var BAIZHI_ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBmaWxsPSIjMWExYTFhIiBkPSJNNTAuNCA3OC41YTc1LjEgNzUuMSAwIDAgMC0yOC41IDYuOWwyNC4yLTY1LjdjLjctMiAxLjktMy4yIDMuNC0zLjJoMjljMS41IDAgMi43IDEuMiAzLjQgMy4ybDI0LjIgNjUuN3MtMTEuNi03LTI4LjUtN0w2NyA0NS41Yy0uNC0xLjctMS42LTIuOC0yLjktMi44LTEuMyAwLTIuNSAxLjEtMi45IDIuN0w1MC40IDc4LjVabS0xLjEgMjguMlptLTQuMi0yMC4yYy0yIDYuNi0uNiAxNS44IDQuMiAyMC4yYTE3LjUgMTcuNSAwIDAgMSAuMi0uNyA1LjUgNS41IDAgMCAxIDUuNy00LjVjMi44LjEgNC4zIDEuNSA0LjcgNC43LjIgMS4xLjIgMi4zLjIgMy41di40YzAgMi43LjcgNS4yIDIuMiA3LjRhMTMgMTMgMCAwIDAgNS43IDQuOXYtLjNsLS4yLS4zYy0xLjgtNS42LS41LTkuNSA0LjQtMTIuOGwxLjUtMWE3MyA3MyAwIDAgMCAzLjItMi4yIDE2IDE2IDAgMCAwIDYuOC0xMS40Yy4zLTIgLjEtNC0uNi02bC0uOC42LTEuNiAxYTM3IDM3IDAgMCAxLTIyLjQgMi43Yy01LS43LTkuNy0yLTEzLjItNi4yWiIgLz48L3N2Zz4=";
 var OPENCODE_ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iIzEyMTYxZCIvPjxwYXRoIGQ9Ik02LjUgOC41IDEwLjUgMTJsLTQgMy41IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS44IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTIuNSAxNmg1IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS44IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4=";
 var GEMINI_ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNDI4NUY0Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOUI3MkNCIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHBhdGggZD0iTTEyIDJjLjQgMy45IDIuMSA2LjYgNiA4LTMuOSAxLjQtNS42IDQuMS02IDgtLjQtMy45LTIuMS02LjYtNi04IDMuOS0xLjQgNS42LTQuMSA2LThaIiBmaWxsPSJ1cmwoI2cpIi8+PHBhdGggZD0iTTE5LjUgMTRjLjIgMS43LjkgMi45IDIuNiAzLjUtMS43LjYtMi40IDEuOC0yLjYgMy41LS4yLTEuNy0uOS0yLjktMi42LTMuNSAxLjctLjYgMi40LTEuOCAyLjYtMy41WiIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==";
 var AGGREGATE_ICON = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGNpcmNsZSBjeD0iNSIgY3k9IjUiIHI9IjIuNiIgZmlsbD0iIzRGOERGNyIvPjxjaXJjbGUgY3g9IjUiIGN5PSIxOSIgcj0iMi42IiBmaWxsPSIjOUI3MkNCIi8+PGNpcmNsZSBjeD0iMTkiIGN5PSIxMiIgcj0iMi42IiBmaWxsPSIjNEY4REY3Ii8+PHBhdGggZD0iTTcgNi4yIDE2LjQgMTFNNyAxNy44IDE2LjQgMTMiIHN0cm9rZT0iIzlCNzJDQiIgc3Ryb2tlLXdpZHRoPSIxLjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEuNSIgZmlsbD0iIzlCNzJDQiIvPjwvc3ZnPg==";
@@ -6717,8 +7587,23 @@ var PROVIDER_ICONS = {
   modelscope: MODELSCOPE_ICON,
   // ⚠️ 与 registry 的声明序一致：magicrew 紧邻 aggregate 之前（倒数第二）。
   magicrew: MAGICREW_ICON,
+  // ⚠️ **MagiCrew 国际版**（2026-11-01）：与国内版**共用同一个图标**
+  //    （同一个 Go 服务、同一个品牌的两个站点）。但键必须存在：
+  //    `PROVIDER_ICONS` 的键集合与 registry 的 id 集合必须完全相等
+  //    （`provider-registry.spec.ts` 有行为断言）。与 `autoclawintl` / `minimaxintl` 同型。
+  magicrewintl: MAGICREW_ICON,
   // ⚠️ **本 fork 独有**（七牛云）：占位图标（见 QINI_ICON 注释，待替换官方 SVG）。
   qiniu: QINI_ICON,
+  // ⚠️ **本 fork 独有**（MonkeyCode，2026-11-02）：**官方 logo**（见 MONKEYCODE_ICON
+  //    注释）。漏加这行会让 `provider-icon-coverage.spec.ts` 红。
+  monkeycode: MONKEYCODE_ICON,
+  // ⚠️ MonkeyCode 国际站（2026-11-02）：与国内站**共用同一个官方 logo**（同产品、
+  //    两套部署）。图标键集合守卫按**全量** registry 比对 ⇒ 漏加这行会红。
+  monkeycodeintl: MONKEYCODE_ICON,
+  // ⚠️ 百智云（2026-11-02）：**官方 favicon**（`https://baizhi.cloud/favicon.svg`）。
+  //    原本带 `prefers-color-scheme: dark` 变白，而面板图标容器是白底 ⇒
+  //    已去掉 media query 固定为深灰，两种主题下都可读。
+  baizhi: BAIZHI_ICON,
   aggregate: AGGREGATE_ICON,
   // ⚠️ Codely（Unity，本 fork 独有）：UI 先行阶段（registry 里 channel:false），
   //    但图标键集合守卫按**全量** registry 比对 —— 漏加这行会红（而非渲染空白图标）。
@@ -6733,7 +7618,7 @@ var PROVIDER_ICONS = {
   codely: CODELY_ICON
 };
 
-// plugin-src/client/compensation-panel-logic.js
+// vendor/dsh-codearts-auth/plugin-src/client/compensation-panel-logic.js
 function isClaimable(status) {
   return status?.active === true && status?.claimed !== true && Number(status?.creditNum) > 0;
 }
@@ -6825,7 +7710,7 @@ function compensationHint(state) {
   return "";
 }
 
-// plugin-src/client/phone-native-login.js
+// vendor/dsh-codearts-auth/plugin-src/client/phone-native-login.js
 function openPhoneNativeLogin({ provider, accountId, loginUrl, rpcCall, onError, onCancel, browserWindow = window }) {
   if (!["orcaterm", "magicrew"].includes(provider) || !accountId || typeof rpcCall !== "function") throw Error("手机登录上下文不完整");
   const callback = provider === "orcaterm" ? "__dshOrcaTermLogin" : "__dshMagicrewLogin";
@@ -6882,7 +7767,7 @@ function openPhoneNativeLogin({ provider, accountId, loginUrl, rpcCall, onError,
   };
 }
 
-// plugin-src/client/account-login-window.js
+// vendor/dsh-codearts-auth/plugin-src/client/account-login-window.js
 async function openAccountLoginWindow({ provider, accountId, loginUrl, rpcCall, onError, onCancel, isolatedLoginCall, browserWindow = window }) {
   if (browserWindow.__dshPhonePresentation === true) {
     if (provider === "orcaterm" || provider === "magicrew") return openPhoneNativeLogin({ provider, accountId, loginUrl, rpcCall, onError, onCancel, browserWindow });
@@ -6911,7 +7796,7 @@ async function openAccountLoginWindow({ provider, accountId, loginUrl, rpcCall, 
   };
 }
 
-// plugin-src/client/jet-hub.js
+// vendor/dsh-codearts-auth/plugin-src/client/jet-hub.js
 var JET_HUB_RPC_CHANNEL = "/jet-hub";
 var PROVIDERS = Object.freeze(
   [{ id: "chatgpt-plan", label: "ChatGPT 会员", monogram: "GPT", logoClass: "chatgpt", externalAccount: true, channel: false }, ...PROVIDER_REGISTRY.map((d) => Object.freeze({
@@ -6931,10 +7816,10 @@ var ACCIO_DAILY_REWARD_NOTE = "Accio 的每日积分由服务端在登录时发�
 function ProviderLogo({ provider }) {
   const p = PROVIDERS.find((p2) => p2.id === provider);
   if (!p) return null;
-  return React9.createElement(
+  return React12.createElement(
     "span",
     { className: `dim-jh-providerIcon ${p.logoClass}` },
-    p.monogram || React9.createElement("img", { src: p.icon, alt: "", width: 20, height: 20 })
+    p.monogram || React12.createElement("img", { src: p.icon, alt: "", width: 20, height: 20 })
   );
 }
 function formatTime(ts) {
@@ -6988,8 +7873,7 @@ function formatPackageLine(pkg, windowDays, now) {
   const daysLeft = daysUntilExpiry(pkg, now);
   if (!pkg.active && pkg.expiredTime) parts.push(`失效于 ${pkg.expiredTime}`);
   else if (daysLeft !== null) {
-    const label = expiryBucketLabel(pkg, windowDays, now);
-    parts.push(`距到期 ${Math.ceil(daysLeft)} 天${label ? `（${label}）` : ""}`);
+    parts.push(formatExpiryHint(pkg, windowDays, now));
   } else if (pkg.cycleEndTime) parts.push(`本周期至 ${pkg.cycleEndTime}`);
   return parts.join(" · ");
 }
@@ -6999,21 +7883,21 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
   const unit = all.find((p) => p && p.unit)?.unit;
   const label = balance?.sourceQuota?.label ?? (provider === "zcode" ? "Start Plan Token" : unitLabel(unit));
   if (loading) {
-    return React9.createElement(
+    return React12.createElement(
       "div",
       rowProps,
-      React9.createElement("dt", null, label),
-      React9.createElement("dd", { "data-tone": "muted" }, "读取中…"),
+      React12.createElement("dt", null, label),
+      React12.createElement("dd", { "data-tone": "muted" }, "读取中…"),
       // 读取中也要挂按钮：否则按钮会在读数到达的那一瞬从右侧跳出来。
       actions === void 0 ? null : actions
     );
   }
   if (error || !balance) {
-    return React9.createElement(
+    return React12.createElement(
       "div",
       rowProps,
-      React9.createElement("dt", null, label),
-      React9.createElement(
+      React12.createElement("dt", null, label),
+      React12.createElement(
         "dd",
         { "data-tone": "warn", title: error || "查询失败" },
         error || "查询失败"
@@ -7023,16 +7907,28 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
     );
   }
   if (balance.sourceQuota) {
-    return React9.createElement(
+    return React12.createElement(
       "div",
       { className: "dim-jh-metaRow" },
-      React9.createElement("dt", null, label),
-      React9.createElement("dd", { style: { overflowWrap: "anywhere" } }, balance.sourceQuota.text)
+      React12.createElement("dt", null, label),
+      React12.createElement("dd", { style: { overflowWrap: "anywhere" } }, balance.sourceQuota.text)
     );
   }
   const total = formatUnits(balance.total, unit) ?? "0";
   const activeCount = all.filter((p) => p.active).length;
   const quotaText = formatQuotaLine(all, unit);
+  const crossUnitText = unit === void 0 ? null : (() => {
+    const mainUnit = normalizeUnit(unit);
+    const parts = all.filter((pkg) => pkg && typeof pkg.unit === "string" && pkg.unit.length > 0 && normalizeUnit(pkg.unit) !== mainUnit).map((pkg) => {
+      const remaining = Number(pkg.remaining);
+      const poolTotal = Number(pkg.total);
+      const poolName = typeof pkg.name === "string" && pkg.name ? pkg.name : unitLabel(pkg.unit);
+      const remainingText = formatUnits(remaining, pkg.unit) ?? String(remaining);
+      const hasRange = Number.isFinite(poolTotal) && poolTotal > 0 && poolTotal !== remaining;
+      return hasRange ? `${poolName} ${remainingText} / ${formatUnits(poolTotal, pkg.unit) ?? String(poolTotal)}` : `${poolName} ${remainingText}`;
+    });
+    return parts.length === 0 ? null : parts.join(" · ");
+  })();
   const now = Date.now();
   const split = splitCreditsByExpiry(all, windowDays, now);
   const formatForUnit = (value) => formatUnits(value, unit);
@@ -7059,13 +7955,17 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
   })() : null;
   const lineText = [
     quotaText ?? total,
+    crossUnitText,
     poolSplitText,
     namedPoolText,
     accioResetNote,
     !poolSplitText && expiryParts.length > 0 ? expiryParts.map((part) => part.countdown === void 0 ? part.text : `${part.text}（${part.countdown}）`).join(" · ") : null,
     exclusiveRemaining > 0 ? `另有 ${formatUnits(exclusiveRemaining, unit) ?? exclusiveRemaining} 专属（不计入）` : null,
     quotaText === null && !poolSplitText && expiryParts.length === 0 && all.length > 1 ? `${activeCount}/${all.length} 个资源包有效` : null,
-    balance.expiredTotal > 0 ? `另有 ${formatUnits(balance.expiredTotal, unit)} 已失效` : null
+    balance.expiredTotal > 0 ? `另有 ${formatUnits(balance.expiredTotal, unit)} 已失效` : null,
+    // 用量（2026-11-02 三审 F🟡-8）：上游真下发用量时才出现 ⇒ 其余 provider 逐字不变。
+    // ⚠️ 原先它是塞进 `packages` 的一个 `active: false` 包，渲染成「[已失效] 本月消耗」。
+    balance.usage ? `${balance.usage.label} ${formatUnits(balance.usage.amount, balance.usage.unit) ?? balance.usage.amount}` : null
   ].filter(Boolean).join(" · ");
   const hoverGlossary = [
     // 三档分桶：**逐条一行**，一行只说一个词条的定义。
@@ -7076,12 +7976,12 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
     accioResetNote ? ACCIO_DAILY_REWARD_NOTE : null
   ].filter(Boolean).join("\n");
   const hoverTitle = [lineText, hoverGlossary, quotaDetail ?? detail].filter(Boolean).join("\n\n") || void 0;
-  return React9.createElement(
+  return React12.createElement(
     "div",
     rowProps,
     // ⚠ 标签按单位走：ZCode 是 token，显示「Token」而不是「积分」。
-    React9.createElement("dt", null, label),
-    React9.createElement(
+    React12.createElement("dt", null, label),
+    React12.createElement(
       "dd",
       {
         className: "dim-jh-creditValue",
@@ -7091,20 +7991,23 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
       },
       // ⚠️ 配额窗口显示**逐窗口百分比**而不是均值：均值（94.5）既不是上游给的数，
       // 在「额度」这个标签下更会被读成 94.5 个积分。见 quotaText 的注释。
-      React9.createElement("strong", { className: "dim-jh-creditTotal" }, quotaText ?? total),
-      balance.pendingNote ? React9.createElement("span", { className: "dim-jh-creditPools" }, balance.pendingNote) : null,
+      React12.createElement("strong", { className: "dim-jh-creditTotal" }, quotaText ?? total),
+      balance.pendingNote ? React12.createElement("span", { className: "dim-jh-creditPools" }, balance.pendingNote) : null,
+      // 跨量纲附注（MonkeyCode 的每日额度）：与 loomy 的 `每日 5000` 同位置、同样式，
+      // 只是**不参与**上面的合计 —— 单位不同，不能相加（用户 2026-11-02 定调）。
+      crossUnitText === null ? null : React12.createElement("span", { className: "dim-jh-creditPools" }, crossUnitText),
       // 当日池分桶（loomy / raccoon）：`formatPoolSplitLine` 已覆盖原先硬编码的
       // loomy 两池判据，且对 Raccoon 的「每日积分」同样成立（用户 2026-09-29 要求）。
       // ⚠ 数字按**包自身的单位**格式化（remote 的单位支持）：池可能来自
       // 不同 provider，不能假定都是积分。
-      poolSplitText ? React9.createElement("span", { className: "dim-jh-creditPools" }, poolSplitText) : null,
+      poolSplitText ? React12.createElement("span", { className: "dim-jh-creditPools" }, poolSplitText) : null,
       // 两个 buddy + TRAE + LobsterAI + OfficeAce：按「会不会近期作废」分**三档**，
       // 与选号判据同一套规则（后端只分两档，前端把「真永久」与「到期还远」拆开着色）。
       // 这条也解释了「锁定永久积分后为什么没有可用账号」——临期桶是 0。
       // ⚠️ 用词「长期」不是「永久」：有到期日的积分即使很远也不叫永久（用户定）；
       //    只有**服务端没给到期时间**的才是真·永久（绿）。
       // ⚠️ Accio 的逐池列（与 loomy 的 `poolSplitText` 同位置、同样式，故视觉统一）。
-      namedPoolText ? React9.createElement("span", { className: "dim-jh-creditPools" }, namedPoolText) : null,
+      namedPoolText ? React12.createElement("span", { className: "dim-jh-creditPools" }, namedPoolText) : null,
       /**
        * ⚠️ Accio 的每日额度重置倒计时（**唯一**与 loomy 不同的附注）。
        *
@@ -7112,7 +8015,7 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
        * 「还有多久刷新」是用户唯一能据此决定「现在要不要用掉」的信息。
        * ⚠️ 它放在**积分行内**（而不是另起区块）—— 这正是 2026-10-13 的统一要求。
        */
-      accioResetNote ? React9.createElement("span", {
+      accioResetNote ? React12.createElement("span", {
         className: "dim-jh-creditPools"
         // ⚠️ **不能**在这里再挂 title（见 hoverTitle 上方「子元素 title 会抢走
         //    父级 title」的注释）。说明文字已并入 hoverTitle。
@@ -7122,16 +8025,16 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
       // ⚠️ 用词「长期」不是「永久」：这些积分都有到期日，只是较远（用户定）。
       // ⚠️ 与上面的池分桶互斥：有当日池的（loomy / raccoon）走池名分桶，
       // 没有的走到期时间分桶。
-      !poolSplitText && expiryParts.length > 0 ? React9.createElement("span", {
+      !poolSplitText && expiryParts.length > 0 ? React12.createElement("span", {
         className: "dim-jh-creditPools"
         // ⚠️ 同上：名词解释已并入 hoverTitle，这里不再挂 title。
       }, expiryParts.flatMap((part, index) => {
-        const node = React9.createElement("span", {
+        const node = React12.createElement("span", {
           key: part.key,
           className: "dim-jh-creditPoolPart",
           "data-tone": part.tone
         }, part.countdown === void 0 ? part.text : `${part.text}（${part.countdown}）`);
-        return index === 0 ? [node] : [React9.createElement("span", { key: `sep-${part.key}`, className: "dim-jh-creditPoolSep" }, " · "), node];
+        return index === 0 ? [node] : [React12.createElement("span", { key: `sep-${part.key}`, className: "dim-jh-creditPoolSep" }, " · "), node];
       })) : null,
       /**
        * **独立池**提示（2026-10-21 用户报障「没标注星火专属」）。
@@ -7143,7 +8046,7 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
        * ⚠️ `exclusiveRemaining === 0` 时不渲染 ⇒ 没有独立池的 provider
        *    （现有全部）行为**逐字不变**。
        */
-      exclusiveRemaining > 0 ? React9.createElement("span", {
+      exclusiveRemaining > 0 ? React12.createElement("span", {
         className: "dim-jh-creditExclusive"
         // ⚠️ 独立池的说明已并入 hoverTitle，这里不再挂 title。
       }, `另有 ${formatUnits(exclusiveRemaining, unit) ?? exclusiveRemaining} 专属（不计入）`) : null,
@@ -7152,28 +8055,28 @@ function CreditBalanceRow({ balance, error, loading, windowDays, provider, actio
       // （用户报障原文：「不要渲染 / 2/2 个资源包有效」）。窗口自身的读数
       // 已由上面的 `quotaText` 逐条列出，这里再补一句纯属噪音。
       // ⚠️ 非配额单位（真正由多个资源包构成余额的 provider）行为**逐字不变**。
-      quotaText === null && !poolSplitText && expiryParts.length === 0 && all.length > 1 ? React9.createElement(
+      quotaText === null && !poolSplitText && expiryParts.length === 0 && all.length > 1 ? React12.createElement(
         "span",
         { className: "dim-jh-creditPackages" },
         `${activeCount}/${all.length} 个资源包有效`
       ) : null,
-      // 失效额度单独提示：它们仍在服务端响应里，但不计入上面的数字
-      // ⚠️ 配额单位下恒不渲染（`expiredTotal` 就是 0），留着分支只为不改变
-      // 其它 provider 的行为。
-      balance.expiredTotal > 0 ? React9.createElement(
-        "span",
-        { className: "dim-jh-creditExpired" },
-        `另有 ${formatUnits(balance.expiredTotal, unit)} 已失效`
-      ) : null,
+      // ⚠️ 上面这段「另有 X 已失效」曾经在这里**又写了一遍**（2026-11-02 审查发现），
+      //    同一个节点里连着挂两个，有失效额度的卡片会原样显示两遍。只保留下面那一处。
       /**
        * 失效额度单独提示：它们仍在服务端响应里，但不计入上面的数字
        * ⚠️ 配额单位下恒不渲染（`expiredTotal` 就是 0），留着分支只为不改变
        * 其它 provider 的行为。
        */
-      balance.expiredTotal > 0 ? React9.createElement(
+      balance.expiredTotal > 0 ? React12.createElement(
         "span",
         { className: "dim-jh-creditExpired" },
         `另有 ${formatUnits(balance.expiredTotal, unit)} 已失效`
+      ) : null,
+      // 用量（2026-11-02 三审 F🟡-8，见上方 hover 那段注释）。未下发用量时不渲染。
+      balance.usage ? React12.createElement(
+        "span",
+        { className: "dim-jh-creditUsage" },
+        `${balance.usage.label} ${formatUnits(balance.usage.amount, balance.usage.unit) ?? balance.usage.amount}`
       ) : null
     ),
     // 操作按钮（重测 / 重置 / 停用 / 删除）贴在这行最右侧 —— 三列网格的第三列。
@@ -7190,7 +8093,7 @@ function proxyModalComponent(provider) {
   if (provider === "minimaxintl") return MinimaxIntlProxyModal;
   if (provider === "qoder") return QoderProxyModal;
   if (provider === "qodercn") return QoderProxyModal;
-  return OpencodeProxyModal;
+  return provider === "opencode" ? OpencodeProxyModal : null;
 }
 function AccountCard({
   account,
@@ -7214,16 +8117,27 @@ function AccountCard({
   drag,
   // ⚠️ opencode 专属：传了才渲染「代理」「指纹」两个按钮（见按钮区注释）。
   // 前者额外需要 current 代理串，故签名与 onRetest 略有不同。
+  // ⚠️ **本 fork 独有**：modelscope 的「令牌」按钮同理（传了才渲染），
+  // 第二参是宿主算好的**打码**串。
   onOpenProxy,
   onRotateFingerprint,
   onEditModelscopeKey,
   onEditQiniuKey,
+  // ⚠️ **本 fork 独有**（MonkeyCode 两站 / 百智云）：两个「改 Key」+ 一个「登录」。
+  // 同为 props 存在性开关（而非 provider 硬判断），见各自按钮处注释。
+  onEditMonkeycodeKey,
+  onEditBaizhiKey,
+  onReadSession,
   rpcCall,
   onSourceChanged
 }) {
-  const rateLimits = account.modelRateLimits ? Object.entries(account.modelRateLimits).filter(([, v]) => v > Date.now()) : [];
+  const limitState = accountLimitActionState(account);
+  const rateLimits = limitState.activeRateLimits.map(({ modelId, resetAt }) => [modelId, resetAt]);
+  const policyBlocked = limitState.policyBlocked;
+  const policyBlockedMessage = policyBlockedInfo(account).message;
   const expired = typeof account.expiresAt === "number" && account.expiresAt > 0 && account.expiresAt <= Date.now();
-  const hasAnyLimit = Boolean(account.modelRateLimits && Object.keys(account.modelRateLimits).length > 0);
+  const hasAnyLimit = limitState.canReset;
+  const hasAnyModelLimit = limitState.canRetest;
   const dragProps = drag || {};
   const hoverPackages = credits?.balance?.packages;
   const packageTooltip = showPackageList && hoverPackages?.length ? formatPackageTooltip(hoverPackages, {
@@ -7231,24 +8145,34 @@ function AccountCard({
     now: Date.now()
   }) : null;
   const accountTitle = packageTooltip ?? (showPackageList && creditsLoading ? "资源包加载中…" : void 0);
-  const actionsNode = React9.createElement(
+  const actionsNode = React12.createElement(
     "div",
     { className: "dim-jh-accountActions" },
-    // 新手任务（仅 Loomy）：一次性 10000 分，每号只能领一次。
+    // 新手任务：全仓库**所有** `credits.onboardingTasks: true` 的渠道共用这一个按钮
+    //（loomy / raccoon / magicrew / magicrewintl），**不是「仅 Loomy」** ——
+    // 旧注释写「仅 Loomy」是接入 raccoon 之前的事。
     // 与「一键领取积分」（每日签到）是**不同**的操作，故独立按钮 ——
-    // 混进「一键签到」会导致每天对已领完的账号发 8 个必然 alreadyCompleted 的请求。
+    // 混进「一键签到」会导致每天对已领完的账号发 N 个必然 alreadyCompleted 的请求。
     //
     // ⚠️ **只显示礼物图标**（用户报障：「领取新手任务」文字太长、按钮溢出行尾）。
     // 该行有 5 个按钮且 `flex-wrap: nowrap`，多一个宽按钮就会被挤出容器。
     // 文案移到 `title`（hover tooltip）与 `aria-label`（无障碍）里。
-    onClaimOnboarding ? React9.createElement("button", {
+    //
+    // ⚠️⚠️ **tooltip 不得写死金额**（2026-11-01 二审发现，用户可见的假数字）：
+    // 原先写「合计 10000 积分」，而那是 **Loomy 一家**的总额 ——
+    // raccoon 是 3000、magicrew 由上游 `tasks[].points` 现场累加、
+    // **magicrewintl 恒为 0**（该站不把账号登记进引导计划）。
+    // 于是国际站用户 hover 看到「合计 10000 积分」、点下去显示「无任务可领」，
+    // 与 `src/magicrew-checkin.ts` 那条「0 项不得报已全部完成」的纪律正相反。
+    // ⇒ 改成不带金额的通用文案。
+    onClaimOnboarding ? React12.createElement("button", {
       className: "dim-jh-btn dim-jh-iconBtn",
-      // tooltip 说明「是什么 + 一次性 + 多少分」，因为图标本身不自解释
-      title: "领取新手任务（合计 10000 积分，每个账号仅能领取一次）",
+      // tooltip 说明「是什么 + 一次性」，金额由点开后的结果面板给（那里是实测值）
+      title: "领取新手任务（一次性奖励，每个账号仅能领取一次；具体金额以领取结果为准）",
       "aria-label": "领取新手任务",
       disabled: busy || onboardingBusy,
       onClick: () => onClaimOnboarding(account.id)
-    }, onboardingBusy ? "领取中…" : React9.createElement(
+    }, onboardingBusy ? "领取中…" : React12.createElement(
       "svg",
       {
         width: 14,
@@ -7263,10 +8187,10 @@ function AccountCard({
         focusable: "false"
       },
       // 礼物盒：盒身 + 盖子 + 竖带 + 蝴蝶结
-      React9.createElement("rect", { x: 3, y: 8, width: 18, height: 4, rx: 1 }),
-      React9.createElement("path", { d: "M12 8v13" }),
-      React9.createElement("path", { d: "M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" }),
-      React9.createElement("path", { d: "M7.5 8a2.5 2.5 0 0 1 0-5A4.8 4.8 0 0 1 12 8a4.8 4.8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" })
+      React12.createElement("rect", { x: 3, y: 8, width: 18, height: 4, rx: 1 }),
+      React12.createElement("path", { d: "M12 8v13" }),
+      React12.createElement("path", { d: "M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" }),
+      React12.createElement("path", { d: "M7.5 8a2.5 2.5 0 0 1 0-5A4.8 4.8 0 0 1 12 8a4.8 4.8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" })
     )) : null,
     // 卡片级「重测 / 重置」同样只对会限流的 provider 有意义
     // （Loomy 不返回限流错误，故这两个按钮对它永远禁用 —— 直接不渲染）。
@@ -7280,20 +8204,23 @@ function AccountCard({
     // ⚠️ 该行是 `flex-wrap: nowrap`，多一个按钮就可能溢出（见上方礼物图标
     // 按钮的注释）。故「测试」放在最前，且**只有**在 provider 同时登记了
     // 测试与重测时才会出现 6 个按钮 —— 当前没有任何 provider 两者皆登记。
-    onTest ? React9.createElement("button", {
+    onTest ? React12.createElement("button", {
       className: "dim-jh-btn",
       title: TEST_HELP,
       // 不依赖 hasAnyLimit：测试的意义正是「没有标记时也能探活」。
       disabled: busy,
       onClick: () => onTest(account.id)
     }, "测试") : null,
-    showRateLimitActions ? React9.createElement("button", {
+    showRateLimitActions ? React12.createElement("button", {
       className: "dim-jh-btn",
+      // ⚠️ 「重测」只测**已有模型标记**的模型（`retestAccount` 在零标记时
+      //    一次请求都不发）。封禁标记不算模型标记 ⇒ 纯封禁账号上它按了也没反应，
+      //    故禁用并让用户走「测试」（无条件探活）。判据与实现同源，别只看 hasAnyLimit。
       title: RETEST_HELP,
-      disabled: busy || !hasAnyLimit,
+      disabled: busy || !hasAnyModelLimit,
       onClick: () => onRetest(account.id)
     }, "重测") : null,
-    showRateLimitActions ? React9.createElement("button", {
+    showRateLimitActions ? React12.createElement("button", {
       className: "dim-jh-btn",
       title: RESET_HELP,
       disabled: busy || !hasAnyLimit,
@@ -7308,7 +8235,7 @@ function AccountCard({
     // provider 列表，也避免以后新增同类 provider 时漏改。
     // 位置在「停用」之后、「删除」之前：删除按钮带 data-kind='danger'，
     // 是这一行的视觉终点，不能被挤到中间。
-    onOpenProxy ? React9.createElement("button", {
+    onOpenProxy ? React12.createElement("button", {
       className: "dim-jh-btn",
       // ⚠️ tooltip 必须解释「不设置会怎样」。四家语义不同，故按各自的
       // 池字段分流文案：
@@ -7325,7 +8252,7 @@ function AccountCard({
         account.opencodeProxy || account.minimaxIntlProxy || account.geminiProxy || account.qoderProxy || ""
       )
     }, "代理") : null,
-    onRotateFingerprint ? React9.createElement("button", {
+    onRotateFingerprint ? React12.createElement("button", {
       className: "dim-jh-btn",
       title: "轮换该账号的指纹（生成新的 project id；用于怀疑多个账号被关联时）",
       disabled: busy,
@@ -7338,7 +8265,7 @@ function AccountCard({
     //    而非 `provider === 'modelscope'` 硬判断。
     //    ⚠️ tooltip 里给的是**宿主算好的打码串**（`modelscopeKeyMask`）——
     //    客户端不自己打码，避免与 `maskModelscopeKey` 两份实现漂移。
-    onEditModelscopeKey ? React9.createElement("button", {
+    onEditModelscopeKey ? React12.createElement("button", {
       className: "dim-jh-btn",
       title: account.modelscopeKeyMask ? "访问令牌：" + account.modelscopeKeyMask + "（点击修改）" : "设置该账号的访问令牌（ms-…）",
       disabled: busy,
@@ -7348,12 +8275,47 @@ function AccountCard({
     //    props 存在性开关（而非 provider 硬判断）；tooltip 给宿主算好的打码串
     //    （`qiniuKeyMask`），客户端不自己打码，避免与宿主 `maskQiniuKey` 漂移。
     //    Key 形状无固定前缀（≥16 位），故占位文案不写 `ms-…` 这类前缀。
-    onEditQiniuKey ? React9.createElement("button", {
+    onEditQiniuKey ? React12.createElement("button", {
       className: "dim-jh-btn",
       title: account.qiniuKeyMask ? "API Key：" + account.qiniuKeyMask + "（点击修改）" : "设置该账号的 API Key",
       disabled: busy,
       onClick: () => onEditQiniuKey(account.id, account.qiniuKeyMask || "")
     }, "Key") : null,
+    // ⚠️ **本 fork 独有**（MonkeyCode 两站共用）：改 API Key / 签名密钥。
+    //    tooltip 给的是宿主算好的打码串（`monkeycodeKeyMask`），客户端不自己打码；
+    //    `hasSession === false` 时提一句——那意味着积分 / 每日额度 / 签到都不可用
+    //    （它们全靠浏览器登录攒下的 HttpOnly `session_cookie`）。
+    onEditMonkeycodeKey ? React12.createElement("button", {
+      className: "dim-jh-btn",
+      title: (account.monkeycodeKeyMask ? "API Key：" + account.monkeycodeKeyMask + "（点击修改）" : "设置该账号的 API Key 与签名密钥（oma_…）") + (account.monkeycodeHasSession === false ? "｜未读取网页登录态：积分/额度/签到不可用（点「改 Key」补填 session cookie，或删掉用浏览器登录重新添加）" : ""),
+      disabled: busy,
+      onClick: () => onEditMonkeycodeKey(account.id, account.monkeycodeKeyMask || "")
+    }, "改 Key") : null,
+    // ⚠️ **本 fork 独有**（百智云）：改 `sk-` API Key。走 `baizhi.setApiKey`（读旧凭据再合并），
+    //    不会冲掉控制台登录态 `session_cookie`。
+    onEditBaizhiKey ? React12.createElement("button", {
+      className: "dim-jh-btn",
+      title: account.baizhiKeyMask ? "API Key：" + account.baizhiKeyMask + "（点击修改）" : "设置该账号的 API Key（sk-…，在大模型商店 console/keys 生成）",
+      disabled: busy,
+      onClick: () => onEditBaizhiKey(account.id, account.baizhiKeyMask || "")
+    }, "改 Key") : null,
+    // ⚠️ **本 fork 独有**（百智云）：登录控制台以读取积分。
+    //
+    // 为何需要**两个**凭据（业内罕见的双凭据渠道）：
+    //   · `access_token`（`sk-` 67 位）→ 打模型网关 `ai-models.app.baizhi.cloud`，
+    //     **能对话**，但拿它查积分是 401；
+    //   · 控制台 `cookie`（`sl-session` + `baizhi_session`）→ 打
+    //     `baizhi.cloud/api/v1/user/wallet/balance`，**能看积分**，但不能发消息；
+    //   且控制台的「API Keys」页只能发 `bzy_`（15 位，打网关 401），
+    //   ⇒ 两套凭据**没有**任何一条能互相顶替的路径，必须各拿各的。
+    //
+    // 文案用「登录」而不是「读积分」：用户动作确实是去控制台登一次。
+    onReadSession ? React12.createElement("button", {
+      className: "dim-jh-btn",
+      title: account.baizhiHasSession ? "已读到网页登录态（积分可读）。点击可重新登录一次控制台" : "登录百智云控制台（打开浏览器窗口）以读取积分；不会动你已填的 API Key",
+      disabled: busy,
+      onClick: () => onReadSession(account.id)
+    }, account.baizhiHasSession ? "重新登录" : "登录") : null,
     // ⚠️ **只显示垃圾桶图标**（用户 2026-10-26 要求「删除按钮改为图标」）。
     //    ⚠️ 换成图标后有两处**必须**补上，否则是净损失：
     //    ① `title` —— 原按钮文案「删除」自带动作语义，图标不自解释；
@@ -7363,7 +8325,7 @@ function AccountCard({
     //       ⇒ 不给 `aria-label` 时读屏只会念出「按钮」，用户无从知道它删号。
     //       这是「文字改图标」最容易漏、也最难被自测发现的一处。
     //    ⚠️ 行为一行未动（`data-kind='danger'` 也保留，危险色靠它）。
-    React9.createElement(
+    React12.createElement(
       "button",
       {
         className: "dim-jh-btn dim-jh-iconBtn",
@@ -7372,7 +8334,7 @@ function AccountCard({
         "aria-label": "删除该账号",
         onClick: () => onDelete(account.id)
       },
-      React9.createElement(
+      React12.createElement(
         "svg",
         {
           width: 14,
@@ -7387,15 +8349,15 @@ function AccountCard({
           focusable: "false"
         },
         // 垃圾桶：盖沿 + 桶身 + 盖上的提手 + 两道竖纹
-        React9.createElement("path", { d: "M3 6h18" }),
-        React9.createElement("path", { d: "M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" }),
-        React9.createElement("path", { d: "M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" }),
-        React9.createElement("path", { d: "M10 11v6" }),
-        React9.createElement("path", { d: "M14 11v6" })
+        React12.createElement("path", { d: "M3 6h18" }),
+        React12.createElement("path", { d: "M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2" }),
+        React12.createElement("path", { d: "M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" }),
+        React12.createElement("path", { d: "M10 11v6" }),
+        React12.createElement("path", { d: "M14 11v6" })
       )
     )
   );
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-accountCard",
@@ -7413,27 +8375,27 @@ function AccountCard({
       onDragOver: dragProps.onDragOver,
       onDrop: dragProps.onDrop
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-accountTop" },
       // 抓取柄 + 序号：序号即自动选号的优先级，让"拖到第一位"的含义明确。
-      dragProps.enabled ? React9.createElement("span", {
+      dragProps.enabled ? React12.createElement("span", {
         className: "dim-jh-dragHandle",
         title: "拖动以调整顺序（顺序即自动选号优先级）",
         "aria-hidden": "true"
       }, "⠿") : null,
-      dragProps.enabled ? React9.createElement(
+      dragProps.enabled ? React12.createElement(
         "span",
         { className: "dim-jh-accountOrder", title: "自动选号优先级" },
         String((order ?? index ?? 0) + 1)
       ) : null,
-      React9.createElement("span", {
+      React12.createElement("span", {
         className: "dim-jh-accountStatus",
         "data-on": account.enabled ? "true" : "false",
         title: account.enabled ? "已启用" : "已停用",
         "aria-hidden": "true"
       }),
-      React9.createElement(
+      React12.createElement(
         "span",
         {
           className: "dim-jh-accountName",
@@ -7452,7 +8414,7 @@ function AccountCard({
              * ⚠️ 键盘可达性靠 `tabIndex` + `onKeyDown`，否则它就成了只能用
              * 鼠标点的控件（原来那个真 `<button>` 是可达的，不能倒退）。
              */
-      React9.createElement("span", {
+      React12.createElement("span", {
         className: "dim-jh-accountTag",
         "data-tone": account.enabled ? "on" : "off",
         "data-clickable": "true",
@@ -7476,7 +8438,7 @@ function AccountCard({
       }, account.enabled ? "已启用" : "已停用"),
       // 受限标记：这张卡片被自动沉到了列表末尾，标出来才说得清「为什么它在下面」。
       // 判据与下方「限额重置」行同源（都是未到期的 modelRateLimits）。
-      rateLimits.length > 0 ? React9.createElement("span", {
+      rateLimits.length > 0 ? React12.createElement("span", {
         className: "dim-jh-accountTag",
         "data-tone": "warn",
         title: "当前处于模型限额中。该账号不会参与自动选号，并已被沉到列表末尾；限额解除后仍留在末尾，避免它再次霸占首位而让其它账号的额度白白过期。"
@@ -7484,26 +8446,26 @@ function AccountCard({
       // ⚠️ 匿名通道标记：它不需要 key、只用于免费模型，额度按**出口 IP** 计。
       // 标注出来是为了让用户知道「这几条不是登录账号」，
       // 以及为什么给它们配不同代理才会各自获得独立额度。
-      provider === "opencode" && isAnonymousAccountId(account.id) ? React9.createElement("span", {
+      provider === "opencode" && isAnonymousAccountId(account.id) ? React12.createElement("span", {
         className: "dim-jh-accountTag",
         "data-tone": "on",
         title: "匿名通道：无需 API key，仅用于免费模型。额度按出口 IP 计算 —— 给它单独配置代理，才会获得独立额度。"
       }, "匿名") : null
     ),
-    React9.createElement(
+    React12.createElement(
       "dl",
       { className: "dim-jh-accountMeta" },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-metaRow" },
-        React9.createElement("dt", null, "凭据"),
-        React9.createElement("dd", null, React9.createElement("code", null, account.credentialRef))
+        React12.createElement("dt", null, "凭据"),
+        React12.createElement("dd", null, React12.createElement("code", null, account.credentialRef))
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-metaRow" },
-        React9.createElement("dt", null, "有效期"),
-        React9.createElement(
+        React12.createElement("dt", null, "有效期"),
+        React12.createElement(
           "dd",
           { "data-tone": expired ? "warn" : void 0 },
           account.expiresAt ? `${formatTime(account.expiresAt) || "未知"}${account.refreshable ? " · 自动续期" : ""}` : "未知"
@@ -7515,11 +8477,11 @@ function AccountCard({
       // 网络失败、非 Gemini 的 provider）时**整行不出现**，不显示「未知」也不
       // 报错：它只是一栏附注信息，不该制造一条无法修复的提示。
       // `title` 放上游原文（`Google AI Pro（g1-pro-tier）`），面板只放得下一个词。
-      credits?.extra?.accountTier ? React9.createElement(
+      credits?.extra?.accountTier ? React12.createElement(
         "div",
         { className: "dim-jh-metaRow" },
-        React9.createElement("dt", null, "账号规格"),
-        React9.createElement(
+        React12.createElement("dt", null, "账号规格"),
+        React12.createElement(
           "dd",
           { title: credits.extra.accountTier.title },
           credits.extra.accountTier.label
@@ -7528,7 +8490,7 @@ function AccountCard({
       // 不支持积分余额的 provider 不渲染该行：留着它只能显示「查询失败」，
       // 而失败原因是「这个 provider 根本没有此接口」——与其展示一条无法修复
       // 的错误，不如不展示。
-      showCredits ? React9.createElement(CreditBalanceRow, {
+      showCredits ? React12.createElement(CreditBalanceRow, {
         balance: credits?.balance ?? null,
         error: credits?.error,
         loading: creditsLoading,
@@ -7541,25 +8503,48 @@ function AccountCard({
         actions: actionsNode
       }) : null
     ),
-    rateLimits.length > 0 ? React9.createElement(
+    // ★ 封禁（账号级）必须排在限流（模型级）**前面**、且用红色：它才是「这个号废了」。
+    policyBlocked ? React12.createElement(
+      "div",
+      { className: "dim-jh-policyBlocked", role: "alert" },
+      React12.createElement("span", { className: "dim-jh-policyBlockedLabel" }, "已限制 · 需重新登录"),
+      policyBlockedMessage === "" ? null : React12.createElement("span", {
+        className: "dim-jh-policyBlockedMsg",
+        title: policyBlockedMessage
+      }, policyBlockedMessage),
+      // ⚠️⚠️ 文案里的入口**必须与真实存在的按钮同源**（对抗审计 E9）：
+      //   「测试」只在登记了能力位的 provider 上渲染（当前只有 gemini），
+      //   而本 issue 的 buddy / workbuddy **没有这个按钮** —— 让用户「点测试」
+      //   等于指一个不存在的入口，比不写更糟。
+      //   `onTest` 就是那个能力位在客户端的落点（`undefined` = 没登记）。
+      React12.createElement(
+        "span",
+        { className: "dim-jh-policyBlockedHint" },
+        policyBlockedHint(onTest !== void 0)
+      )
+    ) : null,
+    rateLimits.length > 0 ? React12.createElement(
       "div",
       { className: "dim-jh-rateLimits" },
-      React9.createElement("span", { className: "dim-jh-rateLimitsLabel" }, "限额重置"),
-      rateLimits.map(([modelId, resetAt]) => React9.createElement("span", {
+      // ⚠️ 文案要说清「**只影响这个模型**」（issue IKS2MV 问题 2）：上游报文自己
+      //    就写着「您也可以切换其他模型继续使用」。笼统写「限流」会让用户以为
+      //    整个账号废了 —— 实测同一账号同一秒：flash 连续 6 次 429，pro 立刻 200。
+      React12.createElement("span", { className: "dim-jh-rateLimitsLabel" }, "限流（仅该模型）"),
+      rateLimits.map(([modelId, resetAt]) => React12.createElement("span", {
         key: modelId,
         className: "dim-jh-ttlBadge",
-        title: `模型 ${modelId}`
-      }, `${modelId} · ${formatTime(resetAt)}`))
+        title: `模型 ${modelId} 限流中（仅此模型；换其它模型仍可用）`
+      }, `${modelId} · 至 ${formatTime(resetAt)}`))
     ) : null,
     // 不支持积分余额的 provider 没有积分行可挂按钮 ⇒ 退回原来的独立行。
     // 否则那个账号卡片上就再也没有「重测 / 重置 / 停用 / 删除」入口了。
-    provider === "zcode" ? React9.createElement(ZcodeSourcePanel, { account, rpcCall, onChanged: onSourceChanged }) : null,
+    provider === "zcode" ? React12.createElement(ZcodeSourcePanel, { account, rpcCall, onChanged: onSourceChanged }) : null,
     showCredits ? null : actionsNode
   );
 }
 function ModelToggle({ provider, model, busy, onToggle, onRestore }) {
   const dead = model.dead === true;
-  return React9.createElement(
+  return React12.createElement(
     "label",
     {
       className: "dim-jh-modelRow",
@@ -7573,15 +8558,15 @@ function ModelToggle({ provider, model, busy, onToggle, onRestore }) {
     //    `deepseek-v4.1-flash` 这类 id 在多家目录里都出现过。
     // ⚠️ 它在 `<label>` 内、但**不是可标记控件**，故不影响「点整行切开关」
     //    那条既有交互。真正的坑是插入第二个 checkbox，见上面的类注释。
-    React9.createElement(ProviderLogo, { provider }),
-    React9.createElement(
+    React12.createElement(ProviderLogo, { provider }),
+    React12.createElement(
       "span",
       { className: "dim-jh-modelInfo" },
-      React9.createElement("strong", { className: "dim-jh-modelName" }, model.name || model.id),
-      dead ? React9.createElement("span", { className: "dim-jh-modelDead" }, "已下架") : null,
-      React9.createElement("code", { className: "dim-jh-modelId" }, model.id)
+      React12.createElement("strong", { className: "dim-jh-modelName" }, model.name || model.id),
+      dead ? React12.createElement("span", { className: "dim-jh-modelDead" }, "已下架") : null,
+      React12.createElement("code", { className: "dim-jh-modelId" }, model.id)
     ),
-    dead ? React9.createElement("button", {
+    dead ? React12.createElement("button", {
       type: "button",
       className: "dim-jh-modelRestore",
       disabled: busy,
@@ -7590,7 +8575,7 @@ function ModelToggle({ provider, model, busy, onToggle, onRestore }) {
         event.stopPropagation();
         onRestore(model.id);
       }
-    }, "重新显示") : React9.createElement("input", {
+    }, "重新显示") : React12.createElement("input", {
       type: "checkbox",
       className: "dim-jh-switch",
       role: "switch",
@@ -7602,20 +8587,20 @@ function ModelToggle({ provider, model, busy, onToggle, onRestore }) {
   );
 }
 function ModelListPanel({ provider, rpcCall, onClose }) {
-  const [models, setModels] = React9.useState(null);
-  const [phase, setPhase] = React9.useState("loading");
-  const [error, setError] = React9.useState(null);
-  const [toggleError, setToggleError] = React9.useState(null);
-  const [toggleWarnings, setToggleWarnings] = React9.useState([]);
-  const [busyIds, setBusyIds] = React9.useState(() => /* @__PURE__ */ new Set());
-  const [deadRestoreBusy, setDeadRestoreBusy] = React9.useState(false);
-  const [bulkBusy, setBulkBusy] = React9.useState(false);
-  const [query, setQuery] = React9.useState("");
-  const [statusFilter, setStatusFilter] = React9.useState("all");
-  const [groupToggles, setGroupToggles] = React9.useState({});
-  const [groupBusy, setGroupBusy] = React9.useState(null);
-  const mounted = React9.useRef(true);
-  const load = React9.useCallback(async () => {
+  const [models, setModels] = React12.useState(null);
+  const [phase, setPhase] = React12.useState("loading");
+  const [error, setError] = React12.useState(null);
+  const [toggleError, setToggleError] = React12.useState(null);
+  const [toggleWarnings, setToggleWarnings] = React12.useState([]);
+  const [busyIds, setBusyIds] = React12.useState(() => /* @__PURE__ */ new Set());
+  const [deadRestoreBusy, setDeadRestoreBusy] = React12.useState(false);
+  const [bulkBusy, setBulkBusy] = React12.useState(false);
+  const [query, setQuery] = React12.useState("");
+  const [statusFilter, setStatusFilter] = React12.useState("all");
+  const [groupToggles, setGroupToggles] = React12.useState({});
+  const [groupBusy, setGroupBusy] = React12.useState(null);
+  const mounted = React12.useRef(true);
+  const load = React12.useCallback(async () => {
     setPhase("loading");
     setError(null);
     try {
@@ -7629,14 +8614,14 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
       setPhase("error");
     }
   }, [provider, rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     mounted.current = true;
     void load();
     return () => {
       mounted.current = false;
     };
   }, [load]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     const onKeyDown = (event) => {
       if (event.key === "Escape") onClose();
     };
@@ -7745,7 +8730,7 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
     setQuery("");
     setStatusFilter("all");
   };
-  const dialog = React9.createElement(
+  const dialog = React12.createElement(
     "div",
     {
       // `--top`：顶部锚定。列表长度随搜索变化，若垂直居中会让弹窗整体上下跳动
@@ -7756,7 +8741,7 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
         if (event.target === event.currentTarget) onClose();
       }
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -7764,51 +8749,51 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
         "aria-modal": "true",
         "aria-label": `${providerLabel2} 模型列表`
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalTitle" },
-          React9.createElement("strong", null, "模型列表"),
-          React9.createElement("span", { className: "dim-jh-modalSubtitle" }, providerLabel2),
-          phase === "ready" ? React9.createElement(
+          React12.createElement("strong", null, "模型列表"),
+          React12.createElement("span", { className: "dim-jh-modalSubtitle" }, providerLabel2),
+          phase === "ready" ? React12.createElement(
             "span",
             { className: "dim-jh-modelPanelCount" },
             filtering ? `${filtered.length} / ${all.length} 个模型${hiddenCount > 0 ? `，已隐藏 ${hiddenCount} 个` : ""}` : `${all.length} 个模型${hiddenCount > 0 ? `，已隐藏 ${hiddenCount} 个` : ""}`
           ) : null
         ),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelPanelActions" },
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             disabled: phase === "loading",
             onClick: () => void load()
           }, phase === "loading" ? "读取中…" : "刷新"),
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             "data-kind": "primary",
             onClick: onClose
           }, "完成")
         )
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "关闭开关后该模型不再出现在对话框的模型选择里；其余模型（含服务端新增的）默认显示。"
       ),
       // ⚠️ 失效模型提示条：它们已被上游下架并从目录剔除，故单独说明「为什么看不见」
       // 并给出**批量**恢复入口（逐个点很麻烦，而误判往往不止一个）。
-      phase === "ready" && deadCount > 0 ? React9.createElement(
+      phase === "ready" && deadCount > 0 ? React12.createElement(
         "div",
         { className: "dim-jh-modelDeadBar" },
-        React9.createElement(
+        React12.createElement(
           "span",
           null,
           `有 ${deadCount} 个模型被上游下架，已自动从列表隐藏。`
         ),
-        React9.createElement("button", {
+        React12.createElement("button", {
           className: "dim-jh-btn",
           disabled: deadRestoreBusy,
           title: "清空该供应商的失效模型记录，让它们重新出现在列表里。",
@@ -7817,10 +8802,10 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
       ) : null,
       // 搜索 + 状态筛选：Cline 的目录实测近 500 条，没有它就只能一页页翻。
       // 只在列表可用时渲染（载入中/出错时没有可筛的内容）。
-      phase === "ready" && all.length > 0 ? React9.createElement(
+      phase === "ready" && all.length > 0 ? React12.createElement(
         "div",
         { className: "dim-jh-modelFilterBar" },
-        React9.createElement("input", {
+        React12.createElement("input", {
           type: "search",
           className: "dim-jh-input dim-jh-modelSearch",
           placeholder: "搜索模型名或 id…",
@@ -7828,10 +8813,10 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
           "aria-label": "搜索模型",
           onChange: (event) => setQuery(event.target.value)
         }),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelStatusFilter", role: "group", "aria-label": "按状态筛选" },
-          [["all", "全部"], ["enabled", "已打开"], ["disabled", "已关闭"]].map(([value, label]) => React9.createElement("button", {
+          [["all", "全部"], ["enabled", "已打开"], ["disabled", "已关闭"]].map(([value, label]) => React12.createElement("button", {
             key: value,
             className: "dim-jh-btn",
             "data-active": statusFilter === value ? "true" : "false",
@@ -7839,62 +8824,62 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
             onClick: () => setStatusFilter(value)
           }, label))
         ),
-        filtering ? React9.createElement("button", {
+        filtering ? React12.createElement("button", {
           className: "dim-jh-btn",
           title: "清空搜索词与状态筛选，恢复完整列表。",
           onClick: resetFilters
         }, "清空筛选") : null
       ) : null,
-      toggleError ? React9.createElement("div", {
+      toggleError ? React12.createElement("div", {
         className: "dim-jh-probeNotice",
         "data-tone": "error",
         role: "alert"
-      }, React9.createElement("div", null, toggleError)) : null,
+      }, React12.createElement("div", null, toggleError)) : null,
       // ⚠️ 与 `toggleError` 分开渲染（Issue IKJW33）：本条是「操作成功，但没有
       // 实际效果」的说明（下架模型的空操作），用中性 tone + `role=status`；
       // 混进错误通道会让「模型已下架」看起来像插件故障。
-      toggleWarnings.length > 0 ? React9.createElement("div", {
+      toggleWarnings.length > 0 ? React12.createElement("div", {
         className: "dim-jh-probeNotice",
         // ⚠️ tone 取值必须是 `warn`：样式表里定义的是 `[data-tone="warn"]`
         //（全仓既有约定），写成 `warning` 会静默落到默认中性色 —— 不报错，
         // 但提示看起来和普通文字一样，等于没做。
         "data-tone": "warn",
         role: "status"
-      }, toggleWarnings.map((text, index) => React9.createElement("div", { key: index }, text))) : null,
-      phase === "error" ? React9.createElement(
+      }, toggleWarnings.map((text, index) => React12.createElement("div", { key: index }, text))) : null,
+      phase === "error" ? React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-empty" },
-          React9.createElement("p", null, error),
-          React9.createElement("button", { className: "dim-jh-btn", onClick: () => void load() }, "重新读取")
+          React12.createElement("p", null, error),
+          React12.createElement("button", { className: "dim-jh-btn", onClick: () => void load() }, "重新读取")
         )
-      ) : phase === "loading" ? React9.createElement(
+      ) : phase === "loading" ? React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React9.createElement("div", { className: "dim-jh-empty" }, "正在读取模型列表…")
-      ) : all.length === 0 ? React9.createElement(
+        React12.createElement("div", { className: "dim-jh-empty" }, "正在读取模型列表…")
+      ) : all.length === 0 ? React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-empty" },
-          React9.createElement("p", null, "该 Provider 当前没有可用的模型。")
+          React12.createElement("p", null, "该 Provider 当前没有可用的模型。")
         )
-      ) : filtered.length === 0 ? React9.createElement(
+      ) : filtered.length === 0 ? React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-empty" },
-          React9.createElement("p", null, "没有符合当前搜索与筛选条件的模型。"),
-          React9.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选")
+          React12.createElement("p", null, "没有符合当前搜索与筛选条件的模型。"),
+          React12.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选")
         )
-      ) : React9.createElement(
+      ) : React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelList" },
           // **按计费/来源分组**渲染（订阅 / 免费 / Cline Cloud / 按量计费）。
@@ -7903,22 +8888,22 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
           groups.map((group) => {
             const expanded = isGroupExpanded(group);
             const groupBulk = groupBulkStateFor(group, bulkBusy || groupBusy !== null);
-            return React9.createElement(
+            return React12.createElement(
               "div",
               {
                 key: group.key,
                 className: "dim-jh-modelGroup"
               },
-              React9.createElement(
+              React12.createElement(
                 "div",
                 { className: "dim-jh-modelGroupHead" },
-                React9.createElement("button", {
+                React12.createElement("button", {
                   className: "dim-jh-modelGroupToggle",
                   "aria-expanded": expanded ? "true" : "false",
                   title: group.hint,
                   onClick: () => toggleGroup(group)
                 }, `${expanded ? "▾" : "▸"} ${group.label}`),
-                React9.createElement(
+                React12.createElement(
                   "span",
                   { className: "dim-jh-modelGroupCount" },
                   group.counts.disabled > 0 ? `${group.counts.shown} 个 · 已关闭 ${group.counts.disabled}` : `${group.counts.shown} 个`
@@ -7927,23 +8912,23 @@ function ModelListPanel({ provider, rpcCall, onClose }) {
                 //    「打开全部 / 关闭全部」工具条已按用户要求删除
                 //    （2026-10-26），两排并列的歧义不复存在，不必再加「本组」前缀。
                 //    title 里仍写明「只影响这一组」—— 分组头本身要能自解释。
-                React9.createElement("button", {
+                React12.createElement("button", {
                   className: "dim-jh-btn dim-jh-modelGroupBtn",
                   title: `打开「${group.label}」的全部模型（只影响这一组）`,
                   disabled: groupBulk.openAllDisabled,
                   onClick: () => void setGroupDisabled(group, false)
                 }, "全开"),
-                React9.createElement("button", {
+                React12.createElement("button", {
                   className: "dim-jh-btn dim-jh-modelGroupBtn",
                   title: `关闭「${group.label}」的全部模型（只影响这一组）`,
                   disabled: groupBulk.closeAllDisabled,
                   onClick: () => void setGroupDisabled(group, true)
                 }, "全关")
               ),
-              expanded ? React9.createElement(
+              expanded ? React12.createElement(
                 "div",
                 { className: "dim-jh-modelGroupBody" },
-                group.models.map((model) => React9.createElement(ModelToggle, {
+                group.models.map((model) => React12.createElement(ModelToggle, {
                   key: model.id,
                   // 本弹窗是**单家供应商**的详情（`provider` 来自
                   // 组件 props，与 `model.list` 用的是同一个值），
@@ -8028,7 +9013,7 @@ function latencyParts(row) {
   return { first, total, rate, rateTitle };
 }
 function StatusDot({ ok, title }) {
-  return React9.createElement("span", {
+  return React12.createElement("span", {
     className: "dim-jh-quotaDot",
     "data-tone": ok ? "ok" : "error",
     title,
@@ -8036,13 +9021,13 @@ function StatusDot({ ok, title }) {
   });
 }
 function MinimaxXffPanel({ rpcCall, value, onSaved, onClose }) {
-  const mounted = React9.useRef(true);
-  React9.useEffect(() => () => {
+  const mounted = React12.useRef(true);
+  React12.useEffect(() => () => {
     mounted.current = false;
   }, []);
-  const [draft, setDraft] = React9.useState(value ?? "");
-  const [busy, setBusy] = React9.useState(false);
-  const [notice, setNotice] = React9.useState(null);
+  const [draft, setDraft] = React12.useState(value ?? "");
+  const [busy, setBusy] = React12.useState(false);
+  const [notice, setNotice] = React12.useState(null);
   const save = async (override) => {
     const payloadValue = typeof override === "string" ? override : draft;
     setBusy(true);
@@ -8065,7 +9050,7 @@ function MinimaxXffPanel({ rpcCall, value, onSaved, onClose }) {
       if (mounted.current) setBusy(false);
     }
   };
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -8073,7 +9058,7 @@ function MinimaxXffPanel({ rpcCall, value, onSaved, onClose }) {
         if (event.target === event.currentTarget) onClose();
       }
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -8081,48 +9066,48 @@ function MinimaxXffPanel({ rpcCall, value, onSaved, onClose }) {
         "aria-modal": "true",
         "aria-label": "MiniMax 国际站分流设置"
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalTitle" },
-          React9.createElement("strong", null, "MiniMax 国际站分流设置")
+          React12.createElement("strong", null, "MiniMax 国际站分流设置")
         ),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelPanelActions" },
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             onClick: onClose
           }, "关闭")
         )
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
         // ── 原因说明 ──
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-hint" },
           "MiniMax 国际站的服务器按**出口 IP 所在国家**分流：中国大陆 IP 会被重定向到中国站，从而出现「余额查询失败」「模型不可用」，而凭据本身是好的。"
         ),
         // ── 两条出路（先给更正当的那条）──
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-hint" },
           "① 推荐：用代理把出口 IP 改到海外（此时无需本设置）；② 应急：在下面填一个海外 IP，让请求被判为海外来源。"
         ),
         // ── 输入 ──
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-field" },
-          React9.createElement(
+          React12.createElement(
             "label",
             { className: "dim-jh-fieldLabel", htmlFor: "dim-jh-minimax-xff" },
             "X-Forwarded-For（留空 = 不伪造来源）"
           ),
-          React9.createElement("input", {
+          React12.createElement("input", {
             id: "dim-jh-minimax-xff",
             className: "dim-jh-input",
             type: "text",
@@ -8138,21 +9123,21 @@ function MinimaxXffPanel({ rpcCall, value, onSaved, onClose }) {
           })
         ),
         // ── 结果 / 错误 ──
-        notice !== null ? React9.createElement("div", {
+        notice !== null ? React12.createElement("div", {
           className: "dim-jh-hint",
           style: notice.kind === "bad" ? { color: "var(--dim-danger, #e5534b)" } : void 0
         }, notice.text) : null,
         // ── 风险说明（必须显式写出来）──
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-hint" },
           "⚠️ 该值是**声明一个并非本机的来源 IP**，仅在应急时使用；上游若改为不信任该头，本设置会失效（届时仍会如实报错，不会假装成功）。"
         ),
         // ── 操作 ──
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalActions" },
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             "data-kind": "primary",
             disabled: busy,
@@ -8166,7 +9151,7 @@ function MinimaxXffPanel({ rpcCall, value, onSaved, onClose }) {
            * 而实际请求**仍在带 XFF**（症状：他以为改回了正常行为，其实没有）。
            * ⇒ 这里直接调后端清空并回读，语义与「保存空值」完全一致。
            */
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             disabled: busy || draft === "" && value === "",
             /**
@@ -8185,19 +9170,19 @@ function MinimaxXffPanel({ rpcCall, value, onSaved, onClose }) {
   );
 }
 function ClineQuotaPanel({ rpcCall, onClose }) {
-  const mounted = React9.useRef(true);
-  React9.useEffect(() => () => {
+  const mounted = React12.useRef(true);
+  React12.useEffect(() => () => {
     mounted.current = false;
   }, []);
-  const [quota, setQuota] = React9.useState([]);
-  const [quotaPhase, setQuotaPhase] = React9.useState("loading");
-  const [quotaError, setQuotaError] = React9.useState("");
-  const [viewIndex, setViewIndex] = React9.useState(0);
-  const [logNonce, setLogNonce] = React9.useState(0);
-  const [rows, setRows] = React9.useState([]);
-  const [logPhase, setLogPhase] = React9.useState("idle");
-  const [logError, setLogError] = React9.useState("");
-  const loadQuota = React9.useCallback(async () => {
+  const [quota, setQuota] = React12.useState([]);
+  const [quotaPhase, setQuotaPhase] = React12.useState("loading");
+  const [quotaError, setQuotaError] = React12.useState("");
+  const [viewIndex, setViewIndex] = React12.useState(0);
+  const [logNonce, setLogNonce] = React12.useState(0);
+  const [rows, setRows] = React12.useState([]);
+  const [logPhase, setLogPhase] = React12.useState("idle");
+  const [logError, setLogError] = React12.useState("");
+  const loadQuota = React12.useCallback(async () => {
     setQuotaPhase("loading");
     setQuotaError("");
     try {
@@ -8213,10 +9198,10 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
       setQuotaPhase("error");
     }
   }, [rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void loadQuota();
   }, [loadQuota]);
-  const loadLog = React9.useCallback(async (accountId) => {
+  const loadLog = React12.useCallback(async (accountId) => {
     setLogPhase("loading");
     setLogError("");
     try {
@@ -8237,50 +9222,50 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
     if (quota.length === 0) return;
     setViewIndex((prev) => ((prev + delta) % quota.length + quota.length) % quota.length);
   };
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     if (viewAccountId === "") return;
     void loadLog(viewAccountId);
   }, [viewAccountId, logNonce, loadLog]);
   const renderQuota = () => {
     if (quotaPhase === "loading" && quota.length === 0) {
-      return React9.createElement("div", { className: "dim-jh-empty" }, "正在读取订阅额度…");
+      return React12.createElement("div", { className: "dim-jh-empty" }, "正在读取订阅额度…");
     }
     if (quotaPhase === "error") {
-      return React9.createElement(
+      return React12.createElement(
         "div",
         { className: "dim-jh-empty", role: "alert" },
-        React9.createElement("p", null, quotaError),
-        React9.createElement("button", { className: "dim-jh-btn", onClick: () => void loadQuota() }, "重试")
+        React12.createElement("p", null, quotaError),
+        React12.createElement("button", { className: "dim-jh-btn", onClick: () => void loadQuota() }, "重试")
       );
     }
     if (quota.length === 0) {
-      return React9.createElement("div", { className: "dim-jh-empty" }, "尚未配置账号");
+      return React12.createElement("div", { className: "dim-jh-empty" }, "尚未配置账号");
     }
     const entry2 = viewAccount;
     if (entry2 === void 0) return null;
-    const pager = quota.length > 1 ? React9.createElement(
+    const pager = quota.length > 1 ? React12.createElement(
       "div",
       { className: "dim-jh-quotaPager" },
-      React9.createElement("button", {
+      React12.createElement("button", {
         className: "dim-jh-quotaArrow",
         title: "上一个账号",
         "aria-label": "上一个账号",
         onClick: () => stepView(-1)
       }, "‹"),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-quotaAccountName" },
-        React9.createElement("span", {
+        React12.createElement("span", {
           className: "dim-jh-quotaAccountLabel",
           title: entry2.nickname || entry2.accountId
         }, entry2.nickname || entry2.accountId),
-        React9.createElement(
+        React12.createElement(
           "span",
           { className: "dim-jh-quotaIndex" },
           `第 ${viewIndex + 1} / ${quota.length} 个`
         )
       ),
-      React9.createElement("button", {
+      React12.createElement("button", {
         className: "dim-jh-quotaArrow",
         title: "下一个账号",
         "aria-label": "下一个账号",
@@ -8288,31 +9273,31 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
       }, "›")
     ) : null;
     const windows = quotaWindowsOf(entry2.windows);
-    const body = entry2.ok ? windows.length === 0 ? React9.createElement("div", { className: "dim-jh-quotaMuted" }, "官方未返回额度窗口。") : React9.createElement(
+    const body = entry2.ok ? windows.length === 0 ? React12.createElement("div", { className: "dim-jh-quotaMuted" }, "官方未返回额度窗口。") : React12.createElement(
       "div",
       { className: "dim-jh-quotaWindows" },
       windows.map(([type, label, win]) => {
         const percent = quotaPercentValue(win.percentUsed);
         const tone = quotaTone(percent);
         const resetsIn = quotaResetsIn(win.resetsAt);
-        return React9.createElement(
+        return React12.createElement(
           "div",
           {
             key: `${type}`,
             className: "dim-jh-quotaWindow"
           },
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-quotaWindowHead" },
-            React9.createElement("span", { className: "dim-jh-quotaWindowName" }, label),
+            React12.createElement("span", { className: "dim-jh-quotaWindowName" }, label),
             // ⚠️ 18px 大字 + 夹取后取整(参考实现同款):百分比是这张卡
             // 唯一要读的数,值得占最大的字级。
-            React9.createElement("span", {
+            React12.createElement("span", {
               className: "dim-jh-quotaWindowPercent",
               "data-tone": tone
             }, formatQuotaPercent(percent))
           ),
-          React9.createElement(
+          React12.createElement(
             "div",
             {
               className: "dim-jh-quotaBar",
@@ -8322,21 +9307,21 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
               "aria-valuemin": 0,
               "aria-valuemax": 100
             },
-            React9.createElement("div", {
+            React12.createElement("div", {
               className: "dim-jh-quotaBarFill",
               "data-tone": tone,
               style: { width: `${percent}%` }
             })
           ),
-          resetsIn === "" ? null : React9.createElement("div", { className: "dim-jh-quotaReset" }, resetsIn)
+          resetsIn === "" ? null : React12.createElement("div", { className: "dim-jh-quotaReset" }, resetsIn)
         );
       })
-    ) : React9.createElement(
+    ) : React12.createElement(
       "div",
       { className: "dim-jh-quotaMuted" },
       `暂时读不到官方额度。${entry2.error ? ` ${entry2.error}` : ""}`
     );
-    return React9.createElement("div", {
+    return React12.createElement("div", {
       // ⚠️ 按账号 id 作 key → 切账号时**重新挂载**该块(参考实现同款):
       // 否则进度条的 width 过渡会在两个账号的读数之间播放,
       // 看起来像"这个账号的额度在涨",而那只是动画。
@@ -8346,39 +9331,39 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
   };
   const renderLog = () => {
     if (viewAccountId === "") return null;
-    const head = React9.createElement(
+    const head = React12.createElement(
       "h3",
       { className: "dim-jh-quotaSectionTitle" },
       "请求记录"
     );
-    const hint = React9.createElement(
+    const hint = React12.createElement(
       "p",
       { className: "dim-jh-quotaLogHint" },
       "是本插件发出的请求流水（进程内存，重启后清空），不是官方账单 —— 官方渠道的消费在 Cline 自己的用量页里。"
     );
-    const tableHead = React9.createElement(
+    const tableHead = React12.createElement(
       "thead",
       null,
-      React9.createElement(
+      React12.createElement(
         "tr",
         null,
-        React9.createElement("th", { className: "dim-jh-quotaDotCol" }, ""),
-        React9.createElement("th", { className: "dim-jh-quotaWhenCol" }, "时间"),
-        React9.createElement("th", null, "模型 / 上游"),
-        React9.createElement("th", null, "TOKEN"),
-        React9.createElement("th", null, "延迟")
+        React12.createElement("th", { className: "dim-jh-quotaDotCol" }, ""),
+        React12.createElement("th", { className: "dim-jh-quotaWhenCol" }, "时间"),
+        React12.createElement("th", null, "模型 / 上游"),
+        React12.createElement("th", null, "TOKEN"),
+        React12.createElement("th", null, "延迟")
       )
     );
-    const colGroup = React9.createElement(
+    const colGroup = React12.createElement(
       "colgroup",
       null,
-      React9.createElement("col", { className: "dim-jh-quotaDotCol" }),
-      React9.createElement("col", { className: "dim-jh-quotaWhenCol" }),
-      React9.createElement("col", null),
-      React9.createElement("col", { className: "dim-jh-quotaTokensCol" }),
-      React9.createElement("col", { className: "dim-jh-quotaLoadCol" })
+      React12.createElement("col", { className: "dim-jh-quotaDotCol" }),
+      React12.createElement("col", { className: "dim-jh-quotaWhenCol" }),
+      React12.createElement("col", null),
+      React12.createElement("col", { className: "dim-jh-quotaTokensCol" }),
+      React12.createElement("col", { className: "dim-jh-quotaLoadCol" })
     );
-    const tableBody = React9.createElement(
+    const tableBody = React12.createElement(
       "tbody",
       null,
       rows.flatMap((row, index) => {
@@ -8387,61 +9372,61 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
         const figures = latencyParts(row);
         const label = String(row.model ?? "").replace(/^cline-pass\//, "");
         const cells = [
-          React9.createElement("td", null, React9.createElement(StatusDot, {
+          React12.createElement("td", null, React12.createElement(StatusDot, {
             ok: !failed,
             title: failed ? String(row.error) : "成功"
           })),
-          React9.createElement("td", { className: "dim-jh-quotaWhen" }, formatStamp(row.ts)),
-          React9.createElement(
+          React12.createElement("td", { className: "dim-jh-quotaWhen" }, formatStamp(row.ts)),
+          React12.createElement(
             "td",
             null,
-            React9.createElement("span", {
+            React12.createElement("span", {
               className: "dim-jh-quotaModel",
               title: String(row.model ?? "")
             }, label || "—"),
             // 上游与模型是两个维度:同模型可能由不同通道服务,拼一列会让
             // 「同名不同上游」的行无法区分。
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-quotaMeta" },
-              React9.createElement(
+              React12.createElement(
                 "span",
                 { className: "dim-jh-quotaTag" },
                 row.upstream || "—"
               )
             )
           ),
-          React9.createElement("td", {
+          React12.createElement("td", {
             className: "dim-jh-quotaTokens",
             // ⚠️ tooltip = **精确**数字 + 图例:单元格里超过 10 万会缩写成 k/M,
             // tooltip 是唯一保留个位的地方;`—` 的含义也只在图例里解释
             // (参考实现同款)。
             title: tokenTooltip(row)
           }, tokenSummary(row)),
-          React9.createElement(
+          React12.createElement(
             "td",
             { className: "dim-jh-quotaLoad" },
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-quotaLoadRow" },
-              React9.createElement("span", { className: "dim-jh-quotaLoadKey" }, "首字"),
-              React9.createElement("span", null, formatMs(figures.first))
+              React12.createElement("span", { className: "dim-jh-quotaLoadKey" }, "首字"),
+              React12.createElement("span", null, formatMs(figures.first))
             ),
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-quotaLoadRow" },
-              React9.createElement("span", { className: "dim-jh-quotaLoadKey" }, "总耗时"),
-              React9.createElement("span", null, formatMs(figures.total))
+              React12.createElement("span", { className: "dim-jh-quotaLoadKey" }, "总耗时"),
+              React12.createElement("span", null, formatMs(figures.total))
             ),
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-quotaLoadRow", title: figures.rateTitle },
-              React9.createElement("span", { className: "dim-jh-quotaLoadKey" }, "输出速度"),
-              React9.createElement("span", null, figures.rate)
+              React12.createElement("span", { className: "dim-jh-quotaLoadKey" }, "输出速度"),
+              React12.createElement("span", null, figures.rate)
             )
           )
         ];
-        const rowEl = React9.createElement("tr", {
+        const rowEl = React12.createElement("tr", {
           key,
           "data-error": failed ? "error" : void 0,
           // 整行 restate 一遍事实(含 token 与速率):截图或复制时信息不丢
@@ -8459,12 +9444,12 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
         if (failed) {
           return [
             rowEl,
-            React9.createElement(
+            React12.createElement(
               "tr",
               { key: `${key}-err`, "data-error": "error" },
-              React9.createElement("td", null, ""),
-              React9.createElement("td", null, ""),
-              React9.createElement("td", {
+              React12.createElement("td", null, ""),
+              React12.createElement("td", null, ""),
+              React12.createElement("td", {
                 className: "dim-jh-quotaError",
                 colSpan: 3,
                 title: String(row.error)
@@ -8475,25 +9460,25 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
         return [rowEl];
       })
     );
-    const table = React9.createElement(
+    const table = React12.createElement(
       "table",
       { className: "dim-jh-quotaTable" },
       colGroup,
       tableHead,
       tableBody
     );
-    const wrap = React9.createElement(
+    const wrap = React12.createElement(
       "div",
       { className: "dim-jh-quotaTableWrap" },
       table
     );
-    const empty = React9.createElement(
+    const empty = React12.createElement(
       "div",
       { className: "dim-jh-empty" },
       logError === "" ? "暂无记录。（面板打开后新发起的请求才会出现在这里）" : logError
     );
-    const body = logPhase === "loading" ? React9.createElement("div", { className: "dim-jh-empty" }, "正在读取请求记录…") : rows.length === 0 ? empty : wrap;
-    return React9.createElement(
+    const body = logPhase === "loading" ? React12.createElement("div", { className: "dim-jh-empty" }, "正在读取请求记录…") : rows.length === 0 ? empty : wrap;
+    return React12.createElement(
       "div",
       { className: "dim-jh-quotaLog" },
       head,
@@ -8507,7 +9492,7 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
     if (only === void 0) return "Cline";
     return `Cline · 账号 ${only.nickname || only.accountId}`;
   };
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -8515,7 +9500,7 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
         if (event.target === event.currentTarget) onClose();
       }
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -8523,19 +9508,19 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
         "aria-modal": "true",
         "aria-label": "Cline 订阅额度"
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalTitle" },
-          React9.createElement("strong", null, "订阅额度"),
-          React9.createElement("span", { className: "dim-jh-modalSubtitle" }, quotaSubtitle())
+          React12.createElement("strong", null, "订阅额度"),
+          React12.createElement("span", { className: "dim-jh-modalSubtitle" }, quotaSubtitle())
         ),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelPanelActions" },
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             disabled: quotaPhase === "loading",
             title: "重新查询全部账号的订阅额度窗口，并重读当前账号的请求记录。",
@@ -8544,14 +9529,14 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
               setLogNonce((n) => n + 1);
             }
           }, quotaPhase === "loading" ? "读取中…" : "刷新"),
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             "data-kind": "primary",
             onClick: onClose
           }, "完成")
         )
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "额度窗口来自 Cline 官方网关；请求记录是本插件自己发出的请求流水（重启后清空）。两者与账号卡片上的「积分」是三份不同的读数：积分答「还剩多少」，额度答「各时间窗用掉百分之几」，记录答「每一笔发了多久、花了多少 token」。"
@@ -8561,7 +9546,7 @@ function ClineQuotaPanel({ rpcCall, onClose }) {
       // 内容直接铺在里面就会**画出弹窗边界之外** —— 首版正是漏了这一层：
       // 额度卡 + 请求表把弹窗撑破，看起来像「弹窗位置不对、内容显示不对」。
       // 模型列表弹窗的内容同样在 modalBody 里（见其 error/loading/empty 分支）。
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
         renderQuota(),
@@ -8588,29 +9573,29 @@ function downloadCsv(filename, headers, rows) {
   setTimeout(() => URL.revokeObjectURL(url), 1e3);
 }
 function TokenLedgerPanel({ rpcCall, onClose }) {
-  const mounted = React9.useRef(true);
-  React9.useEffect(() => () => {
+  const mounted = React12.useRef(true);
+  React12.useEffect(() => () => {
     mounted.current = false;
   }, []);
-  const [snapshot, setSnapshot] = React9.useState(null);
-  const [phase, setPhase] = React9.useState("loading");
-  const [error, setError] = React9.useState("");
-  const [selected, setSelected] = React9.useState(null);
-  const [historyRange, setHistoryRange] = React9.useState("30d");
-  const [historyFromDay, setHistoryFromDay] = React9.useState("");
-  const [historyToDay, setHistoryToDay] = React9.useState("");
-  const [history, setHistory] = React9.useState(null);
-  const [historyPhase, setHistoryPhase] = React9.useState("idle");
-  const [deletingHistoryDay, setDeletingHistoryDay] = React9.useState(null);
-  const [historyDeleteError, setHistoryDeleteError] = React9.useState("");
-  const [expandedDay, setExpandedDay] = React9.useState(null);
-  const [hoveredDay, setHoveredDay] = React9.useState(null);
-  const [entryQuery, setEntryQuery] = React9.useState("");
-  const [entryChannel, setEntryChannel] = React9.useState("all");
-  const [entryStatus, setEntryStatus] = React9.useState("all");
-  const [entrySort, setEntrySort] = React9.useState("newest");
-  const [entryPage, setEntryPage] = React9.useState(1);
-  const load = React9.useCallback(async () => {
+  const [snapshot, setSnapshot] = React12.useState(null);
+  const [phase, setPhase] = React12.useState("loading");
+  const [error, setError] = React12.useState("");
+  const [selected, setSelected] = React12.useState(null);
+  const [historyRange, setHistoryRange] = React12.useState("30d");
+  const [historyFromDay, setHistoryFromDay] = React12.useState("");
+  const [historyToDay, setHistoryToDay] = React12.useState("");
+  const [history, setHistory] = React12.useState(null);
+  const [historyPhase, setHistoryPhase] = React12.useState("idle");
+  const [deletingHistoryDay, setDeletingHistoryDay] = React12.useState(null);
+  const [historyDeleteError, setHistoryDeleteError] = React12.useState("");
+  const [expandedDay, setExpandedDay] = React12.useState(null);
+  const [hoveredDay, setHoveredDay] = React12.useState(null);
+  const [entryQuery, setEntryQuery] = React12.useState("");
+  const [entryChannel, setEntryChannel] = React12.useState("all");
+  const [entryStatus, setEntryStatus] = React12.useState("all");
+  const [entrySort, setEntrySort] = React12.useState("newest");
+  const [entryPage, setEntryPage] = React12.useState(1);
+  const load = React12.useCallback(async () => {
     setPhase("loading");
     setError("");
     try {
@@ -8625,10 +9610,10 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
       setPhase("error");
     }
   }, [rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void load();
   }, [load]);
-  const loadHistory = React9.useCallback(async (rangeKey, fromDay = historyFromDay, toDay = historyToDay) => {
+  const loadHistory = React12.useCallback(async (rangeKey, fromDay = historyFromDay, toDay = historyToDay) => {
     if (rangeKey === "custom" && fromDay && toDay && fromDay > toDay) {
       setHistory(null);
       setHistoryPhase("ready");
@@ -8649,7 +9634,7 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
       setHistoryPhase("error");
     }
   }, [historyFromDay, historyToDay, rpcCall]);
-  const deleteHistoryDay = React9.useCallback(async (day) => {
+  const deleteHistoryDay = React12.useCallback(async (day) => {
     if (typeof day !== "string" || !confirm(
       `确认删除 ${day} 的历史用量？只清除这一天的日累计，不会清除实时明细、其他日期或账号设置。`
     )) return;
@@ -8668,32 +9653,32 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
       if (mounted.current) setDeletingHistoryDay(null);
     }
   }, [historyRange, loadHistory, rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void loadHistory(historyRange);
   }, [historyRange, historyFromDay, historyToDay, loadHistory]);
-  const channels = React9.useMemo(() => {
+  const channels = React12.useMemo(() => {
     const list = Array.isArray(snapshot?.channels) ? [...snapshot.channels] : [];
     list.sort((a, b) => channelOrder(a?.channel, b?.channel));
     return selected === null ? list : list.filter((c) => c?.channel === selected);
   }, [snapshot, selected]);
-  const perfCell = (row) => React9.createElement("span", {
+  const perfCell = (row) => React12.createElement("span", {
     className: "dim-jh-ledgerPerf",
     title: avgPerfDetailTooltip(row)
   }, avgPerfText(row));
-  const renderModelRow = (modelRow, key) => React9.createElement(
+  const renderModelRow = (modelRow, key) => React12.createElement(
     "div",
     {
       key,
       className: "dim-jh-ledgerModel"
     },
-    React9.createElement("span", { className: "dim-jh-ledgerModelName", title: modelRow.model }, modelRow.model),
-    React9.createElement(
+    React12.createElement("span", { className: "dim-jh-ledgerModelName", title: modelRow.model }, modelRow.model),
+    React12.createElement(
       "span",
       { className: "dim-jh-ledgerModelReq", title: "请求数（含失败）" },
       modelRow.requests + " 次"
     ),
     perfCell(modelRow),
-    React9.createElement(
+    React12.createElement(
       "span",
       { className: "dim-jh-ledgerModelTokens", title: tokenSummaryTooltip(modelRow) },
       tokenSummaryText(modelRow)
@@ -8701,22 +9686,22 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
   );
   const renderSummary = () => {
     if (phase === "loading" && snapshot === null) {
-      return React9.createElement("div", { className: "dim-jh-empty" }, "正在读取 Token 用量…");
+      return React12.createElement("div", { className: "dim-jh-empty" }, "正在读取 Token 用量…");
     }
     if (phase === "error") {
-      return React9.createElement(
+      return React12.createElement(
         "div",
         { className: "dim-jh-empty", role: "alert" },
-        React9.createElement("p", null, error),
-        React9.createElement("button", { className: "dim-jh-btn", onClick: () => void load() }, "重试")
+        React12.createElement("p", null, error),
+        React12.createElement("button", { className: "dim-jh-btn", onClick: () => void load() }, "重试")
       );
     }
     if (!hasAnyData(snapshot)) {
-      return React9.createElement(
+      return React12.createElement(
         "div",
         { className: "dim-jh-empty" },
-        React9.createElement("p", null, "还没有任何请求记录。"),
-        React9.createElement(
+        React12.createElement("p", null, "还没有任何请求记录。"),
+        React12.createElement(
           "p",
           null,
           "本插件在每次模型请求结束时记录 token 用量（含直连与网关两条通道），重启 DSH 后清空。"
@@ -8724,10 +9709,10 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
       );
     }
     const present = Array.from(new Set((snapshot?.channels ?? []).map((c) => c?.channel)));
-    const filterRow = present.length > 1 ? React9.createElement(
+    const filterRow = present.length > 1 ? React12.createElement(
       "div",
       { className: "dim-jh-ledgerFilters", key: "filters" },
-      [null, ...present].map((key) => React9.createElement("button", {
+      [null, ...present].map((key) => React12.createElement("button", {
         key: key === null ? "all" : key,
         className: "dim-jh-btn dim-jh-ledgerFilterBtn",
         "data-active": selected === key ? "true" : "false",
@@ -8737,22 +9722,22 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
     const renderProviderBody = (providerRow) => {
       const accounts = providerRow.accounts ?? [];
       if (accounts.length > 1) {
-        return accounts.map((accountRow) => React9.createElement(
+        return accounts.map((accountRow) => React12.createElement(
           "div",
           {
             key: providerRow.provider + "#" + accountRow.accountId,
             className: "dim-jh-ledgerAccount"
           },
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-ledgerAccountHead" },
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-ledgerAccountName", title: accountRow.accountId },
               accountLabel(accountRow.accountId)
             ),
             perfCell(accountRow.totals),
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-ledgerAccountSum", title: tokenSummaryTooltip(accountRow.totals) },
               tokenSummaryText(accountRow.totals)
@@ -8763,41 +9748,41 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
       }
       return accounts.flatMap((accountRow) => accountRow.models.map((modelRow) => renderModelRow(modelRow, providerRow.provider + "#" + modelRow.model)));
     };
-    return React9.createElement(
-      React9.Fragment,
+    return React12.createElement(
+      React12.Fragment,
       null,
       filterRow,
       // 汇总卡：渠道 → provider → 账号 → 模型（第 2 期加了账号层）。
       // provider / 账号行带自身小计（与模型行同列对齐）。
-      channels.map((channelRow) => React9.createElement(
+      channels.map((channelRow) => React12.createElement(
         "div",
         {
           key: channelRow.channel,
           className: "dim-jh-ledgerCard"
         },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-ledgerCardHead" },
-          React9.createElement("strong", null, channelCardTitle(channelRow)),
+          React12.createElement("strong", null, channelCardTitle(channelRow)),
           perfCell(channelRow.totals),
-          React9.createElement(
+          React12.createElement(
             "span",
             { className: "dim-jh-ledgerCardSum", title: tokenSummaryTooltip(channelRow.totals) },
             tokenSummaryText(channelRow.totals)
           )
         ),
-        channelRow.providers.map((providerRow) => React9.createElement(
+        channelRow.providers.map((providerRow) => React12.createElement(
           "div",
           {
             key: providerRow.provider,
             className: "dim-jh-ledgerProvider"
           },
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-ledgerProviderHead" },
-            React9.createElement("span", { className: "dim-jh-ledgerProviderName" }, providerRow.provider),
+            React12.createElement("span", { className: "dim-jh-ledgerProviderName" }, providerRow.provider),
             perfCell(providerRow.totals),
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-ledgerProviderSum", title: tokenSummaryTooltip(providerRow.totals) },
               tokenSummaryText(providerRow.totals)
@@ -8809,7 +9794,7 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
     );
   };
   const entries = Array.isArray(snapshot?.entries) ? snapshot.entries : [];
-  const visibleEntries = React9.useMemo(() => {
+  const visibleEntries = React12.useMemo(() => {
     const query = entryQuery.trim().toLowerCase();
     const filtered = entries.filter((entry2) => {
       if (entryChannel !== "all" && entry2.channel !== entryChannel) return false;
@@ -8827,7 +9812,7 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
     });
     return filtered;
   }, [entries, entryChannel, entryQuery, entrySort, entryStatus]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     setEntryPage(1);
   }, [entryChannel, entryQuery, entrySort, entryStatus]);
   const entryPageCount = Math.max(1, Math.ceil(visibleEntries.length / 50));
@@ -8858,12 +9843,12 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
   );
   const renderEntries = () => {
     if (entries.length === 0) return null;
-    const toolbar = React9.createElement(
+    const toolbar = React12.createElement(
       "div",
       { className: "dim-jh-ledgerEntryTools" },
-      React9.createElement("strong", null, "最近请求"),
-      React9.createElement("span", { className: "dim-jh-ledgerEntryCount" }, `${visibleEntries.length} / ${entries.length}`),
-      React9.createElement("input", {
+      React12.createElement("strong", null, "最近请求"),
+      React12.createElement("span", { className: "dim-jh-ledgerEntryCount" }, `${visibleEntries.length} / ${entries.length}`),
+      React12.createElement("input", {
         className: "dim-jh-input dim-jh-ledgerSearch",
         type: "search",
         value: entryQuery,
@@ -8871,99 +9856,99 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
         "aria-label": "按模型筛选请求",
         onChange: (event) => setEntryQuery(event.target.value)
       }),
-      React9.createElement("select", {
+      React12.createElement("select", {
         className: "dim-jh-ledgerSelect",
         value: entryChannel,
         "aria-label": "按渠道筛选请求",
         onChange: (event) => setEntryChannel(event.target.value)
       }, [
-        React9.createElement("option", { key: "all", value: "all" }, "全部渠道"),
-        React9.createElement("option", { key: "direct", value: "direct" }, "直连"),
-        React9.createElement("option", { key: "gateway", value: "gateway" }, "网关")
+        React12.createElement("option", { key: "all", value: "all" }, "全部渠道"),
+        React12.createElement("option", { key: "direct", value: "direct" }, "直连"),
+        React12.createElement("option", { key: "gateway", value: "gateway" }, "网关")
       ]),
-      React9.createElement("select", {
+      React12.createElement("select", {
         className: "dim-jh-ledgerSelect",
         value: entryStatus,
         "aria-label": "按请求状态筛选",
         onChange: (event) => setEntryStatus(event.target.value)
       }, [
-        React9.createElement("option", { key: "all", value: "all" }, "全部状态"),
-        React9.createElement("option", { key: "success", value: "success" }, "成功"),
-        React9.createElement("option", { key: "error", value: "error" }, "失败")
+        React12.createElement("option", { key: "all", value: "all" }, "全部状态"),
+        React12.createElement("option", { key: "success", value: "success" }, "成功"),
+        React12.createElement("option", { key: "error", value: "error" }, "失败")
       ]),
-      React9.createElement("select", {
+      React12.createElement("select", {
         className: "dim-jh-ledgerSelect",
         value: entrySort,
         "aria-label": "请求排序方式",
         onChange: (event) => setEntrySort(event.target.value)
       }, [
-        React9.createElement("option", { key: "newest", value: "newest" }, "最新优先"),
-        React9.createElement("option", { key: "tokens", value: "tokens" }, "Token 量最多"),
-        React9.createElement("option", { key: "duration", value: "duration" }, "耗时最长"),
-        React9.createElement("option", { key: "speed", value: "speed" }, "速率最高")
+        React12.createElement("option", { key: "newest", value: "newest" }, "最新优先"),
+        React12.createElement("option", { key: "tokens", value: "tokens" }, "Token 量最多"),
+        React12.createElement("option", { key: "duration", value: "duration" }, "耗时最长"),
+        React12.createElement("option", { key: "speed", value: "speed" }, "速率最高")
       ]),
-      React9.createElement("button", {
+      React12.createElement("button", {
         className: "dim-jh-btn dim-jh-ledgerExport",
         onClick: exportEntries,
         disabled: visibleEntries.length === 0,
         title: "导出当前筛选后的请求明细 CSV"
       }, "导出明细")
     );
-    if (visibleEntries.length === 0) return React9.createElement(
+    if (visibleEntries.length === 0) return React12.createElement(
       "div",
       { key: "entries" },
       toolbar,
-      React9.createElement("div", { className: "dim-jh-empty" }, "没有符合当前筛选条件的请求。")
+      React12.createElement("div", { className: "dim-jh-empty" }, "没有符合当前筛选条件的请求。")
     );
-    return React9.createElement(
+    return React12.createElement(
       "div",
       { key: "entries" },
       toolbar,
-      React9.createElement(
+      React12.createElement(
         "table",
         { className: "dim-jh-ledgerTable" },
-        React9.createElement(
+        React12.createElement(
           "thead",
           null,
-          React9.createElement(
+          React12.createElement(
             "tr",
             null,
-            ["时间", "渠道", "模型", "TOKEN", "首字", "速率", "耗时", "状态"].map((h3) => React9.createElement("th", {
-              key: h3,
-              title: h3 === "TOKEN" ? "总处理量 = 未命中缓存输入 + 缓存命中输入 + 输出；缓存写入单列展示，不重复计入总量" : void 0
-            }, h3))
+            ["时间", "渠道", "模型", "TOKEN", "首字", "速率", "耗时", "状态"].map((h4) => React12.createElement("th", {
+              key: h4,
+              title: h4 === "TOKEN" ? "总处理量 = 未命中缓存输入 + 缓存命中输入 + 输出；缓存写入单列展示，不重复计入总量" : void 0
+            }, h4))
           )
         ),
-        React9.createElement("tbody", null, pageEntries.map((entry2, index) => React9.createElement(
+        React12.createElement("tbody", null, pageEntries.map((entry2, index) => React12.createElement(
           "tr",
           {
             key: entry2.ts + "-" + index,
             "data-error": entry2.error !== void 0 ? "true" : "false"
           },
-          React9.createElement("td", { title: new Date(entry2.ts).toLocaleString() }, formatEntryTime(entry2.ts)),
-          React9.createElement("td", null, channelLabel(entry2.channel)),
-          React9.createElement("td", { className: "dim-jh-ledgerEntryModel" }, entry2.model),
-          React9.createElement("td", { title: tokenSummaryTooltip(entry2) }, entryTokenText(entry2)),
-          React9.createElement("td", null, formatTtft(entry2)),
-          React9.createElement("td", null, formatTps(entry2)),
-          React9.createElement("td", null, formatDuration(entry2.durationMs)),
-          React9.createElement("td", {
+          React12.createElement("td", { title: new Date(entry2.ts).toLocaleString() }, formatEntryTime(entry2.ts)),
+          React12.createElement("td", null, channelLabel(entry2.channel)),
+          React12.createElement("td", { className: "dim-jh-ledgerEntryModel" }, entry2.model),
+          React12.createElement("td", { title: tokenSummaryTooltip(entry2) }, entryTokenText(entry2)),
+          React12.createElement("td", null, formatTtft(entry2)),
+          React12.createElement("td", null, formatTps(entry2)),
+          React12.createElement("td", null, formatDuration(entry2.durationMs)),
+          React12.createElement("td", {
             className: entry2.error !== void 0 ? "dim-jh-ledgerError" : "dim-jh-ledgerSuccess",
             title: entry2.error !== void 0 ? entry2.error : "请求成功",
             "aria-label": entry2.error !== void 0 ? "失败详情：" + entry2.error : "请求成功"
           }, entry2.error !== void 0 ? "失败 ⓘ" : "成功 ✓")
         )))
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-ledgerPagination" },
-        React9.createElement("span", null, `第 ${safeEntryPage} / ${entryPageCount} 页，每页 50 条`),
-        React9.createElement("button", {
+        React12.createElement("span", null, `第 ${safeEntryPage} / ${entryPageCount} 页，每页 50 条`),
+        React12.createElement("button", {
           className: "dim-jh-btn",
           disabled: safeEntryPage <= 1,
           onClick: () => setEntryPage((page) => Math.max(1, page - 1))
         }, "上一页"),
-        React9.createElement("button", {
+        React12.createElement("button", {
           className: "dim-jh-btn",
           disabled: safeEntryPage >= entryPageCount,
           onClick: () => setEntryPage((page) => Math.min(entryPageCount, page + 1))
@@ -8992,10 +9977,10 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
     ])
   );
   const renderHistory = () => {
-    const rangeRow = React9.createElement(
+    const rangeRow = React12.createElement(
       "div",
       { className: "dim-jh-ledgerFilters", key: "historyRanges" },
-      HISTORY_RANGES.map((r) => React9.createElement("button", {
+      HISTORY_RANGES.map((r) => React12.createElement("button", {
         key: r.key,
         className: "dim-jh-btn dim-jh-ledgerFilterBtn",
         "data-active": historyRange === r.key ? "true" : "false",
@@ -9004,7 +9989,7 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
           setExpandedDay(null);
         }
       }, r.label)),
-      React9.createElement("button", {
+      React12.createElement("button", {
         key: "custom",
         className: "dim-jh-btn dim-jh-ledgerFilterBtn",
         "data-active": historyRange === "custom" ? "true" : "false",
@@ -9018,29 +10003,29 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
           setExpandedDay(null);
         }
       }, "自选"),
-      historyRange === "custom" ? React9.createElement(
+      historyRange === "custom" ? React12.createElement(
         "div",
         { className: "dim-jh-ledgerDateRange", key: "dateRange" },
-        React9.createElement("label", null, "从", React9.createElement("input", {
+        React12.createElement("label", null, "从", React12.createElement("input", {
           type: "date",
           className: "dim-jh-input",
           value: historyFromDay,
           onChange: (event) => setHistoryFromDay(event.target.value)
         })),
-        React9.createElement("label", null, "到", React9.createElement("input", {
+        React12.createElement("label", null, "到", React12.createElement("input", {
           type: "date",
           className: "dim-jh-input",
           value: historyToDay,
           onChange: (event) => setHistoryToDay(event.target.value)
         }))
       ) : null,
-      React9.createElement("button", {
+      React12.createElement("button", {
         className: "dim-jh-btn dim-jh-ledgerExport",
         disabled: historyPhase !== "ready" || historyDays.length === 0,
         title: "导出当前日期范围的每日汇总 CSV",
         onClick: exportHistory
       }, "导出历史"),
-      React9.createElement(
+      React12.createElement(
         "span",
         {
           className: "dim-jh-ledgerPerf",
@@ -9050,21 +10035,21 @@ function TokenLedgerPanel({ rpcCall, onClose }) {
         history !== null && history.totals !== void 0 ? "总处理 " + formatTokenCount2(history.totals.totalTokens) + " · " + (history.totals.requests ?? 0) + " 次" : ""
       )
     );
-    const body = invalidHistoryRange ? React9.createElement("div", { className: "dim-jh-empty", key: "histRangeError", role: "alert" }, "起始日期不能晚于结束日期。") : historyPhase === "loading" ? React9.createElement("div", { className: "dim-jh-empty", key: "histLoading" }, "正在读取历史用量…") : historyPhase === "error" ? React9.createElement("div", { className: "dim-jh-empty", key: "histError" }, "历史用量读取失败（不影响明细）。") : historyDays.length === 0 ? React9.createElement(
+    const body = invalidHistoryRange ? React12.createElement("div", { className: "dim-jh-empty", key: "histRangeError", role: "alert" }, "起始日期不能晚于结束日期。") : historyPhase === "loading" ? React12.createElement("div", { className: "dim-jh-empty", key: "histLoading" }, "正在读取历史用量…") : historyPhase === "error" ? React12.createElement("div", { className: "dim-jh-empty", key: "histError" }, "历史用量读取失败（不影响明细）。") : historyDays.length === 0 ? React12.createElement(
       "div",
       { className: "dim-jh-empty", key: "histEmpty" },
       "还没有历史用量。请求完成后会立即按 UTC+8 日期累计，历史最多保留 90 天。"
-    ) : React9.createElement(
-      React9.Fragment,
+    ) : React12.createElement(
+      React12.Fragment,
       { key: "histBody" },
       // GitHub 风格用量格：固定四行，按日期顺序排列，点击可展开当日详情。
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-ledgerHeatmapWrap" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-ledgerHeatmap", role: "group", "aria-label": "每日 Token 用量热力图" },
-          heatmapCells.map((cell) => React9.createElement("button", {
+          heatmapCells.map((cell) => React12.createElement("button", {
             key: cell.day,
             className: "dim-jh-ledgerHeatmapCell",
             type: "button",
@@ -9085,29 +10070,29 @@ ${tokenSummaryTooltip(historyDays.find((day) => day.day === cell.day)?.totals)}
           }))
         )
       ),
-      selectedHistoryDay ? React9.createElement(
+      selectedHistoryDay ? React12.createElement(
         "div",
         { className: "dim-jh-ledgerDayPeek" },
-        React9.createElement("strong", null, selectedHistoryDay.day),
-        React9.createElement("span", null, "总处理 " + formatTokenCount2(selectedHistoryDay.totals?.totalTokens)),
-        React9.createElement("span", null, (selectedHistoryDay.totals?.requests ?? 0) + " 次请求"),
-        React9.createElement("span", { title: tokenSummaryTooltip(selectedHistoryDay.totals) }, "悬停查看 Token 拆分"),
-        React9.createElement("button", {
+        React12.createElement("strong", null, selectedHistoryDay.day),
+        React12.createElement("span", null, "总处理 " + formatTokenCount2(selectedHistoryDay.totals?.totalTokens)),
+        React12.createElement("span", null, (selectedHistoryDay.totals?.requests ?? 0) + " 次请求"),
+        React12.createElement("span", { title: tokenSummaryTooltip(selectedHistoryDay.totals) }, "悬停查看 Token 拆分"),
+        React12.createElement("button", {
           className: "dim-jh-btn dim-jh-ledgerDeleteQuick",
           onClick: () => setExpandedDay(selectedHistoryDay.day),
           title: "展开当日详情与删除入口"
         }, "查看 / 删除")
-      ) : React9.createElement(
+      ) : React12.createElement(
         "div",
         { className: "dim-jh-ledgerChartHint" },
         "悬停查看当日用量，点击日期展开详情"
       ),
       ...expandedDay !== null ? historyDays.filter((d) => d?.day === expandedDay).map((dayRow) => renderDayTree(dayRow)) : []
     );
-    return React9.createElement(
+    return React12.createElement(
       "div",
       { className: "dim-jh-ledgerSection", key: "history" },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-ledgerSectionTitle" },
         historyTitle(historyRange)
@@ -9116,20 +10101,20 @@ ${tokenSummaryTooltip(historyDays.find((day) => day.day === cell.day)?.totals)}
       body
     );
   };
-  const renderDayTree = (dayRow) => React9.createElement(
+  const renderDayTree = (dayRow) => React12.createElement(
     "div",
     { key: "day-" + dayRow.day, className: "dim-jh-ledgerCard" },
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-ledgerCardHead" },
-      React9.createElement("strong", null, dayRow.day + " · " + (dayRow.totals?.requests ?? 0) + " 次请求"),
+      React12.createElement("strong", null, dayRow.day + " · " + (dayRow.totals?.requests ?? 0) + " 次请求"),
       perfCell(dayRow.totals),
-      React9.createElement(
+      React12.createElement(
         "span",
         { className: "dim-jh-ledgerCardSum", title: tokenSummaryTooltip(dayRow.totals) },
         tokenSummaryText(dayRow.totals)
       ),
-      React9.createElement("button", {
+      React12.createElement("button", {
         className: "dim-jh-btn",
         "data-kind": "danger",
         disabled: deletingHistoryDay === dayRow.day,
@@ -9139,54 +10124,54 @@ ${tokenSummaryTooltip(historyDays.find((day) => day.day === cell.day)?.totals)}
         }
       }, deletingHistoryDay === dayRow.day ? "删除中…" : "删除此日")
     ),
-    historyDeleteError ? React9.createElement("div", { className: "dim-jh-empty", role: "alert" }, historyDeleteError) : null,
-    dayRow.channels.map((channelRow) => React9.createElement(
+    historyDeleteError ? React12.createElement("div", { className: "dim-jh-empty", role: "alert" }, historyDeleteError) : null,
+    dayRow.channels.map((channelRow) => React12.createElement(
       "div",
       { key: channelRow.channel, className: "dim-jh-ledgerProvider" },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-ledgerProviderHead" },
-        React9.createElement("span", { className: "dim-jh-ledgerProviderName" }, channelLabel(channelRow.channel)),
+        React12.createElement("span", { className: "dim-jh-ledgerProviderName" }, channelLabel(channelRow.channel)),
         perfCell(channelRow.totals),
-        React9.createElement(
+        React12.createElement(
           "span",
           { className: "dim-jh-ledgerProviderSum", title: tokenSummaryTooltip(channelRow.totals) },
           tokenSummaryText(channelRow.totals)
         )
       ),
-      channelRow.providers.map((providerRow) => React9.createElement(
+      channelRow.providers.map((providerRow) => React12.createElement(
         "div",
         {
           key: providerRow.provider,
           className: "dim-jh-ledgerAccount"
         },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-ledgerAccountHead" },
-          React9.createElement("span", { className: "dim-jh-ledgerAccountName" }, providerRow.provider),
+          React12.createElement("span", { className: "dim-jh-ledgerAccountName" }, providerRow.provider),
           perfCell(providerRow.totals),
-          React9.createElement(
+          React12.createElement(
             "span",
             { className: "dim-jh-ledgerAccountSum", title: tokenSummaryTooltip(providerRow.totals) },
             tokenSummaryText(providerRow.totals)
           )
         ),
-        (providerRow.accounts ?? []).length > 1 ? providerRow.accounts.map((accountRow) => React9.createElement(
+        (providerRow.accounts ?? []).length > 1 ? providerRow.accounts.map((accountRow) => React12.createElement(
           "div",
           {
             key: providerRow.provider + "#" + accountRow.accountId,
             className: "dim-jh-ledgerAccount",
             style: { padding: "0 0 0 8px" }
           },
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-ledgerAccountHead" },
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-ledgerAccountName" },
               accountLabel(accountRow.accountId)
             ),
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-ledgerAccountSum", title: tokenSummaryTooltip(accountRow.totals) },
               tokenSummaryText(accountRow.totals)
@@ -9197,7 +10182,7 @@ ${tokenSummaryTooltip(historyDays.find((day) => day.day === cell.day)?.totals)}
       ))
     ))
   );
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -9205,7 +10190,7 @@ ${tokenSummaryTooltip(historyDays.find((day) => day.day === cell.day)?.totals)}
         if (event.target === event.currentTarget) onClose();
       }
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       {
         role: "dialog",
@@ -9213,32 +10198,32 @@ ${tokenSummaryTooltip(historyDays.find((day) => day.day === cell.day)?.totals)}
         "aria-label": "Token 用量",
         className: "dim-jh-modal dim-jh-modal--ledger"
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalTitle" },
-          React9.createElement("strong", null, "Token 用量"),
-          React9.createElement("span", { className: "dim-jh-modalSubtitle" }, ledgerSubtitle())
+          React12.createElement("strong", null, "Token 用量"),
+          React12.createElement("span", { className: "dim-jh-modalSubtitle" }, ledgerSubtitle())
         ),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelPanelActions" },
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             disabled: phase === "loading",
             title: "重新读取本机 Token 账本。",
             onClick: () => void load()
           }, phase === "loading" ? "读取中…" : "刷新"),
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             "data-kind": "primary",
             onClick: onClose
           }, "完成")
         )
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         {
           className: "dim-jh-modalHint",
@@ -9246,7 +10231,7 @@ ${tokenSummaryTooltip(historyDays.find((day) => day.day === cell.day)?.totals)}
         },
         "按渠道、供应商、账号和模型统计用量。悬停数字查看 Token 拆分与性能口径；逐笔明细重启后清空，按日历史会保留。"
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
         renderHistory(),
@@ -9276,50 +10261,55 @@ function accioResetSeconds(packages, now) {
 }
 function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
   const phoneLogin = phoneLoginPresentation();
-  const [accounts, setAccounts] = React9.useState([]);
-  const [phase, setPhase] = React9.useState("loading");
-  const [error, setError] = React9.useState(null);
-  const [creating, setCreating] = React9.useState(false);
-  const [compensation, setCompensation] = React9.useState(null);
-  const compensationClaimRef = React9.useRef(false);
-  const [zcodeProvider, setZcodeProvider] = React9.useState("bigmodel");
-  const [accioRegion, setAccioRegion] = React9.useState("cn");
-  const [astudioLoginMethod, setAstudioLoginMethod] = React9.useState(phoneLogin ? "web" : "local");
-  const [autoclawMode, setAutoclawMode] = React9.useState(phoneLogin ? provider === "autoclawintl" ? "oauth" : "sms" : "local");
-  const [pendingLogin, setPendingLogin] = React9.useState(void 0);
-  const [probeBusy, setProbeBusy] = React9.useState(null);
-  const [probeNotice, setProbeNoticeState] = React9.useState(null);
-  const setProbeNotice = React9.useCallback((next) => {
+  const [accounts, setAccounts] = React12.useState([]);
+  const [phase, setPhase] = React12.useState("loading");
+  const [error, setError] = React12.useState(null);
+  const [creating, setCreating] = React12.useState(false);
+  const [compensation, setCompensation] = React12.useState(null);
+  const compensationClaimRef = React12.useRef(false);
+  const [zcodeProvider, setZcodeProvider] = React12.useState("bigmodel");
+  const [accioRegion, setAccioRegion] = React12.useState("cn");
+  const [astudioLoginMethod, setAstudioLoginMethod] = React12.useState(phoneLogin ? "web" : "local");
+  const [autoclawMode, setAutoclawMode] = React12.useState(
+    phoneLogin ? provider === "autoclawintl" ? "oauth" : "sms" : provider === "autoclawintl" ? "zai" : "local"
+  );
+  const [pendingLogin, setPendingLogin] = React12.useState(void 0);
+  const [probeBusy, setProbeBusy] = React12.useState(null);
+  const [probeNotice, setProbeNoticeState] = React12.useState(null);
+  const setProbeNotice = React12.useCallback((next) => {
     setProbeNoticeState(normalizeProbeNotice(next));
   }, []);
-  const [credits, setCredits] = React9.useState({});
-  const [creditsLoading, setCreditsLoading] = React9.useState(false);
-  const [expiryWindowDays, setExpiryWindowDays] = React9.useState(null);
-  const [loginUrlForManual, setLoginUrlForManual] = React9.useState(null);
-  const [loginLinkCopied, setLoginLinkCopied] = React9.useState(null);
-  const [proxyModal, setProxyModal] = React9.useState(null);
-  const [keyEditModal, setKeyEditModal] = React9.useState(null);
-  const [qiniuKeyEditModal, setQiniuKeyEditModal] = React9.useState(null);
-  const [autoclawLogin, setAutoclawLogin] = React9.useState(false);
-  const [keyModal, setKeyModal] = React9.useState(null);
-  const keyInputRef = React9.useRef(null);
-  const keyEditInputRef = React9.useRef(null);
-  const qiniuKeyEditInputRef = React9.useRef(null);
-  const [credentialModal, setCredentialModal] = React9.useState(null);
-  const magicrewInFlightRef = React9.useRef(false);
-  const [draggingId, setDraggingId] = React9.useState(null);
-  const [dropTargetId, setDropTargetId] = React9.useState(null);
-  const [dropPosition, setDropPosition] = React9.useState("before");
-  const [reordering, setReordering] = React9.useState(false);
-  const [reorderError, setReorderError] = React9.useState(null);
-  const mounted = React9.useRef(true);
-  const accountsRef = React9.useRef([]);
-  const pollRef = React9.useRef(0);
-  const pollAccountRef = React9.useRef("");
-  const loginWindowRef = React9.useRef(null);
-  const loginStartingRef = React9.useRef(false);
-  const claimInFlightRef = React9.useRef(false);
-  const loadAccounts = React9.useCallback(async () => {
+  const [credits, setCredits] = React12.useState({});
+  const [creditsLoading, setCreditsLoading] = React12.useState(false);
+  const [expiryWindowDays, setExpiryWindowDays] = React12.useState(null);
+  const [loginUrlForManual, setLoginUrlForManual] = React12.useState(null);
+  const [loginLinkCopied, setLoginLinkCopied] = React12.useState(null);
+  const [proxyModal, setProxyModal] = React12.useState(null);
+  const [keyEditModal, setKeyEditModal] = React12.useState(null);
+  const [qiniuKeyEditModal, setQiniuKeyEditModal] = React12.useState(null);
+  const [autoclawLogin, setAutoclawLogin] = React12.useState(false);
+  const [keyModal, setKeyModal] = React12.useState(null);
+  const keyModalRef = React12.useRef(null);
+  keyModalRef.current = keyModal;
+  const keyInputRef = React12.useRef(null);
+  const keyEditInputRef = React12.useRef(null);
+  const qiniuKeyEditInputRef = React12.useRef(null);
+  const [credentialModal, setCredentialModal] = React12.useState(null);
+  const magicrewInFlightRef = React12.useRef(false);
+  const baizhiSessionRef = React12.useRef(/* @__PURE__ */ new Set());
+  const [draggingId, setDraggingId] = React12.useState(null);
+  const [dropTargetId, setDropTargetId] = React12.useState(null);
+  const [dropPosition, setDropPosition] = React12.useState("before");
+  const [reordering, setReordering] = React12.useState(false);
+  const [reorderError, setReorderError] = React12.useState(null);
+  const mounted = React12.useRef(true);
+  const accountsRef = React12.useRef([]);
+  const pollRef = React12.useRef(0);
+  const pollAccountRef = React12.useRef("");
+  const loginWindowRef = React12.useRef(null);
+  const loginStartingRef = React12.useRef(false);
+  const claimInFlightRef = React12.useRef(false);
+  const loadAccounts = React12.useCallback(async () => {
     setPhase("loading");
     setError(null);
     try {
@@ -9335,7 +10325,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       setPhase("error");
     }
   }, [provider, rpcCall]);
-  const reloadAccountsQuietly = React9.useCallback(async () => {
+  const reloadAccountsQuietly = React12.useCallback(async () => {
     try {
       const res = await rpcCall("account.list", { provider });
       if (!mounted.current) return;
@@ -9351,13 +10341,14 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
   const astudioDialog = provider === "astudio";
   const autoclawDialog = provider === "autoclaw" || provider === "autoclawintl";
   const autoclawSmsAvailable = provider === "autoclaw";
+  const autoclawZaiAvailable = provider === "autoclawintl";
   const supportsCredits = supportsDailyCheckin(provider);
   const supportsGrowthTasks = GROWTH_TASK_PROVIDERS.has(provider);
   const supportsSessionBalance = provider === "zcode";
-  const [sessionBalanceOn, setSessionBalanceOn] = React9.useState(true);
-  const [sessionBalanceBusy, setSessionBalanceBusy] = React9.useState(false);
-  const [sessionBalanceFailed, setSessionBalanceFailed] = React9.useState(false);
-  const loadSessionBalanceStatus = React9.useCallback(async () => {
+  const [sessionBalanceOn, setSessionBalanceOn] = React12.useState(true);
+  const [sessionBalanceBusy, setSessionBalanceBusy] = React12.useState(false);
+  const [sessionBalanceFailed, setSessionBalanceFailed] = React12.useState(false);
+  const loadSessionBalanceStatus = React12.useCallback(async () => {
     if (!supportsSessionBalance) return;
     try {
       const res = await rpcCall("sessionBalance.getEnabled", {});
@@ -9371,7 +10362,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       setSessionBalanceFailed(true);
     }
   }, [rpcCall, supportsSessionBalance]);
-  const toggleSessionBalance = React9.useCallback(async (nextEnabled) => {
+  const toggleSessionBalance = React12.useCallback(async (nextEnabled) => {
     setSessionBalanceBusy(true);
     try {
       const res = await rpcCall("sessionBalance.setEnabled", { enabled: nextEnabled });
@@ -9386,11 +10377,11 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       if (mounted.current) setSessionBalanceBusy(false);
     }
   }, [rpcCall, loadSessionBalanceStatus]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void loadSessionBalanceStatus();
   }, [loadSessionBalanceStatus]);
   const canShowSubscriptionQuota = supportsSubscriptionQuota(provider);
-  const loadCredits = React9.useCallback(async (force = false) => {
+  const loadCredits = React12.useCallback(async (force = false) => {
     if (!canLoadCredits) return;
     setCreditsLoading(true);
     try {
@@ -9418,7 +10409,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       if (mounted.current) setCreditsLoading(false);
     }
   }, [provider, rpcCall, canLoadCredits, reloadAccountsQuietly]);
-  const loadCompensation = React9.useCallback(async () => {
+  const loadCompensation = React12.useCallback(async () => {
     if (provider !== "buddy") return;
     try {
       const list = await rpcCall("account.list", { provider });
@@ -9473,7 +10464,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       if (mounted.current) setCompensation((prev) => prev === null ? prev : { ...prev, busy: false });
     }
   };
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     mounted.current = true;
     void loadAccounts();
     void loadCompensation();
@@ -9490,18 +10481,18 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       compensationClaimRef.current = false;
     };
   }, [provider]);
-  const [claiming, setClaiming] = React9.useState(false);
-  const [claimNotice, setClaimNotice] = React9.useState(null);
-  const [onboarding, setOnboarding] = React9.useState(null);
-  const [onboardingLoading, setOnboardingLoading] = React9.useState(false);
-  const [onboardingNotice, setOnboardingNotice] = React9.useState(null);
+  const [claiming, setClaiming] = React12.useState(false);
+  const [claimNotice, setClaimNotice] = React12.useState(null);
+  const [onboarding, setOnboarding] = React12.useState(null);
+  const [onboardingLoading, setOnboardingLoading] = React12.useState(false);
+  const [onboardingNotice, setOnboardingNotice] = React12.useState(null);
   const canClaimOnboarding = supportsOnboardingTasks(provider);
   const canLockPermanent = supportsPermanentLock(provider);
   const lockCopy = permanentLockCopy(provider, expiryWindowDays);
-  const [permanentLocked, setPermanentLocked] = React9.useState(false);
-  const [lockBusy, setLockBusy] = React9.useState(false);
-  const [lockNotice, setLockNotice] = React9.useState(null);
-  React9.useEffect(() => {
+  const [permanentLocked, setPermanentLocked] = React12.useState(false);
+  const [lockBusy, setLockBusy] = React12.useState(false);
+  const [lockNotice, setLockNotice] = React12.useState(null);
+  React12.useEffect(() => {
     if (!canLockPermanent) return void 0;
     let alive = true;
     void (async () => {
@@ -9518,7 +10509,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       alive = false;
     };
   }, [canLockPermanent, provider]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     if (provider !== "minimaxintl") return void 0;
     let alive = true;
     void (async () => {
@@ -9568,12 +10559,19 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         parts.push(`本次领取 ${res.claimed.length} 个任务（+${gained} 积分）`);
       }
       if (res.skipped.length > 0) parts.push(`${res.skipped.length} 个此前已完成`);
+      const manual = Array.isArray(res.manualRequired) ? res.manualRequired : [];
+      if (manual.length > 0) parts.push(`${manual.length} 个需你手动完成`);
+      if (Array.isArray(res.errors) && res.errors.length > 0) {
+        parts.push(`${res.errors.length} 个失败`);
+      }
       setOnboardingNotice({
-        tone: "ok",
+        tone: manual.length > 0 || Array.isArray(res.errors) && res.errors.length > 0 ? "warn" : "ok",
         text: parts.length > 0 ? parts.join("，") : "没有可领取的任务",
         details: [
           `累计已领 ${res.earned} / ${res.total}`,
-          ...res.claimed.map((item) => `${item.title} +${item.points}`)
+          ...res.claimed.map((item) => `${item.title} +${item.points}`),
+          ...manual.map((key) => `${key}：需在网页里完成（发一条消息）后才能领`),
+          ...(Array.isArray(res.errors) ? res.errors : []).map((item) => `失败：${item}`)
         ]
       });
       setOnboarding({ earned: res.earned, total: res.total, skipped: res.skipped });
@@ -9584,11 +10582,11 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       if (mounted.current) setOnboardingLoading(false);
     }
   };
-  const [showModels, setShowModels] = React9.useState(false);
-  const [modelCatalogVersion, setModelCatalogVersion] = React9.useState(0);
-  const [showQuota, setShowQuota] = React9.useState(false);
-  const [minimaxXff, setMinimaxXff] = React9.useState("");
-  const [showMinimaxXff, setShowMinimaxXff] = React9.useState(false);
+  const [showModels, setShowModels] = React12.useState(false);
+  const [modelCatalogVersion, setModelCatalogVersion] = React12.useState(0);
+  const [showQuota, setShowQuota] = React12.useState(false);
+  const [minimaxXff, setMinimaxXff] = React12.useState("");
+  const [showMinimaxXff, setShowMinimaxXff] = React12.useState(false);
   const claimCredits = async () => {
     if (!supportsCredits) return;
     if (claimInFlightRef.current) {
@@ -9619,9 +10617,17 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         const outcome = item.outcome || {};
         if (outcome.kind === "claimed") {
           const unit = outcome.unit === "token" ? "token" : "credit";
-          details.push(
-            `${item.nickname || item.accountId}：领取成功 +${formatUnits(outcome.credit, unit)}${unitLabel(unit)}`
-          );
+          const claimedCredit = Number(outcome.credit) || 0;
+          const delayedMessage = typeof outcome.delayedMessage === "string" ? outcome.delayedMessage : "";
+          if (claimedCredit > 0) {
+            details.push(
+              `${item.nickname || item.accountId}：领取成功 +${formatUnits(claimedCredit, unit)}${unitLabel(unit)}`
+            );
+          } else if (delayedMessage !== "") {
+            details.push(`${item.nickname || item.accountId}：${delayedMessage}`);
+          } else {
+            details.push(`${item.nickname || item.accountId}：领取成功`);
+          }
         } else if (outcome.kind === "already-claimed") {
           details.push(`${item.nickname || item.accountId}：${outcome.message || "今天已领取"}`);
         } else if (outcome.kind === "inactive") {
@@ -9778,18 +10784,229 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         });
       }
     } catch (caught) {
-      setKeyModal({ error: caught && caught.message ? caught.message : "未知错误" });
+      setKeyModal((prev) => prev ? { ...prev, error: caught && caught.message ? caught.message : "未知错误" } : prev);
     } finally {
       setCreating(false);
     }
   };
-  const submitMagicrewLocalImport = async (mode = "local-browser") => {
+  const submitBaizhiKey = async (rawKey) => {
+    const key = String(rawKey == null ? "" : rawKey).trim();
+    if (key === "") return;
+    const editAccountId = keyModal && keyModal.accountId ? keyModal.accountId : "";
+    if (!editAccountId) {
+      await submitOpencodeEntry("baizhi.addAccount", { apiKey: key });
+      return;
+    }
+    setCreating(true);
+    try {
+      const res = await rpcCall("baizhi.setApiKey", { accountId: editAccountId, apiKey: key });
+      setKeyModal(null);
+      await loadAccounts();
+      setProbeNotice({
+        tone: "ok",
+        text: res && res.renamed ? "已更新 API Key。该账号的标识随 Key 一并更新（昵称与停用状态已保留）。" : "已更新 API Key（控制台登录态保留）。",
+        details: []
+      });
+    } catch (caught) {
+      const message = caught && caught.message ? caught.message : "未知错误";
+      setKeyModal((prev) => prev ? { ...prev, error: message } : prev);
+      if (keyModalRef.current === null) {
+        setProbeNotice({ tone: "error", text: message, details: [] });
+      }
+    } finally {
+      setCreating(false);
+    }
+  };
+  const MONKEYCODE_PROVIDER_IDS = ["monkeycode", "monkeycodeintl"];
+  const submitMonkeycodeKey = async (value, provider2 = "monkeycode") => {
+    const apiKey = String(value && value.apiKey ? value.apiKey : "").trim();
+    const sessionCookie = String(value && value.sessionCookie ? value.sessionCookie : "").trim();
+    const signingSecret = String(value && value.signingSecret ? value.signingSecret : "").trim();
+    const editAccountId = keyModal && keyModal.accountId ? keyModal.accountId : "";
+    if (apiKey === "") {
+      if (editAccountId !== "" && signingSecret !== "") {
+        setKeyModal((prev) => prev ? { ...prev, error: "改 signing_secret 必须同时重填 API Key（账号 id 由 Key 派生）。只想补网页登录态时，把 API Key 与 signing_secret 都留空、只填 session cookie。" } : prev);
+        return;
+      }
+      if (editAccountId !== "" && sessionCookie !== "") {
+        setCreating(true);
+        try {
+          await rpcCall(`${provider2}.setSession`, { accountId: editAccountId, sessionCookie });
+          setKeyModal(null);
+          await loadAccounts();
+          await loadCredits(true);
+          setProbeNotice({ tone: "ok", text: "已写入会话 cookie，积分与签到可用了。", details: [] });
+        } catch (caught) {
+          const message = caught && caught.message ? caught.message : "未知错误";
+          setKeyModal((prev) => prev ? { ...prev, error: message } : prev);
+          if (keyModalRef.current === null) {
+            setProbeNotice({ tone: "error", text: message, details: [] });
+          }
+        } finally {
+          setCreating(false);
+        }
+        return;
+      }
+      setKeyModal((prev) => prev ? { ...prev, error: "API Key 不能为空。若只是给已有账号补网页登录态，请从账号卡片的「改 Key」进入并只填 session cookie。" } : prev);
+      return;
+    }
+    const payload = { apiKey };
+    if (signingSecret !== "") payload.signingSecret = signingSecret;
+    if (sessionCookie !== "") payload.sessionCookie = sessionCookie;
+    if (editAccountId) payload.accountId = editAccountId;
+    setCreating(true);
+    try {
+      const res = await rpcCall(
+        editAccountId ? `${provider2}.setApiKey` : `${provider2}.addAccount`,
+        payload
+      );
+      setKeyModal(null);
+      await loadAccounts();
+      setProbeNotice({
+        tone: "ok",
+        text: editAccountId ? res && res.renamed ? "已更新凭据。该账号的标识随 Key 一并更新（昵称与停用状态已保留）。" : "已更新凭据。" : res && res.existed ? "该 key 已存在，已为你定位到原有账号。" : "已添加 MonkeyCode 账号。",
+        details: []
+      });
+    } catch (caught) {
+      const message = caught && caught.message ? caught.message : "未知错误";
+      setKeyModal((prev) => prev ? { ...prev, error: message } : prev);
+      if (keyModalRef.current === null) {
+        setProbeNotice({ tone: "error", text: message, details: [] });
+      }
+    } finally {
+      setCreating(false);
+    }
+  };
+  const submitMonkeycodeBrowserLogin = async (provider2 = "monkeycode") => {
     if (magicrewInFlightRef.current) return;
     magicrewInFlightRef.current = true;
     setCreating(true);
     setError(null);
     try {
-      const created = await rpcCall("account.create", { provider: "magicrew", mode });
+      const created = await rpcCall("account.create", { provider: provider2, mode: "browser" });
+      if (mounted.current) setCredentialModal(null);
+      const accountId = created && created.accountId ? created.accountId : "";
+      if (!accountId) {
+        if (mounted.current) {
+          setCredentialModal((m) => m ? { ...m, error: "宿主未返回账号 id，请重试" } : m);
+        }
+        return;
+      }
+      setProbeNotice({
+        tone: "ok",
+        text: "浏览器窗口已打开，请在窗口里完成登录（完成后会自动建号并拉取额度）。",
+        details: []
+      });
+      startLoginPoll({ accountId, provider: provider2 });
+    } catch (caught) {
+      if (mounted.current) {
+        setCredentialModal((m) => m ? { ...m, error: caught && caught.message ? caught.message : "登录失败" } : m);
+      }
+    } finally {
+      magicrewInFlightRef.current = false;
+      if (mounted.current) setCreating(false);
+    }
+  };
+  const submitBaizhiBrowserLogin = async () => {
+    if (magicrewInFlightRef.current) return;
+    magicrewInFlightRef.current = true;
+    setCreating(true);
+    setError(null);
+    try {
+      const created = await rpcCall("account.create", { provider: "baizhi", mode: "browser" });
+      if (mounted.current) setCredentialModal(null);
+      const accountId = created && created.accountId ? created.accountId : "";
+      if (!accountId) {
+        if (mounted.current) {
+          setCredentialModal((m) => m ? { ...m, error: "宿主未返回账号 id，请重试" } : m);
+        }
+        return;
+      }
+      setProbeNotice({
+        tone: "ok",
+        text: "浏览器窗口已打开，请在窗口里登录百智云；登录完成后会自动建号，并同时拿到 API Key 与积分。",
+        details: []
+      });
+      startLoginPoll({ accountId, provider: "baizhi" });
+    } catch (caught) {
+      if (mounted.current) {
+        setCredentialModal((m) => m ? { ...m, error: caught && caught.message ? caught.message : "登录失败" } : m);
+      }
+    } finally {
+      magicrewInFlightRef.current = false;
+      if (mounted.current) setCreating(false);
+    }
+  };
+  const startBaizhiSession = async (accountId) => {
+    if (!accountId) return;
+    const inFlight = baizhiSessionRef.current;
+    if (inFlight.has(accountId)) return;
+    inFlight.add(accountId);
+    try {
+      await runBaizhiSession(accountId);
+    } finally {
+      inFlight.delete(accountId);
+    }
+  };
+  const runBaizhiSession = async (accountId) => {
+    if (!mounted.current) return;
+    setProbeNotice({
+      tone: "ok",
+      text: "浏览器窗口已打开，请在窗口里登录百智云控制台（baizhi.cloud）；登录完成后卡片上的积分会自动出现。",
+      details: []
+    });
+    try {
+      const res = await rpcCall("baizhi.startSession", { accountId });
+      if (!mounted.current) return;
+      if (!res || !res.accountId) {
+        setProbeNotice({ tone: "error", text: "宿主未接受补登录态请求，请重试。", details: [] });
+        return;
+      }
+    } catch (caught) {
+      if (!mounted.current) return;
+      setProbeNotice({
+        tone: "error",
+        text: caught && caught.message ? caught.message : "补登录态失败",
+        details: []
+      });
+      return;
+    }
+    const deadline = Date.now() + 4 * 60 * 1e3;
+    while (Date.now() < deadline) {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 3e3);
+      });
+      if (!mounted.current) return;
+      await reloadAccountsQuietly();
+      const snapshot = accountsRef.current || [];
+      const hit = snapshot.find((a) => a && a.id === accountId);
+      if (hit && hit.baizhiHasSession === true) {
+        if (mounted.current) {
+          setProbeNotice({
+            tone: "ok",
+            text: "已读到百智云登录态，正在拉取积分…",
+            details: []
+          });
+        }
+        await loadCredits(true);
+        return;
+      }
+    }
+    if (mounted.current) {
+      setProbeNotice({
+        tone: "warn",
+        text: "没读到百智云登录态（4 分钟内未完成登录）。窗口可能已关闭 —— 可点卡片上的「登录」重试。",
+        details: []
+      });
+    }
+  };
+  const submitMagicrewLocalImport = async (provider2, mode = "local-browser") => {
+    if (magicrewInFlightRef.current) return;
+    magicrewInFlightRef.current = true;
+    setCreating(true);
+    setError(null);
+    try {
+      const created = await rpcCall("account.create", { provider: provider2, mode });
       if (mounted.current) setCredentialModal(null);
       if (mode === "browser") {
         const accountId = created && created.accountId ? created.accountId : "";
@@ -9804,11 +11021,11 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
           text: "浏览器窗口已打开，请在窗口里完成登录（完成后会自动读取登录态）。",
           details: []
         });
-        startLoginPoll({ accountId, provider: "magicrew" });
+        startLoginPoll({ accountId, provider: provider2 });
         return;
       }
       await loadAccounts();
-      setProbeNotice({ tone: "ok", text: "已从本机浏览器导入超级麦吉账号。", details: [] });
+      setProbeNotice({ tone: "ok", text: `已从本机浏览器导入${provider2 === "magicrewintl" ? "MagiCrew 国际版" : "超级麦吉"}账号。`, details: [] });
     } catch (caught) {
       if (mounted.current) {
         setCredentialModal((m) => m ? { ...m, error: caught && caught.message ? caught.message : "导入失败" } : m);
@@ -9844,6 +11061,22 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       return;
     }
     if (provider === "magicrew" && !phoneLogin) {
+      setCredentialModal({ provider, error: "" });
+      return;
+    }
+    if (provider === "magicrewintl") {
+      setCredentialModal({ provider, error: "" });
+      return;
+    }
+    if (provider === "monkeycode") {
+      setCredentialModal({ provider, error: "" });
+      return;
+    }
+    if (provider === "monkeycodeintl") {
+      setCredentialModal({ provider, error: "" });
+      return;
+    }
+    if (provider === "baizhi") {
       setCredentialModal({ provider, error: "" });
       return;
     }
@@ -10165,17 +11398,17 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       if (mounted.current) setProbeBusy(null);
     }
   };
-  const compensationCard = provider === "buddy" && shouldShowCompensation(compensation) ? React9.createElement(
+  const compensationCard = provider === "buddy" && shouldShowCompensation(compensation) ? React12.createElement(
     "div",
     {
       className: "dim-jh-probeNotice",
       "data-tone": compensation.error ? "warn" : compensation.total > 0 ? "ok" : "idle"
     },
-    React9.createElement("div", null, compensationHeadline(compensation)),
+    React12.createElement("div", null, compensationHeadline(compensation)),
     // 副文案可能为空串（已领完那条分支已不再印说明）⇒ 空时不挂空 div，
     // 否则 .dim-jh-hint 的 margin 会凭空多出一截间距。
-    compensationHint(compensation).length > 0 ? React9.createElement("div", { className: "dim-jh-hint" }, compensationHint(compensation)) : null,
-    compensation.total > 0 ? React9.createElement("button", {
+    compensationHint(compensation).length > 0 ? React12.createElement("div", { className: "dim-jh-hint" }, compensationHint(compensation)) : null,
+    compensation.total > 0 ? React12.createElement("button", {
       className: "dim-jh-btn",
       type: "button",
       disabled: compensation.busy === true,
@@ -10183,7 +11416,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       onClick: () => void claimCompensation()
     }, compensation.busy === true ? "领取中…" : "立即领取") : null
   ) : null;
-  return React9.createElement(
+  return React12.createElement(
     "section",
     {
       className: "dim-jh-accountSection",
@@ -10197,10 +11430,10 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     //    不同父级，CSS 无论如何排不到同一行（这是本次改动的关键，不是样式微调）。
     //    ⚠️ 提示为 null（账号 ≤ 1）时按钮组仍靠右：margin-left: auto 与
     //    justify-content: flex-end 两条都留着，任一条都能把它推到右边。
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-panelHead" },
-      React9.createElement(
+      React12.createElement(
         "h2",
         { className: "dim-jh-panelTitle" },
         `${PROVIDERS.find((p) => p.id === provider)?.label || provider} 账号管理`
@@ -10216,84 +11449,84 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       //    又变回「挤在按钮旁边」的老毛病。
       //    ⚠️ 它们仍必须是 panelHead 的**直接**子节点：包一层容器会让
       //    `.dim-jh-panelHead > ...` 那组选择器全部失效。
-      probeNotice ? React9.createElement(
+      probeNotice ? React12.createElement(
         "div",
         {
           className: "dim-jh-probeNotice",
           "data-tone": probeNotice.tone,
           role: "status"
         },
-        React9.createElement("div", null, probeNotice.text),
+        React12.createElement("div", null, probeNotice.text),
         // ⚠️ 不能直接读 `probeNotice.details.length`：`probeNotice` 若被写成裸
         //    字符串（2026-10-22 整页白屏事故），`.details` 是 undefined ⇒ 抛
         //    TypeError ⇒ 整个 Jet Hub 设置页被 React 卸载。这里按「无明细」
         //    降级：宁可少一行明细，也不能让整页消失。
-        safeNoticeDetails(probeNotice.details).length > 0 ? React9.createElement(
+        safeNoticeDetails(probeNotice.details).length > 0 ? React12.createElement(
           "ul",
           { className: "dim-jh-probeDetails" },
-          safeNoticeDetails(probeNotice.details).map((d, i) => React9.createElement("li", { key: i }, d))
+          safeNoticeDetails(probeNotice.details).map((d, i) => React12.createElement("li", { key: i }, d))
         ) : null
       ) : null,
-      lockNotice ? React9.createElement("div", {
+      lockNotice ? React12.createElement("div", {
         className: "dim-jh-probeNotice",
         "data-tone": lockNotice.tone,
         role: lockNotice.tone === "error" ? "alert" : "status"
       }, lockNotice.text) : null,
-      claimNotice ? React9.createElement(
+      claimNotice ? React12.createElement(
         "div",
         {
           className: "dim-jh-probeNotice",
           "data-tone": claimNotice.tone,
           role: claimNotice.tone === "error" ? "alert" : "status"
         },
-        React9.createElement("div", null, claimNotice.text),
+        React12.createElement("div", null, claimNotice.text),
         // 逐账号原因列表。没有它时用户只看到「1 个失败」，无从判断是
         // 凭据问题、活动未开、还是解析 bug。
-        (claimNotice.details || []).length > 0 ? React9.createElement(
+        (claimNotice.details || []).length > 0 ? React12.createElement(
           "ul",
           { className: "dim-jh-probeDetails" },
-          claimNotice.details.map((d, i) => React9.createElement("li", { key: i }, d))
+          claimNotice.details.map((d, i) => React12.createElement("li", { key: i }, d))
         ) : null
       ) : null,
       // 新手任务结果（仅 Loomy，一次性领取）。
-      onboardingNotice ? React9.createElement(
+      onboardingNotice ? React12.createElement(
         "div",
         {
           className: "dim-jh-probeNotice",
           "data-tone": onboardingNotice.tone,
           role: onboardingNotice.tone === "error" ? "alert" : "status"
         },
-        React9.createElement("div", null, onboardingNotice.text),
-        (onboardingNotice.details || []).length > 0 ? React9.createElement(
+        React12.createElement("div", null, onboardingNotice.text),
+        (onboardingNotice.details || []).length > 0 ? React12.createElement(
           "ul",
           { className: "dim-jh-probeDetails" },
-          onboardingNotice.details.map((line, index) => React9.createElement("li", { key: index }, line))
+          onboardingNotice.details.map((line, index) => React12.createElement("li", { key: index }, line))
         ) : null
       ) : null,
       // 弹窗被拦截：给出可点击的登录链接 + 复制按钮。不劫持当前页面（见 createAccount 的说明）。
       // 链接 300+ 字符，用户此刻唯一动作就是复制到别处；手工框选漏一个字符会得到「授权失败」假象。
-      loginUrlForManual ? React9.createElement(
+      loginUrlForManual ? React12.createElement(
         "div",
         {
           className: "dim-jh-probeNotice",
           "data-tone": "warn",
           role: "alert"
         },
-        React9.createElement("div", null, "登录窗口被浏览器拦截，请手动打开下方链接完成登录："),
-        React9.createElement(
+        React12.createElement("div", null, "登录窗口被浏览器拦截，请手动打开下方链接完成登录："),
+        React12.createElement(
           "div",
           {
             className: "dim-jh-loginLinkRow",
             "data-copy-state": loginLinkCopied === false ? "failed" : "idle"
           },
-          React9.createElement("a", {
+          React12.createElement("a", {
             className: "dim-jh-loginLink",
             href: loginUrlForManual,
             target: "_blank",
             rel: "noopener noreferrer"
           }, loginUrlForManual),
           // type='button' 必须有：按钮若落在表单里，默认 submit 会连带提交表单。
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             type: "button",
             title: loginLinkCopied === false ? "复制失败：请手动选中链接后按 Ctrl+C" : "复制授权链接",
@@ -10310,25 +11543,25 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       // ⚠️ 文案必须**单行显示**（用户同日「文案改为一行显示」）：样式侧用
       //    white-space: nowrap 钉死，故窄窗口下会被省略号截断 ⇒ 必须把
       //    完整文案挂到 title 上，否则被截掉的那半句就再也读不到。
-      accounts.length > 1 ? React9.createElement("p", {
+      accounts.length > 1 ? React12.createElement("p", {
         className: "dim-jh-orderHint",
         title: ORDER_HINT_TEXT
       }, ORDER_HINT_TEXT) : null,
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-headerActions" },
         // 「订阅额度」放在**面板级**（而不是账号卡片的按钮行）：
         // 那一行已有 5 个按钮且 `flex-wrap: nowrap`，再塞一个必然溢出
         // （该行的注释里记着「领取新手任务」当时就是这么被挤出去的）。
         // 且额度是**跨账号**的读数，放在面板级与它的语义一致。
-        canShowSubscriptionQuota ? React9.createElement("button", {
+        canShowSubscriptionQuota ? React12.createElement("button", {
           className: "dim-jh-btn",
           title: "查看 Cline 官方订阅额度窗口（5 小时 / 周 / 月各用掉百分之几）与逐笔请求记录（模型、token、积分）。数据来自官方网关，非本地记账。",
           onClick: () => setShowQuota(true)
         }, "订阅额度") : null,
-        supportsCredits ? React9.createElement("button", {
+        supportsCredits ? React12.createElement("button", {
           className: "dim-jh-btn",
-          title: supportsGrowthTasks ? `领取全部 ${PROVIDERS.find((p) => p.id === provider)?.label || provider} 账号（含已停用）的每日签到积分，**并完成成长中心任务**。成长一轮单账号实测 90～270s 且全串行，账号多时可能需多点几次；受客户端动作限制的项（微信、夜猫子窗口、判据推不动）会如实标为「需客户端」。` : `领取全部 ${PROVIDERS.find((p) => p.id === provider)?.label || provider} 账号（含已停用）的每日签到积分`,
+          title: supportsGrowthTasks ? `领取全部 ${PROVIDERS.find((p) => p.id === provider)?.label || provider} 账号（含已停用）的每日签到积分，**并完成成长中心任务**。成长一轮单账号可达数分钟（小程序族任务有 45s/条的反作弊节奏）且全串行，账号多时可能需多点几次；同时自动领取连登兑换、补签、抽奖、首Buddy 与新手礼包；受客户端动作限制的项（微信、夜猫子窗口、判据推不动）会如实标为「需客户端」。` : `领取全部 ${PROVIDERS.find((p) => p.id === provider)?.label || provider} 账号（含已停用）的每日签到积分`,
           disabled: claiming || accounts.length === 0,
           onClick: () => void claimCredits()
         }, claiming ? "领取中…" : supportsGrowthTasks ? "一键领取积分 + 成长任务" : "一键领取积分") : null,
@@ -10337,13 +11570,13 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         // 隐藏这两个按钮 —— 重测永远测不出限流、重置也没有标记可清，
         // 而重测还会白烧积分（用户报障：「这个 provider 好像没发现模型限流，
         // 把重置所有按钮删掉」）。
-        supportsRateLimit(provider) ? React9.createElement("button", {
+        supportsRateLimit(provider) ? React12.createElement("button", {
           className: "dim-jh-btn",
           title: RETEST_ALL_HELP,
           disabled: probeBusy !== null || accounts.length === 0,
           onClick: () => void runLimitAction("retestAll")
         }, probeBusy === "all" ? "重测中…" : "重测所有") : null,
-        supportsRateLimit(provider) ? React9.createElement("button", {
+        supportsRateLimit(provider) ? React12.createElement("button", {
           className: "dim-jh-btn",
           title: RESET_ALL_HELP,
           disabled: probeBusy !== null || accounts.length === 0,
@@ -10365,7 +11598,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         //    ③ 加载态文字换成「处理中…」之外，图标也一起转圈（`data-loading`
         //       驱动样式里的 .dim-jh-iconBtn[data-loading="true"] svg 动画）——
         //       双保险：文字换了但用户眼神在图标上，只动一处会看不出还在忙。
-        canLockPermanent ? React9.createElement(
+        canLockPermanent ? React12.createElement(
           "button",
           {
             className: "dim-jh-btn dim-jh-iconTextBtn",
@@ -10376,7 +11609,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
             disabled: lockBusy,
             onClick: () => void togglePermanentLock()
           },
-          React9.createElement(
+          React12.createElement(
             "svg",
             {
               width: 14,
@@ -10393,21 +11626,21 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
             // 挂锁图标，两种状态共用锁体，只改锁梁：
             //   锁定 = 锁梁闭合（两边都落到锁体上）；
             //   解锁 = 锁梁右侧抬起（左端仍插在锁体里），一眼能分辨。
-            React9.createElement("rect", { x: 3, y: 11, width: 18, height: 11, rx: 2 }),
-            permanentLocked ? React9.createElement("path", { d: "M7 11V7a5 5 0 0 1 10 0v4" }) : React9.createElement("path", { d: "M7 11V7a5 5 0 0 1 9.9-1" })
+            React12.createElement("rect", { x: 3, y: 11, width: 18, height: 11, rx: 2 }),
+            permanentLocked ? React12.createElement("path", { d: "M7 11V7a5 5 0 0 1 10 0v4" }) : React12.createElement("path", { d: "M7 11V7a5 5 0 0 1 9.9-1" })
           ),
           lockBusy ? "处理中…" : "永久积分"
         ) : null,
         // 「负载均衡」开关：**只对 ZCode 面板渲染**（supportsSessionBalance）。
         // 与页头开关同款 Switch 形态；挂在按钮行（面板页头最右），与
         // 「一键领取积分 / 重测所有」同一排。
-        supportsSessionBalance ? React9.createElement(
+        supportsSessionBalance ? React12.createElement(
           "label",
           {
             className: "dim-jh-nativeSearch",
             title: sessionBalanceFailed ? "⚠️ 开关状态读取失败，当前显示的是默认值（开启）。点击即可重新提交一次。" : "负载均衡：多账号按会话分散（同一会话优先同一账号；账号今日请求数达阈值后会沉底，正在跑的会话可能迁移一次以摊平负载；无会话标识的请求随机分摊）。关闭后回到「手动顺序优先」的选号方式。"
           },
-          React9.createElement("input", {
+          React12.createElement("input", {
             type: "checkbox",
             className: "dim-jh-switch",
             checked: sessionBalanceOn,
@@ -10415,7 +11648,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
             disabled: sessionBalanceBusy,
             onChange: (event) => void toggleSessionBalance(event.target.checked)
           }),
-          React9.createElement("span", null, "负载均衡")
+          React12.createElement("span", null, "负载均衡")
         ) : null,
         // ⚠️ **「模型列表」排在「+ 新建账号」左边，且已改成图标 + 文字**
         //    （用户 2026-10-26：「模型按钮移动到新建账号左边改为图标+模型」）。
@@ -10424,7 +11657,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         //    宽度，省不出多少地方。
         //    ⚠️ `aria-label` 仍写全「模型列表」（读屏念的是动作，不是按钮上那两个字）。
         //    ⚠️ 顺序：**模型列表 → 新建账号 → 刷新积分**（三个都跟「本页内容」相关）。
-        React9.createElement(
+        React12.createElement(
           "button",
           {
             className: "dim-jh-btn dim-jh-iconTextBtn",
@@ -10432,7 +11665,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
             "aria-label": "模型列表",
             onClick: () => setShowModels(true)
           },
-          React9.createElement(
+          React12.createElement(
             "svg",
             {
               width: 14,
@@ -10447,19 +11680,19 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
               focusable: "false"
             },
             // 列表图标：三横线 + 左侧圆点
-            React9.createElement("path", { d: "M9 6h11" }),
-            React9.createElement("path", { d: "M9 12h11" }),
-            React9.createElement("path", { d: "M9 18h11" }),
-            React9.createElement("path", { d: "M4.5 6h.01" }),
-            React9.createElement("path", { d: "M4.5 12h.01" }),
-            React9.createElement("path", { d: "M4.5 18h.01" })
+            React12.createElement("path", { d: "M9 6h11" }),
+            React12.createElement("path", { d: "M9 12h11" }),
+            React12.createElement("path", { d: "M9 18h11" }),
+            React12.createElement("path", { d: "M4.5 6h.01" }),
+            React12.createElement("path", { d: "M4.5 12h.01" }),
+            React12.createElement("path", { d: "M4.5 18h.01" })
           ),
           "模型"
         ),
         // ⚠️ 渠道弹窗**只服务 ZCode**：非 zcode 直接发起登录，与「搬进弹窗」
         //   之前逐字等价。上游 15ccae5 把渠道选择搬进弹窗时丢了这层门控，
         //   于是全部 14 个 provider 点「+ 新建账号」都弹出一个「添加 ZCode 账号」。
-        React9.createElement(
+        React12.createElement(
           "button",
           {
             className: "dim-jh-btn dim-jh-iconBtn",
@@ -10488,7 +11721,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
             },
             disabled: creating
           },
-          React9.createElement(
+          React12.createElement(
             "svg",
             {
               width: 14,
@@ -10503,10 +11736,10 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
               focusable: "false"
             },
             // 人形 + 加号（user-plus）：新建的是「一个账号」，不是「一个文件」
-            React9.createElement("path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" }),
-            React9.createElement("circle", { cx: 9, cy: 7, r: 4 }),
-            React9.createElement("path", { d: "M19 8v6" }),
-            React9.createElement("path", { d: "M22 11h-6" })
+            React12.createElement("path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" }),
+            React12.createElement("circle", { cx: 9, cy: 7, r: 4 }),
+            React12.createElement("path", { d: "M19 8v6" }),
+            React12.createElement("path", { d: "M22 11h-6" })
           )
         ),
         // ⚠️ **刷新积分排在「+ 新建账号」右边**（用户 2026-10-26 要求
@@ -10514,7 +11747,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         //    与「新建账号」隔了两个按钮 —— 两者同属「让本页数据变新」的动作，
         //    挨在一起比夹在领取/重测中间更顺手。
         //    ⚠️ 它必须仍在 minimaxintl 的「国际站分流设置」之前：那个是排障入口。
-        canLoadCredits ? React9.createElement(
+        canLoadCredits ? React12.createElement(
           "button",
           {
             className: "dim-jh-btn dim-jh-iconBtn",
@@ -10524,7 +11757,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
             disabled: creditsLoading,
             onClick: () => void loadCredits(true)
           },
-          React9.createElement(
+          React12.createElement(
             "svg",
             {
               width: 14,
@@ -10539,12 +11772,12 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
               focusable: "false"
             },
             // 环形箭头：缺口圆 + 端点箭头（顺时针方向）
-            React9.createElement("path", { d: "M21 12a9 9 0 1 1-3.2-6.9" }),
-            React9.createElement("path", { d: "M21 3v5h-5" })
+            React12.createElement("path", { d: "M21 12a9 9 0 1 1-3.2-6.9" }),
+            React12.createElement("path", { d: "M21 3v5h-5" })
           )
         ) : null,
-        provider === "autoclaw" ? React9.createElement("button", { className: "dim-jh-btn", disabled: creating, onClick: () => setAutoclawLogin(true) }, "短信登录") : null,
-        ["buddy", "workbuddy", "autoclaw", "autoclawintl", "orcaterm", "magicrew"].includes(provider) && creating && pollRef.current !== 0 ? React9.createElement("button", {
+        provider === "autoclaw" ? React12.createElement("button", { className: "dim-jh-btn", disabled: creating, onClick: () => setAutoclawLogin(true) }, "短信登录") : null,
+        ["buddy", "workbuddy", "autoclaw", "autoclawintl", "orcaterm", "magicrew"].includes(provider) && creating && pollRef.current !== 0 ? React12.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           onClick: () => {
@@ -10569,7 +11802,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
          * 分流设置是**排障用的次要入口** —— 次要项排在主操作前面会让用户
          * 先看到「分流设置」而不是「怎么加账号」。
          */
-        provider === "minimaxintl" ? React9.createElement("button", {
+        provider === "minimaxintl" ? React12.createElement("button", {
           className: "dim-jh-btn",
           "data-kind": minimaxXff !== "" ? "primary" : void 0,
           title: `MiniMax 国际站的服务器会按**出口 IP 所在国家**决定把你路由到哪个站：中国大陆 IP 会被 307 重定向到中国站，表现为「余额查询失败 / 模型不可用」。
@@ -10597,36 +11830,36 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
         // ⚠ 本弹窗原先有**两个入口**（这里与官方模型卡片里的 ZCode 账号区）；后者
         //   已随 Gitee issue IKJLHQ 整体移除（它占用的 provider-card 槽 key 与第三方
         //   pi-ai 扩展互斥，机制见 index.js 文件头）—— 现在只剩本处一个入口。
-        pendingLogin === void 0 || !newAccountAsksChannel(provider) ? null : React9.createElement(
+        pendingLogin === void 0 || !newAccountAsksChannel(provider) ? null : React12.createElement(
           "div",
           {
             className: "dim-jh-zcDialogMask",
             onClick: () => setPendingLogin(void 0)
           },
-          React9.createElement(
+          React12.createElement(
             "div",
             {
               className: "dim-jh-zcDialog",
               onClick: (event) => event.stopPropagation()
             },
-            React9.createElement(
+            React12.createElement(
               "h3",
               { className: "dim-jh-zcDialogTitle" },
               // ⚠ 弹窗服务四个 provider（zcode / accio / astudio / autoclaw），
               //   各问各的东西：渠道 / 区域 / AStudio 登录方式 / AutoClaw 登录方式。
               astudioDialog ? "添加 AStudio 账号" : autoclawDialog ? "添加 AutoClaw 账号" : accioDialog ? "添加 Accio 账号" : "添加 ZCode 账号"
             ),
-            React9.createElement(
+            React12.createElement(
               "p",
               { className: "dim-jh-zcDialogHint" },
-              astudioDialog ? "支持导入本机桌面端已登录会话，或在浏览器中打开三合一登录页（支持手机短信/账号密码/微信扫码）。" : autoclawDialog ? "请选择登录方式：可直接读取本机已安装并登录的桌面端凭据，或使用手机短信验证码快速登录。" : accioDialog ? "Accio 的登录页按区域分域名，且区域由服务端按账号下发 —— 登录前无法自动判断。请选择该账号所属的区域，否则会打开打不开的登录页。" : "选择登录渠道后才会打开对应的认证页面。两个渠道的授权页与凭据各自独立，"
+              astudioDialog ? "支持导入本机桌面端已登录会话，或在浏览器中打开三合一登录页（支持手机短信/账号密码/微信扫码）。" : autoclawDialog ? autoclawZaiAvailable ? "请选择登录方式：可直接读取本机已安装并登录的桌面端凭据，或使用 Z.ai 账号在浏览器中授权登录。" : "请选择登录方式：可直接读取本机已安装并登录的桌面端凭据，或使用手机短信验证码快速登录。" : accioDialog ? "Accio 的登录页按区域分域名，且区域由服务端按账号下发 —— 登录前无法自动判断。请选择该账号所属的区域，否则会打开打不开的登录页。" : "选择登录渠道后才会打开对应的认证页面。两个渠道的授权页与凭据各自独立，"
             ),
-            accioDialog || astudioDialog || autoclawDialog ? null : React9.createElement(
+            accioDialog || astudioDialog || autoclawDialog ? null : React12.createElement(
               "p",
               { className: "dim-jh-zcDialogHint" },
               "可用 z.ai（国际）登录另一个账号。"
             ),
-            React9.createElement(
+            React12.createElement(
               "label",
               { className: "dim-jh-zcProvider" },
               astudioDialog ? "登录方式" : autoclawDialog ? "登录方式" : accioDialog ? "登录区域" : "登录渠道"
@@ -10653,7 +11886,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
               //   `pnpm build:client`，见 AGENTS.md 的「单测只读源码文本」那条。
             ),
             // 彻底解决 Windows/Electron 下原生 <select> 下拉框经常点不开的恶心 bug：使用 100% 可靠的 DOM 单选卡片组
-            React9.createElement(
+            React12.createElement(
               "div",
               {
                 style: {
@@ -10668,7 +11901,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                 { value: "web", label: "🌐 网页三合一快捷登录", desc: "在浏览器载体页中登录，支持手机短信/账号密码/微信扫码，免依赖桌面端" }
               ].map((opt) => {
                 const active = astudioLoginMethod === opt.value;
-                return React9.createElement(
+                return React12.createElement(
                   "div",
                   {
                     key: opt.value,
@@ -10686,7 +11919,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       userSelect: "none"
                     }
                   },
-                  React9.createElement("div", {
+                  React12.createElement("div", {
                     style: {
                       width: "14px",
                       height: "14px",
@@ -10697,17 +11930,17 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       background: active ? "#fff" : "transparent"
                     }
                   }),
-                  React9.createElement(
+                  React12.createElement(
                     "div",
                     { style: { display: "flex", flexDirection: "column" } },
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "13px",
                         fontWeight: active ? 600 : 400,
                         color: "var(--dsw-alias-label-primary, inherit)"
                       }
                     }, opt.label),
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "11px",
                         color: "var(--dsw-alias-label-tertiary, #888)",
@@ -10721,7 +11954,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                 { value: "global", label: "🌐 国际版（zh.accio.com）", desc: "适用于 Accio 国际站点账号" }
               ].map((opt) => {
                 const active = accioRegion === opt.value;
-                return React9.createElement(
+                return React12.createElement(
                   "div",
                   {
                     key: opt.value,
@@ -10739,7 +11972,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       userSelect: "none"
                     }
                   },
-                  React9.createElement("div", {
+                  React12.createElement("div", {
                     style: {
                       width: "14px",
                       height: "14px",
@@ -10750,17 +11983,17 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       background: active ? "#fff" : "transparent"
                     }
                   }),
-                  React9.createElement(
+                  React12.createElement(
                     "div",
                     { style: { display: "flex", flexDirection: "column" } },
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "13px",
                         fontWeight: active ? 600 : 400,
                         color: "var(--dsw-alias-label-primary, inherit)"
                       }
                     }, opt.label),
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "11px",
                         color: "var(--dsw-alias-label-tertiary, #888)",
@@ -10775,10 +12008,14 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                 // ⚠️ 国际版**不渲染**这条：它的账号是邮箱 + Z.ai OAuth 创建的、
                 //    `phone` 为 null、无绑手机端点 ⇒ 短信必然失败（详见
                 //    `autoclawSmsAvailable` 的注释）。
-                ...autoclawSmsAvailable ? [{ value: "sms", label: "📱 手机验证码快速登录", desc: "免安装桌面端，支持输入任意手机号登录" }] : []
+                ...autoclawSmsAvailable ? [{ value: "sms", label: "📱 手机验证码快速登录", desc: "免安装桌面端，支持输入任意手机号登录" }] : [],
+                // ⚠️ 国际版**只有**这一条能走通（短信对国际账号必然失败）：
+                //    非 local 的取值会落到 RPC 的「其它情况」分支 ⇒ startLogin
+                //    ⇒ 返回的登录页对国际版渲染 Z.ai 授权按钮。
+                ...autoclawZaiAvailable ? [{ value: "zai", label: "🌐 使用 Z.ai 账号登录", desc: "在浏览器里用 Z.ai 账号授权（国际版唯一可用方式）" }] : []
               ].map((opt) => {
                 const active = autoclawMode === opt.value;
-                return React9.createElement(
+                return React12.createElement(
                   "div",
                   {
                     key: opt.value,
@@ -10796,7 +12033,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       userSelect: "none"
                     }
                   },
-                  React9.createElement("div", {
+                  React12.createElement("div", {
                     style: {
                       width: "14px",
                       height: "14px",
@@ -10807,17 +12044,17 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       background: active ? "#fff" : "transparent"
                     }
                   }),
-                  React9.createElement(
+                  React12.createElement(
                     "div",
                     { style: { display: "flex", flexDirection: "column" } },
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "13px",
                         fontWeight: active ? 600 : 400,
                         color: "var(--dsw-alias-label-primary, inherit)"
                       }
                     }, opt.label),
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "11px",
                         color: "var(--dsw-alias-label-tertiary, #888)",
@@ -10831,7 +12068,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                 { value: "zai", label: "🌐 z.ai（chat.z.ai，国际版）", desc: "适用于 z.ai 国际版账号" }
               ].map((opt) => {
                 const active = zcodeProvider === opt.value;
-                return React9.createElement(
+                return React12.createElement(
                   "div",
                   {
                     key: opt.value,
@@ -10849,7 +12086,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       userSelect: "none"
                     }
                   },
-                  React9.createElement("div", {
+                  React12.createElement("div", {
                     style: {
                       width: "14px",
                       height: "14px",
@@ -10860,17 +12097,17 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                       background: active ? "#fff" : "transparent"
                     }
                   }),
-                  React9.createElement(
+                  React12.createElement(
                     "div",
                     { style: { display: "flex", flexDirection: "column" } },
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "13px",
                         fontWeight: active ? 600 : 400,
                         color: "var(--dsw-alias-label-primary, inherit)"
                       }
                     }, opt.label),
-                    React9.createElement("span", {
+                    React12.createElement("span", {
                       style: {
                         fontSize: "11px",
                         color: "var(--dsw-alias-label-tertiary, #888)",
@@ -10881,14 +12118,14 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
                 );
               })
             ),
-            React9.createElement(
+            React12.createElement(
               "div",
               { className: "dim-jh-zcDialogActions" },
-              React9.createElement("button", {
+              React12.createElement("button", {
                 className: "dim-jh-btn",
                 onClick: () => setPendingLogin(void 0)
               }, "取消"),
-              React9.createElement(
+              React12.createElement(
                 "button",
                 {
                   className: "dim-jh-btn",
@@ -10917,36 +12154,36 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     //    用 AST 守着 —— 文本切片断言在括号错位时**全部通过**，只有 AST 能发现。
     //    ⚠️ 本段（section 的直接子节点）**不得**再出现任何 .dim-jh-probeNotice：
     //    它们一律属于 panelHead，出现在这里就会落到按钮行下方。
-    phase === "loading" ? React9.createElement("div", { className: "dim-jh-empty" }, "正在读取账号列表…") : phase === "error" ? React9.createElement(
+    phase === "loading" ? React12.createElement("div", { className: "dim-jh-empty" }, "正在读取账号列表…") : phase === "error" ? React12.createElement(
       "div",
       { className: "dim-jh-empty", role: "alert" },
-      React9.createElement("p", null, error),
-      React9.createElement("button", { className: "dim-jh-btn", onClick: loadAccounts }, "重新读取")
-    ) : accounts.length === 0 ? React9.createElement(
+      React12.createElement("p", null, error),
+      React12.createElement("button", { className: "dim-jh-btn", onClick: loadAccounts }, "重新读取")
+    ) : accounts.length === 0 ? React12.createElement(
       "div",
       { className: "dim-jh-empty" },
       // ⚠️ opencode 的「新建」是**粘贴 API key**、不是浏览器登录，
       // 空态文案必须跟着变 —— 否则用户会去找一个根本不存在的登录页。
-      provider === "opencode" ? React9.createElement(
+      provider === "opencode" ? React12.createElement(
         "div",
         null,
-        React9.createElement(
+        React12.createElement(
           "p",
           null,
           "尚未添加账号。免费模型无需账号即可使用；添加自己的 API key 可启用付费模型，并为每个账号配置独立出口。"
         ),
-        React9.createElement(
+        React12.createElement(
           "p",
           { className: "dim-jh-hint" },
           "API key 在 opencode.ai/console/account 生成（旧 key 形如 sk-…，新 key 形如 oc_sk_…）"
         )
-      ) : React9.createElement(
+      ) : React12.createElement(
         "div",
         null,
-        React9.createElement("p", null, "尚未配置账号"),
-        React9.createElement("p", null, provider === "autoclaw" ? "点击短信登录，使用自己的 AutoClaw 账号。" : "点击新建账号进行浏览器登录。")
+        React12.createElement("p", null, "尚未配置账号"),
+        React12.createElement("p", null, provider === "autoclaw" ? "点击短信登录，使用自己的 AutoClaw 账号。" : "点击新建账号进行浏览器登录。")
       )
-    ) : React9.createElement(
+    ) : React12.createElement(
       "div",
       { className: "dim-jh-accountList" },
       // ⚠️ **必须有 className**（2026-10-21 修）：本行的父级是
@@ -10961,7 +12198,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       // ⚠️ opencode 专属策略提示：必须说清「多账号 ≠ 多额度」——
       // 匿名通道按出口 IP 限流，同一出口下的多个账号共用一份额度。
       // 不解释的话，用户加了 5 个号却只看到一份配额，会以为功能坏了。
-      provider === "opencode" ? React9.createElement(
+      provider === "opencode" ? React12.createElement(
         "p",
         { className: "dim-jh-hint" },
         "免费模型在所有通道间自动轮换，收费模型仅「API key 账号」可用。匿名通道无需 key，可添加多条、各自配代理；注意额度按「出口 IP」计算 —— 多条通道共用一个出口不会增加额度，分别配不同代理才会各自获得独立额度。"
@@ -10969,12 +12206,12 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       // ⚠️ 排序提示**已挪到 `.dim-jh-panelHead` 里**（用户 2026-10-26
       //    「将按钮行合并到文案行最右侧」）—— 它必须与按钮组同父级
       //    才能排到同一行。**不要**搬回这里：搬回来会立刻变回三行。
-      reorderError ? React9.createElement("div", {
+      reorderError ? React12.createElement("div", {
         className: "dim-jh-probeNotice",
         "data-tone": "warn",
         role: "alert"
-      }, React9.createElement("div", null, `顺序保存失败：${reorderError}`)) : null,
-      accounts.map((account, index) => React9.createElement(AccountCard, {
+      }, React12.createElement("div", null, `顺序保存失败：${reorderError}`)) : null,
+      accounts.map((account, index) => React12.createElement(AccountCard, {
         key: account.id,
         account,
         index,
@@ -11063,6 +12300,33 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
             currentMasked: masked
           })
         } : {},
+        // ⚠️ 编辑凭据（MonkeyCode 两站共用同一个弹窗组件，靠 provider 分派站点）。
+        //
+        // 背景（2026-11-02 审查 B🟡）：宿主早就有 `monkeycode.setApiKey`，
+        // 但客户端**零调用点** ⇒ 用户填错 Key 只能删卡重建，而重建会丢掉
+        // 已攒下的 `session_cookie`（积分/额度/签到全靠它）。
+        ...MONKEYCODE_PROVIDER_IDS.includes(provider) ? {
+          onEditMonkeycodeKey: (id, masked) => setKeyModal({
+            provider,
+            accountId: id,
+            currentMasked: masked,
+            error: ""
+          })
+        } : {},
+        // ⚠️ 百智云同理：`baizhi.setApiKey` 走「读旧凭据再合并」，
+        // 不会冲掉控制台登录态（`session_cookie`）。
+        ...provider === "baizhi" ? {
+          onEditBaizhiKey: (id, masked) => setKeyModal({
+            provider,
+            accountId: id,
+            currentMasked: masked,
+            error: ""
+          })
+        } : {},
+        // ⚠️ **本 fork 独有**（百智云）：补网页登录态（读积分）。
+        // 与上面的「编辑 Key」是**两个方向**的凭据：这里只写
+        // `session_cookie`、绝不覆盖手填的 `sk-`。
+        ...provider === "baizhi" ? { onReadSession: (id) => void startBaizhiSession(id) } : {},
         // 新手任务（仅 Loomy）：一次性 10000 分，每号只能领一次。
         // 与「一键领取积分」（每日签到）是**不同**的操作，故独立按钮。
         onClaimOnboarding: canClaimOnboarding ? (id) => void claimOnboarding(id) : void 0,
@@ -11073,7 +12337,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     ),
     // 模型列表以 modal 渲染：它是覆盖层，放在账号区之后只是组件树的书写顺序，
     // 实际靠 fixed 定位浮在整个面板之上，不再挤占账号池的版面。
-    showModels ? React9.createElement(ModelListPanel, {
+    showModels ? React12.createElement(ModelListPanel, {
       key: provider + ":" + modelCatalogVersion,
       provider,
       rpcCall,
@@ -11082,12 +12346,12 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     // 「订阅额度」弹窗同样以覆盖层渲染（不挤占账号池版面）。
     // 不复用 ModelListPanel 的 provider 形参：额度端点当前只认 Cline，
     // 由 `canShowSubscriptionQuota` 门控按钮，面板内部固定传 'cline'。
-    showQuota ? React9.createElement(ClineQuotaPanel, {
+    showQuota ? React12.createElement(ClineQuotaPanel, {
       rpcCall,
       onClose: () => setShowQuota(false)
     }) : null,
     // MiniMax 国际站分流设置弹窗（issue IKMEVG）：覆盖层，独立 state。
-    showMinimaxXff ? React9.createElement(MinimaxXffPanel, {
+    showMinimaxXff ? React12.createElement(MinimaxXffPanel, {
       rpcCall,
       value: minimaxXff,
       onSaved: (next) => setMinimaxXff(next),
@@ -11103,7 +12367,9 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     // 不同，React 抛 #310（"Rendered more hooks than during the previous render"），
     // 整个设置页崩成白屏。仓库其它弹窗（ModelListPanel / BackupPanel /
     // ClineQuotaPanel）都是 `createElement` 形式，正是这个原因。
-    proxyModal ? React9.createElement(proxyModalComponent(proxyModal.provider), {
+    // ⚠️ `proxyModalComponent` 对未知 provider 返回 `null`（白名单，2026-11-03 五审），
+    //    这里必须判空再 `createElement`，否则 `createElement(null)` 直接抛。
+    proxyModal && proxyModalComponent(proxyModal.provider) ? React12.createElement(proxyModalComponent(proxyModal.provider), {
       // ⚠️ 传最小 ctx 门面而不是整个面板：弹窗只需要 rpc，
       // 这样它在单测/复用时不必拖上整个 ProviderPanel 的依赖。
       ctx: { rpc: (payload) => rpcCall(payload.method, payload.payload) },
@@ -11116,12 +12382,15 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     }) : null,
     // 「添加 opencode 账号」弹窗：自绘而非 window.prompt ——
     // DSH 客户端沙箱里 prompt() 直接抛 `prompt() is not supported`（真机报障）。
-    autoclawLogin ? React9.createElement(AutoclawLogin, { rpcCall, onClose: () => setAutoclawLogin(false), onSuccess: () => {
+    autoclawLogin ? React12.createElement(AutoclawLogin, { rpcCall, onClose: () => setAutoclawLogin(false), onSuccess: () => {
       setAutoclawLogin(false);
       void loadAccounts();
       void loadCredits();
     } }) : null,
-    keyModal && keyModal.provider !== "modelscope" && keyModal.provider !== "qiniu" ? React9.createElement(OpencodeKeyModal, {
+    // ⚠️ 白名单（2026-11-02 四审）：原先这里是**排除式**（`!== 'modelscope' && !== 'qiniu'`），
+    //    任何没被点名的新 provider 都会落到本弹窗 ⇒ 用户往里粘的是别家的 Key，
+    //    却按本 provider 打 RPC（跨 provider 落库）。排除名单是开放式，白名单是封闭式。
+    keyModal && keyModal.provider === "opencode" ? React12.createElement(OpencodeKeyModal, {
       error: keyModal.error,
       busy: creating,
       inputRef: keyInputRef,
@@ -11134,7 +12403,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     //    「通用面板里的按钮与弹窗必须按 provider 分支」，两家的表单字段不同。
     //    ⚠️ 必须用 `React.createElement` 而非直接调用组件函数：直接调用会把
     //    组件的 hook 算进 ProviderPanel（该文件头记录过 hook #310 事故）。
-    keyModal && keyModal.provider === "modelscope" ? React9.createElement(ModelscopeKeyModal, {
+    keyModal && keyModal.provider === "modelscope" ? React12.createElement(ModelscopeKeyModal, {
       error: keyModal.error,
       busy: creating,
       inputRef: keyInputRef,
@@ -11143,17 +12412,50 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     }) : null,
     // ⚠️ **本 fork 独有**（七牛云）：与 modelscope 同款按 provider 分派；
     //    ⚠️ 必须用 React.createElement 而非直接调用组件函数（hook #310 事故）。
-    keyModal && keyModal.provider === "qiniu" ? React9.createElement(QiniuKeyModal, {
+    keyModal && keyModal.provider === "qiniu" ? React12.createElement(QiniuKeyModal, {
       error: keyModal.error,
       busy: creating,
       inputRef: keyInputRef,
       onSubmit: (value) => void submitQiniuKey(value),
       onClose: () => setKeyModal(null)
     }) : null,
+    keyModal && keyModal.provider === "baizhi" ? React12.createElement(BaizhiKeyModal, {
+      error: keyModal.error,
+      busy: creating,
+      // ⚠️ 编辑模式判据**必须由 `accountId` 派生**（2026-11-02 二审 D🟡-2）：
+      //    宿主对空 mask 是**省略字段**下发（`maskBaizhiKey` 正则不过即 `''`），
+      //    所以「accountId 有值但 mask 为空」是合法状态 —— 若拿 mask 判态，
+      //    弹窗会显示「添加/确定」而提交却按 accountId 走 setApiKey。
+      editing: Boolean(keyModal.accountId),
+      currentMasked: keyModal.currentMasked || "",
+      inputRef: keyInputRef,
+      onSubmit: (value) => void submitBaizhiKey(value),
+      onClose: () => setKeyModal(null),
+      onDismissError: () => setKeyModal((prev) => prev ? { ...prev, error: "" } : prev)
+    }) : null,
+    // ⚠️ **本 fork 独有**（MonkeyCode）：三个字段（API Key / signing_secret / session cookie），
+    //    故独立组件；⚠️ 必须用 React.createElement 而非直接调用（hook #310 事故）。
+    // ⚠️ **必须传 provider**（2026-11-02 审查员 B 复审 🔴）：两站是独立部署，
+    //    弹窗里的站点名与「去哪个域名生 Key」都由它派生。不传会恒按国内站渲染 ⇒
+    //    国际站用户被指去 .com 生 Key，而两站凭据不通用（国际站的 cookie 打国内站
+    //    回 401）⇒ 建出每次 401 的账号。
+    keyModal && MONKEYCODE_PROVIDER_IDS.includes(keyModal.provider) ? React12.createElement(MonkeycodeKeyModal, {
+      provider: keyModal.provider,
+      error: keyModal.error,
+      busy: creating,
+      // ⚠️ 同百智：编辑态判据由 `accountId` 派生（mask 可能为空），
+      //    `currentMasked` 只用于显示「当前 Key：…」。
+      editing: Boolean(keyModal.accountId),
+      currentMasked: keyModal.currentMasked || "",
+      inputRef: keyInputRef,
+      onSubmit: (value) => void submitMonkeycodeKey(value, keyModal.provider),
+      onClose: () => setKeyModal(null),
+      onDismissError: () => setKeyModal((prev) => prev ? { ...prev, error: "" } : prev)
+    }) : null,
     // ⚠️ **本 fork 独有**（魔搭）：「编辑访问令牌」弹窗（独立 state + 独立 ref）。
     // ⚠️ 必须用 `React.createElement` 而非直接调用组件函数：直接调用会把组件的
     // hook 算进 ProviderPanel（该文件头记录过 hook #310 事故，整个设置页白屏）。
-    keyEditModal ? React9.createElement(ModelscopeKeyEditModal, {
+    keyEditModal && provider === "modelscope" ? React12.createElement(ModelscopeKeyEditModal, {
       error: keyEditModal.error || "",
       busy: creating,
       currentMasked: keyEditModal.currentMasked || "",
@@ -11162,7 +12464,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
       onClose: () => setKeyEditModal(null)
     }) : null,
     // ⚠️ **本 fork 独有**（七牛云）：「编辑 API Key」弹窗（独立 state + 独立 ref）。
-    qiniuKeyEditModal ? React9.createElement(QiniuKeyEditModal, {
+    qiniuKeyEditModal && provider === "qiniu" ? React12.createElement(QiniuKeyEditModal, {
       error: qiniuKeyEditModal.error || "",
       busy: creating,
       currentMasked: qiniuKeyEditModal.currentMasked || "",
@@ -11175,17 +12477,54 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     // 理由见 `credentialModal` 的声明处。
     // ⚠️ 同样必须 `React.createElement` 而非直接调用组件函数：直接调用会把
     // 组件的 hook 算进 ProviderPanel（该文件头记录过 hook #310 事故，整页白屏）。
-    credentialModal ? React9.createElement(MagicrewImportModal, {
+    credentialModal && credentialModal.provider === "baizhi" ? React12.createElement(BaizhiLoginModal, {
       error: credentialModal.error || "",
       busy: creating,
-      onSubmit: () => void submitMagicrewLocalImport("local-browser"),
-      onBrowse: () => void submitMagicrewLocalImport("browser"),
+      onBrowse: () => void submitBaizhiBrowserLogin(),
+      onManual: () => {
+        setCredentialModal(null);
+        setKeyModal({ provider: "baizhi", error: "" });
+      },
+      onClose: () => setCredentialModal(null)
+    }) : null,
+    // MonkeyCode 走**浏览器登录**（本 fork 独有，2026-11-02）：与 magicrew 共用
+    // `credentialModal` 这个 state，但渲染的是**另一个组件** —— 它没有「导入本机
+    // 登录态」这条腿（cookie 是 HttpOnly，只能由插件自己开的窗口读到）。
+    credentialModal && MONKEYCODE_PROVIDER_IDS.includes(credentialModal.provider) ? React12.createElement(MonkeycodeLoginModal, {
+      provider: credentialModal.provider,
+      error: credentialModal.error || "",
+      busy: creating,
+      onBrowse: () => void submitMonkeycodeBrowserLogin(credentialModal.provider),
+      onManual: () => {
+        const manualProvider = credentialModal.provider;
+        setCredentialModal(null);
+        setKeyModal({ provider: manualProvider, error: "" });
+      },
+      onClose: () => setCredentialModal(null)
+    }) : null,
+    // ⚠️ 白名单（2026-11-02 四审 H-1）：原先末支是整条排除式（`credentialModal ?`），
+    //    任何 provider 误用都会落到本弹窗 ⇒ 看到 Magicrew 文案、并按错的 provider 打 RPC。
+    credentialModal && (credentialModal.provider === "magicrew" || credentialModal.provider === "magicrewintl") ? React12.createElement(MagicrewImportModal, {
+      // ⚠️ **必须传 provider**（2026-11-01 接线审查）：本弹窗同时服务
+      //    `magicrew`（超级麦吉 / www.letsmagic.cn）与 `magicrewintl`
+      //    （MagiCrew 国际版 / www.magicrew.ai）。不传的话标题与引导文案
+      //    恒为国内站 ⇒ 国际站用户被指引去登 letsmagic.cn，而读取器找的是
+      //    magicrew.ai 的登录态 ⇒ 必然失败；宿主错误文案又反过来让他去登
+      //    magicrew.ai ⇒ **引导自相矛盾的死循环**。
+      provider: credentialModal.provider,
+      error: credentialModal.error || "",
+      busy: creating,
+      onSubmit: () => void submitMagicrewLocalImport(credentialModal.provider, "local-browser"),
+      onBrowse: () => void submitMagicrewLocalImport(credentialModal.provider, "browser"),
       onClose: () => setCredentialModal(null)
     }) : null
   );
 }
-function MagicrewImportModal({ error, busy, onSubmit, onBrowse, onClose }) {
-  return React9.createElement(
+function MagicrewImportModal({ provider, error, busy, onSubmit, onBrowse, onClose }) {
+  const isIntl = provider === "magicrewintl";
+  const siteName = isIntl ? "MagiCrew (国际版)" : "超级麦吉";
+  const webHost = isIntl ? "www.magicrew.ai" : "www.letsmagic.cn";
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -11193,40 +12532,40 @@ function MagicrewImportModal({ error, busy, onSubmit, onBrowse, onClose }) {
         if (e.target === e.currentTarget && !busy && onClose) onClose();
       }
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       {
         className: "dim-jh-modal",
         role: "dialog",
         "aria-modal": "true",
-        "aria-label": "导入超级麦吉",
+        "aria-label": `导入${siteName}`,
         style: { maxWidth: "460px" }
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React9.createElement("div", { className: "dim-jh-modalTitle" }, "导入超级麦吉")
+        React12.createElement("div", { className: "dim-jh-modalTitle" }, `导入${siteName}`)
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        React9.createElement(
+        React12.createElement(
           "p",
           { className: "dim-jh-modalHint" },
           // ⚠️ 纯文本（不走 markdown 渲染），不要写 `**强调**`。
-          "「导入」：先用 Edge / Chrome 打开 www.letsmagic.cn 登录，然后回到这里点「导入」。插件会直接读取该浏览器的登录态，不需要再输一次密码。"
+          `「导入」：先用 Edge / Chrome 打开 ${webHost} 登录，然后回到这里点「导入」。插件会直接读取该浏览器的登录态，不需要再输一次密码。`
         ),
-        React9.createElement(
+        React12.createElement(
           "p",
           { className: "dim-jh-modalHint" },
           "「网页登录」：插件会另开一个干净的浏览器窗口，你在里面完成登录即可（可能需要在那个窗口里重新登一次 —— 它不带你日常浏览器的登录态）。"
         ),
-        error ? React9.createElement("p", { className: "dim-jh-error", role: "alert" }, error) : null
+        error ? React12.createElement("p", { className: "dim-jh-error", role: "alert" }, error) : null
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalActions" },
-        React9.createElement("button", {
+        React12.createElement("button", {
           type: "button",
           className: "dim-jh-btn dim-jh-btnPrimary",
           disabled: !!busy,
@@ -11234,7 +12573,7 @@ function MagicrewImportModal({ error, busy, onSubmit, onBrowse, onClose }) {
             if (onSubmit) onSubmit();
           }
         }, busy ? "处理中…" : "导入"),
-        React9.createElement("button", {
+        React12.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           // ⚠️ 禁用判据必须与「导入」共用 `busy`：两条腿都会建账号，同时跑
@@ -11244,7 +12583,150 @@ function MagicrewImportModal({ error, busy, onSubmit, onBrowse, onClose }) {
             if (onBrowse) onBrowse();
           }
         }, "网页登录"),
-        React9.createElement("button", {
+        React12.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn",
+          disabled: !!busy,
+          onClick: () => {
+            if (onClose) onClose();
+          }
+        }, "取消")
+      )
+    )
+  );
+}
+function BaizhiLoginModal({ error, busy, onBrowse, onManual, onClose }) {
+  return React12.createElement(
+    "div",
+    {
+      className: "dim-jh-modalOverlay",
+      onClick: (e) => {
+        if (e.target === e.currentTarget && !busy && onClose) onClose();
+      }
+    },
+    React12.createElement(
+      "div",
+      {
+        className: "dim-jh-modal",
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-label": "登录百智云",
+        style: { maxWidth: "460px" }
+      },
+      React12.createElement(
+        "div",
+        { className: "dim-jh-modalHead" },
+        React12.createElement("div", { className: "dim-jh-modalTitle" }, "登录百智云")
+      ),
+      React12.createElement(
+        "div",
+        { className: "dim-jh-modalBody" },
+        React12.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          // ⚠️ 纯文本（不走 markdown 渲染），不要写 `**强调**`。
+          "点「打开浏览器登录」后，插件会新开一个浏览器窗口，你在里面登录百智云（手机号 / 密码 / 第三方都行）。登录完成后会自动建号：同时取回大模型商店的 sk- API Key（用于对话）与控制台登录态（用于读积分），不需要你复制任何东西。"
+        ),
+        React12.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          "如果你已经有一把 sk- 开头的 Key（大模型商店 console/keys 页可以创建），也可以点「手动填写 API Key」直接填入；这样能对话，但卡片上看不到积分。"
+        ),
+        error ? React12.createElement("p", { className: "dim-jh-error", role: "alert" }, error) : null
+      ),
+      React12.createElement(
+        "div",
+        { className: "dim-jh-modalActions" },
+        React12.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn dim-jh-btnPrimary",
+          disabled: !!busy,
+          onClick: () => {
+            if (onBrowse) onBrowse();
+          }
+        }, busy ? "等待登录…" : "打开浏览器登录"),
+        React12.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn",
+          disabled: !!busy,
+          onClick: () => {
+            if (onManual) onManual();
+          }
+        }, "手动填写 API Key"),
+        React12.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn",
+          disabled: !!busy,
+          onClick: () => {
+            if (onClose) onClose();
+          }
+        }, "取消")
+      )
+    )
+  );
+}
+function MonkeycodeLoginModal({ provider, error, busy, onBrowse, onManual, onClose }) {
+  const siteName = provider === "monkeycodeintl" ? "MonkeyCode 国际站" : "MonkeyCode";
+  return React12.createElement(
+    "div",
+    {
+      className: "dim-jh-modalOverlay",
+      onClick: (e) => {
+        if (e.target === e.currentTarget && !busy && onClose) onClose();
+      }
+    },
+    React12.createElement(
+      "div",
+      {
+        className: "dim-jh-modal",
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-label": `登录 ${siteName}`,
+        style: { maxWidth: "460px" }
+      },
+      React12.createElement(
+        "div",
+        { className: "dim-jh-modalHead" },
+        React12.createElement("div", { className: "dim-jh-modalTitle" }, `登录 ${siteName}`)
+      ),
+      React12.createElement(
+        "div",
+        { className: "dim-jh-modalBody" },
+        React12.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          // ⚠️ 纯文本（不走 markdown 渲染），不要写 `**强调**`。
+          `点「打开浏览器登录」后，插件会新开一个浏览器窗口。你在里面用手机号 / 密码 / 第三方账号登录 ${siteName}，登录完成后插件自动读取登录态并建号 —— 不需要复制任何东西。`
+        ),
+        React12.createElement(
+          "p",
+          { className: "dim-jh-modalHint" },
+          "如果你已经有 OhMyAgent 的 API Key（oma_ 开头，可在站内「OhMyAgent」页面生成），可以点「手动填写 API Key」。"
+        ),
+        error ? React12.createElement("p", { className: "dim-jh-error", role: "alert" }, error) : null
+      ),
+      React12.createElement(
+        "div",
+        { className: "dim-jh-modalActions" },
+        React12.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn dim-jh-btnPrimary",
+          disabled: !!busy,
+          onClick: () => {
+            if (onBrowse) onBrowse();
+          }
+        }, busy ? "等待登录…" : "打开浏览器登录"),
+        React12.createElement("button", {
+          type: "button",
+          className: "dim-jh-btn",
+          // ⚠️ 与「打开浏览器登录」共用 `busy`：两条路都会建账号，同时跑会让池里
+          //    多出两个账号指向同一个上游号。
+          disabled: !!busy,
+          onClick: () => {
+            if (onManual) onManual();
+          }
+        }, "手动填写 API Key"),
+        React12.createElement("button", {
           type: "button",
           className: "dim-jh-btn",
           disabled: !!busy,
@@ -11257,23 +12739,23 @@ function MagicrewImportModal({ error, busy, onSubmit, onBrowse, onClose }) {
   );
 }
 function BackupPanel({ rpcCall, onImported }) {
-  const [dialog, setDialog] = React9.useState(null);
-  const [encrypt, setEncrypt] = React9.useState(true);
-  const [pass1, setPass1] = React9.useState("");
-  const [pass2, setPass2] = React9.useState("");
-  const [importFile, setImportFile] = React9.useState(null);
-  const [importPass, setImportPass] = React9.useState("");
-  const [backupStatus, setBackupStatus] = React9.useState(null);
-  const [confirmStep, setConfirmStep] = React9.useState(false);
-  const [decryptedPayload, setDecryptedPayload] = React9.useState(null);
-  const [busy, setBusy] = React9.useState(false);
-  const [notice, setNotice] = React9.useState(null);
-  const [exportIds, setExportIds] = React9.useState(null);
-  const [importMode, setImportMode] = React9.useState("replace");
-  const [importIds, setImportIds] = React9.useState(null);
-  const fileRef = React9.useRef(null);
-  const mounted = React9.useRef(true);
-  React9.useEffect(() => {
+  const [dialog, setDialog] = React12.useState(null);
+  const [encrypt, setEncrypt] = React12.useState(true);
+  const [pass1, setPass1] = React12.useState("");
+  const [pass2, setPass2] = React12.useState("");
+  const [importFile, setImportFile] = React12.useState(null);
+  const [importPass, setImportPass] = React12.useState("");
+  const [backupStatus, setBackupStatus] = React12.useState(null);
+  const [confirmStep, setConfirmStep] = React12.useState(false);
+  const [decryptedPayload, setDecryptedPayload] = React12.useState(null);
+  const [busy, setBusy] = React12.useState(false);
+  const [notice, setNotice] = React12.useState(null);
+  const [exportIds, setExportIds] = React12.useState(null);
+  const [importMode, setImportMode] = React12.useState("replace");
+  const [importIds, setImportIds] = React12.useState(null);
+  const fileRef = React12.useRef(null);
+  const mounted = React12.useRef(true);
+  React12.useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
@@ -11472,7 +12954,7 @@ function BackupPanel({ rpcCall, onImported }) {
   };
   const renderAccountPicker = (entries, ids, setIds, emptyHint) => {
     if (!Array.isArray(entries) || entries.length === 0) {
-      return React9.createElement("p", { className: "dim-jh-modalHint" }, emptyHint);
+      return React12.createElement("p", { className: "dim-jh-modalHint" }, emptyHint);
     }
     const allSelected = ids === null;
     const toggleOne = (id) => {
@@ -11481,39 +12963,39 @@ function BackupPanel({ rpcCall, onImported }) {
       else base.add(id);
       setIds(base);
     };
-    return React9.createElement(
+    return React12.createElement(
       "div",
       { className: "dim-jh-accountPick" },
-      React9.createElement(
+      React12.createElement(
         "label",
         { className: "dim-jh-checkRow" },
-        React9.createElement("input", {
+        React12.createElement("input", {
           type: "checkbox",
           checked: allSelected,
           onChange: (event) => setIds(event.target.checked ? null : /* @__PURE__ */ new Set())
         }),
         `全部账号（${entries.length} 个）`
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-accountPickList" },
-        entries.map((entry2) => React9.createElement(
+        entries.map((entry2) => React12.createElement(
           "label",
           {
             key: entry2.id,
             className: "dim-jh-checkRow dim-jh-accountPickRow"
           },
-          React9.createElement("input", {
+          React12.createElement("input", {
             type: "checkbox",
             // 「全部」态下每条都显示为选中，用户一取消某条就自动落到逐条模式。
             checked: allSelected || ids.has(entry2.id),
             onChange: () => toggleOne(entry2.id)
           }),
-          React9.createElement(
+          React12.createElement(
             "span",
             { className: "dim-jh-accountPickName" },
             entry2.nickname || entry2.id,
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-accountPickMeta" },
               `${entry2.provider}${entry2.enabled === false ? " · 已停用" : ""}`
@@ -11527,17 +13009,17 @@ function BackupPanel({ rpcCall, onImported }) {
     const isExport = dialog === "export";
     const title = isExport ? "导出备份" : "导入备份";
     const subtitle = isExport ? "全部或选中的账号密钥与凭据" : importFile?.name || "";
-    const body = isExport ? React9.createElement(
-      React9.Fragment,
+    const body = isExport ? React12.createElement(
+      React12.Fragment,
       null,
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "备份文件包含账号的密钥与 refresh_token，请",
-        React9.createElement("strong", { className: "dim-jh-emph-warn" }, "妥善保管"),
+        React12.createElement("strong", { className: "dim-jh-emph-warn" }, "妥善保管"),
         "。"
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "备份是导出时刻的凭据快照：refresh_token 会随续期轮换或过期，建议导出后尽快迁移，导入后失效的账号需重新登录。"
@@ -11548,27 +13030,27 @@ function BackupPanel({ rpcCall, onImported }) {
         setExportIds,
         "读取账号列表失败，将导出全部账号。"
       ),
-      React9.createElement(
+      React12.createElement(
         "label",
         { className: "dim-jh-checkRow" },
-        React9.createElement("input", {
+        React12.createElement("input", {
           type: "checkbox",
           checked: encrypt,
           onChange: (event) => setEncrypt(event.target.checked)
         }),
         "加密备份文件（推荐）"
       ),
-      encrypt ? React9.createElement(
+      encrypt ? React12.createElement(
         "div",
         { className: "dim-jh-formRows" },
-        React9.createElement("input", {
+        React12.createElement("input", {
           className: "dim-jh-input",
           type: "password",
           placeholder: "备份口令（用于解密，请牢记）",
           value: pass1,
           onChange: (event) => setPass1(event.target.value)
         }),
-        React9.createElement("input", {
+        React12.createElement("input", {
           className: "dim-jh-input",
           type: "password",
           placeholder: "再次输入口令",
@@ -11578,26 +13060,26 @@ function BackupPanel({ rpcCall, onImported }) {
       ) : null
     ) : !isExport && confirmStep ? (
       // 导入确认页（应用内二次确认）：模式选择 + 覆盖警告 / 追加说明
-      React9.createElement(
-        React9.Fragment,
+      React12.createElement(
+        React12.Fragment,
         null,
         // 第三方账号列表的转换摘要：让用户先确认「识别到了几条、都是谁」，
         // 再决定导入。没有这段提示时，用户会怀疑文件没被读进去。
-        importFile?.converted ? React9.createElement(
-          React9.Fragment,
+        importFile?.converted ? React12.createElement(
+          React12.Fragment,
           null,
-          React9.createElement(
+          React12.createElement(
             "p",
             { className: "dim-jh-modalHint" },
             "已自动识别为",
-            React9.createElement("strong", { className: "dim-jh-emph-warn" }, "第三方账号列表"),
+            React12.createElement("strong", { className: "dim-jh-emph-warn" }, "第三方账号列表"),
             "并转换为插件格式：共 ",
-            React9.createElement("strong", { className: "dim-jh-emph-warn" }, `${importFile.converted.count}`),
+            React12.createElement("strong", { className: "dim-jh-emph-warn" }, `${importFile.converted.count}`),
             " 个账号",
             importFile.converted.providers?.length > 0 ? `（${importFile.converted.providers.join("、")}）` : "",
             "。"
           ),
-          importFile.converted.warnings?.length > 0 ? React9.createElement(
+          importFile.converted.warnings?.length > 0 ? React12.createElement(
             "p",
             { className: "dim-jh-modalHint" },
             `${importFile.converted.warnings.length} 条记录被跳过：`,
@@ -11605,13 +13087,13 @@ function BackupPanel({ rpcCall, onImported }) {
             importFile.converted.warnings.length > 3 ? " …" : ""
           ) : null
         ) : null,
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modePick" },
-          React9.createElement(
+          React12.createElement(
             "label",
             { className: "dim-jh-checkRow" },
-            React9.createElement("input", {
+            React12.createElement("input", {
               type: "radio",
               name: "dim-jh-import-mode",
               checked: importMode === "replace",
@@ -11619,10 +13101,10 @@ function BackupPanel({ rpcCall, onImported }) {
             }),
             "整体还原（覆盖当前全部账号）"
           ),
-          React9.createElement(
+          React12.createElement(
             "label",
             { className: "dim-jh-checkRow" },
-            React9.createElement("input", {
+            React12.createElement("input", {
               type: "radio",
               name: "dim-jh-import-mode",
               checked: importMode === "merge",
@@ -11631,39 +13113,39 @@ function BackupPanel({ rpcCall, onImported }) {
             "单独导入（只增加账号，不覆盖现有账号）"
           )
         ),
-        importMode === "replace" ? React9.createElement(
-          React9.Fragment,
+        importMode === "replace" ? React12.createElement(
+          React12.Fragment,
           null,
-          React9.createElement(
+          React12.createElement(
             "p",
             { className: "dim-jh-modalHint" },
             "导入将",
-            React9.createElement("strong", { className: "dim-jh-emph-danger" }, "覆盖"),
+            React12.createElement("strong", { className: "dim-jh-emph-danger" }, "覆盖"),
             "当前全部账号与模型开关（共 ",
-            React9.createElement("strong", { className: "dim-jh-emph-warn" }, `${decryptedPayload?.accounts?.length ?? 0}`),
+            React12.createElement("strong", { className: "dim-jh-emph-warn" }, `${decryptedPayload?.accounts?.length ?? 0}`),
             " 个账号），且",
-            React9.createElement("strong", { className: "dim-jh-emph-danger" }, "不可撤销"),
+            React12.createElement("strong", { className: "dim-jh-emph-danger" }, "不可撤销"),
             "。"
           ),
-          backupStatus?.withoutExpiry > 0 ? React9.createElement(
+          backupStatus?.withoutExpiry > 0 ? React12.createElement(
             "p",
             { className: "dim-jh-modalHint" },
             "当前有 ",
-            React9.createElement("strong", { className: "dim-jh-emph-warn" }, `${backupStatus.withoutExpiry}`),
+            React12.createElement("strong", { className: "dim-jh-emph-warn" }, `${backupStatus.withoutExpiry}`),
             " 个账号缺少有效期信息（可能是版本切换后自动恢复的），导入将",
-            React9.createElement("strong", { className: "dim-jh-emph-warn" }, "整体覆盖"),
+            React12.createElement("strong", { className: "dim-jh-emph-warn" }, "整体覆盖"),
             "它们。"
           ) : null
-        ) : React9.createElement(
-          React9.Fragment,
+        ) : React12.createElement(
+          React12.Fragment,
           null,
-          React9.createElement(
+          React12.createElement(
             "p",
             { className: "dim-jh-modalHint" },
             "只把选中的账号",
-            React9.createElement("strong", { className: "dim-jh-emph-warn" }, "追加"),
+            React12.createElement("strong", { className: "dim-jh-emph-warn" }, "追加"),
             "到当前账号池：同 id 的账号",
-            React9.createElement("strong", { className: "dim-jh-emph-warn" }, "自动跳过、不会被覆盖"),
+            React12.createElement("strong", { className: "dim-jh-emph-warn" }, "自动跳过、不会被覆盖"),
             "，现有账号、模型开关与锁定状态都不受影响。"
           ),
           renderAccountPicker(
@@ -11674,27 +13156,27 @@ function BackupPanel({ rpcCall, onImported }) {
           )
         )
       )
-    ) : importFile?.encrypted ? React9.createElement(
-      React9.Fragment,
+    ) : importFile?.encrypted ? React12.createElement(
+      React12.Fragment,
       null,
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "该备份已加密，请输入导出时设置的口令。"
       ),
-      React9.createElement("input", {
+      React12.createElement("input", {
         className: "dim-jh-input",
         type: "password",
         placeholder: "备份口令",
         value: importPass,
         onChange: (event) => setImportPass(event.target.value)
       })
-    ) : React9.createElement(
+    ) : React12.createElement(
       "p",
       { className: "dim-jh-modalHint" },
       "该备份为明文文件，点「下一步」后选择导入方式（整体还原或单独导入）。"
     );
-    return React9.createElement(
+    return React12.createElement(
       "div",
       {
         className: "dim-jh-modalOverlay",
@@ -11702,7 +13184,7 @@ function BackupPanel({ rpcCall, onImported }) {
           if (event.target === event.currentTarget) closeDialog();
         }
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         {
           className: "dim-jh-modal",
@@ -11710,45 +13192,45 @@ function BackupPanel({ rpcCall, onImported }) {
           "aria-modal": "true",
           "aria-label": title
         },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalHead" },
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-modalTitle" },
-            React9.createElement("strong", null, title),
-            subtitle.length > 0 ? React9.createElement("span", { className: "dim-jh-modalSubtitle" }, subtitle) : null
+            React12.createElement("strong", null, title),
+            subtitle.length > 0 ? React12.createElement("span", { className: "dim-jh-modalSubtitle" }, subtitle) : null
           ),
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-modelPanelActions" },
-            React9.createElement("button", {
+            React12.createElement("button", {
               className: "dim-jh-btn",
               onClick: closeDialog
             }, "关闭")
           )
         ),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalBody" },
           body,
-          notice ? React9.createElement("div", {
+          notice ? React12.createElement("div", {
             className: "dim-jh-probeNotice",
             "data-tone": notice.tone,
             role: notice.tone === "error" ? "alert" : "status"
-          }, React9.createElement("div", null, notice.text)) : null,
-          React9.createElement(
+          }, React12.createElement("div", null, notice.text)) : null,
+          React12.createElement(
             "div",
             { className: "dim-jh-modalActions" },
-            isExport ? React9.createElement("button", {
+            isExport ? React12.createElement("button", {
               className: "dim-jh-btn",
               "data-kind": "primary",
               disabled: busy,
               onClick: () => void doExport()
-            }, busy ? "生成中…" : "生成备份文件") : confirmStep ? React9.createElement(
-              React9.Fragment,
+            }, busy ? "生成中…" : "生成备份文件") : confirmStep ? React12.createElement(
+              React12.Fragment,
               null,
-              React9.createElement("button", {
+              React12.createElement("button", {
                 className: "dim-jh-btn",
                 disabled: busy,
                 onClick: () => {
@@ -11756,13 +13238,13 @@ function BackupPanel({ rpcCall, onImported }) {
                   setNotice(null);
                 }
               }, "返回"),
-              React9.createElement("button", {
+              React12.createElement("button", {
                 className: "dim-jh-btn",
                 "data-kind": "primary",
                 disabled: busy,
                 onClick: () => void confirmImport()
               }, busy ? "导入中…" : "确认导入")
-            ) : React9.createElement("button", {
+            ) : React12.createElement("button", {
               className: "dim-jh-btn",
               "data-kind": "primary",
               disabled: busy,
@@ -11773,20 +13255,20 @@ function BackupPanel({ rpcCall, onImported }) {
       )
     );
   };
-  return React9.createElement(
-    React9.Fragment,
+  return React12.createElement(
+    React12.Fragment,
     null,
-    React9.createElement("button", {
+    React12.createElement("button", {
       className: "dim-jh-btn",
       title: "导出账号的密钥与凭据（全部或勾选其中几个），便于迁移或单独搬一个账号。",
       onClick: () => void openExportDialog()
     }, "备份"),
-    React9.createElement("button", {
+    React12.createElement("button", {
       className: "dim-jh-btn",
       title: "从备份文件导入账号：可选「整体还原（会覆盖当前全部账号）」或「单独导入（只增加账号，不覆盖）」。",
       onClick: () => fileRef.current?.click()
     }, "恢复"),
-    React9.createElement("input", {
+    React12.createElement("input", {
       ref: fileRef,
       type: "file",
       accept: ".json,application/json",
@@ -11823,18 +13305,18 @@ function providerRowSummary(row) {
   return row.accounts ? `账号 ${row.accounts.total ?? 0}（启用 ${row.accounts.enabled ?? 0}）` : "账号 —";
 }
 function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onToggle, onReload, onClose, order, onCommitOrder, reordering, notice, rpcCall }) {
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     const onKeyDown = (event) => {
       if (event.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
-  const [draggingId, setDraggingId] = React9.useState(null);
-  const [dropTargetId, setDropTargetId] = React9.useState(null);
-  const [dropPosition, setDropPosition] = React9.useState("before");
-  const touchDrag = React9.useRef(null);
-  const [view, setView] = React9.useState("switches");
+  const [draggingId, setDraggingId] = React12.useState(null);
+  const [dropTargetId, setDropTargetId] = React12.useState(null);
+  const [dropPosition, setDropPosition] = React12.useState("before");
+  const touchDrag = React12.useRef(null);
+  const [view, setView] = React12.useState("switches");
   const rows = providerSwitchRows(providers, statuses, order);
   const summary = providerToggleSummary(providers, statuses);
   const countText = summary.known ? `共 ${summary.total} 个，已打开 ${summary.open}，已关闭 ${summary.closed}` : statusFailed ? "状态读取失败" : "正在读取状态…";
@@ -11939,7 +13421,7 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
       }
     };
   };
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       // 遮罩层：垂直居中（2026-10-26 起全仓弹窗统一居中，`--top` 修饰类已删除）。
@@ -11948,7 +13430,7 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
         if (event.target === event.currentTarget) onClose();
       }
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       {
         className: "dim-jh-modal",
@@ -11956,32 +13438,32 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
         "aria-modal": "true",
         "aria-label": "供应商开关"
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalTitle" },
-          React9.createElement("strong", null, view === "models" ? "供应商模型列表" : "供应商开关"),
-          React9.createElement(
+          React12.createElement("strong", null, view === "models" ? "供应商模型列表" : "供应商开关"),
+          React12.createElement(
             "span",
             { className: "dim-jh-modelPanelCount" },
             view === "models" ? "跨供应商统一管理" : countText
           )
         ),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelPanelActions" },
           // 两屏共用一个弹窗（见上面 `view` 的注释）。复用 `.dim-jh-modelStatusFilter`
           // 那套 `[data-active="true"]` 高亮样式，不新增样式类。
-          React9.createElement(
+          React12.createElement(
             "div",
             {
               className: "dim-jh-modelStatusFilter",
               role: "group",
               "aria-label": "弹窗视图"
             },
-            [["switches", "开关"], ["models", "模型列表"]].map(([value, label]) => React9.createElement("button", {
+            [["switches", "开关"], ["models", "模型列表"]].map(([value, label]) => React12.createElement("button", {
               key: value,
               className: "dim-jh-btn",
               "data-active": view === value ? "true" : "false",
@@ -11990,19 +13472,19 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
               onClick: () => setView(value)
             }, label))
           ),
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             title: "重新读取各供应商的模型数与账号数。",
             onClick: () => void onReload()
           }, "刷新"),
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             "data-kind": "primary",
             onClick: onClose
           }, "完成")
         )
       ),
-      view === "models" ? null : React9.createElement(
+      view === "models" ? null : React12.createElement(
         "p",
         { className: "dim-jh-modalHint" },
         "关闭一个供应商 = 关闭它的全部模型（从对话框的模型选择里移除）并停用它的全部账号；打开则恢复。关闭前会再确认一次。没有可关闭模型的供应商会被禁用（服务端也会拒绝）。拖动可自定义顺序（顺序只保存在本机）；已打开与已关闭各自排序，组间先后不变。"
@@ -12014,22 +13496,22 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
       // 它们此刻在页面层同样被遮住，只按 inModal 过滤会让切换结果一样消失。
       // 弹窗关闭即不挂载、页面层那条照旧渲染，两边不会重复出现。
       // 复用既有 `.dim-jh-probeNotice` + `.dim-jh-modal .dim-jh-probeNotice` 样式，不新增样式。
-      notice ? React9.createElement("div", {
+      notice ? React12.createElement("div", {
         className: "dim-jh-probeNotice",
         "data-tone": notice.tone,
         role: notice.tone === "error" ? "alert" : "status"
-      }, React9.createElement("div", null, notice.text)) : null,
-      React9.createElement(
+      }, React12.createElement("div", null, notice.text)) : null,
+      React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        view === "models" ? React9.createElement(ModelCenterPanel, { providers, rpcCall, statuses }) : React9.createElement(
+        view === "models" ? React12.createElement(ModelCenterPanel, { providers, rpcCall, statuses }) : React12.createElement(
           "div",
           { className: "dim-jh-modelList" },
           rows.map((row) => {
             const busy = busyIds.has(row.id);
             const action = row.checked ? "关闭" : "打开";
             const drag = dragPropsFor(row);
-            return React9.createElement(
+            return React12.createElement(
               "label",
               {
                 key: row.id,
@@ -12049,7 +13531,7 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
                 "data-dropAfter": drag.isDropTarget && drag.dropPosition === "after" ? "true" : void 0,
                 title: row.disabled ? row.reason : `${action}「${row.label}」：${action}它的全部模型并${row.checked ? "停用" : "启用"}全部账号`
               },
-              drag.enabled ? React9.createElement("span", {
+              drag.enabled ? React12.createElement("span", {
                 ...touchPropsFor(row),
                 className: "dim-jh-dragHandle dim-jh-providerDragHandle",
                 role: "button",
@@ -12068,14 +13550,14 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
               //    但这个**供应商弹窗**里的同一批清单从来没有 —— 两处列的是同一份
               //    PROVIDERS，一有一无，用户在弹窗里只能靠读名字认供应商。
               //    图标走 `row.id`（就是 provider id），与 `data-provider` 同源。
-              React9.createElement(ProviderLogo, { provider: row.id }),
-              React9.createElement(
+              React12.createElement(ProviderLogo, { provider: row.id }),
+              React12.createElement(
                 "span",
                 { className: "dim-jh-modelInfo" },
-                React9.createElement("strong", { className: "dim-jh-modelName" }, row.label),
-                React9.createElement("code", { className: "dim-jh-modelId" }, providerRowSummary(row))
+                React12.createElement("strong", { className: "dim-jh-modelName" }, row.label),
+                React12.createElement("code", { className: "dim-jh-modelId" }, providerRowSummary(row))
               ),
-              React9.createElement("input", {
+              React12.createElement("input", {
                 type: "checkbox",
                 className: "dim-jh-switch",
                 role: "switch",
@@ -12093,23 +13575,23 @@ function ProviderSwitchPanel({ providers, statuses, statusFailed, busyIds, onTog
   );
 }
 function ModelCenterPanel({ providers, rpcCall, statuses }) {
-  const [states, setStates] = React9.useState({});
-  const [query, setQuery] = React9.useState("");
-  const [statusFilter, setStatusFilter] = React9.useState("all");
-  const [openIds, setOpenIds] = React9.useState({});
-  const [busyIds, setBusyIds] = React9.useState(() => /* @__PURE__ */ new Set());
-  const [providerBusy, setProviderBusy] = React9.useState(() => /* @__PURE__ */ new Set());
-  const [toggleError, setToggleError] = React9.useState("");
-  const [toggleWarnings, setToggleWarnings] = React9.useState([]);
-  const [loadingAll, setLoadingAll] = React9.useState(false);
-  const mounted = React9.useRef(true);
-  React9.useEffect(() => {
+  const [states, setStates] = React12.useState({});
+  const [query, setQuery] = React12.useState("");
+  const [statusFilter, setStatusFilter] = React12.useState("all");
+  const [openIds, setOpenIds] = React12.useState({});
+  const [busyIds, setBusyIds] = React12.useState(() => /* @__PURE__ */ new Set());
+  const [providerBusy, setProviderBusy] = React12.useState(() => /* @__PURE__ */ new Set());
+  const [toggleError, setToggleError] = React12.useState("");
+  const [toggleWarnings, setToggleWarnings] = React12.useState([]);
+  const [loadingAll, setLoadingAll] = React12.useState(false);
+  const mounted = React12.useRef(true);
+  React12.useEffect(() => {
     mounted.current = true;
     return () => {
       mounted.current = false;
     };
   }, []);
-  const loadProvider = React9.useCallback(async (providerId) => {
+  const loadProvider = React12.useCallback(async (providerId) => {
     setStates((prev) => {
       if (prev[providerId]?.phase === "ready") return prev;
       return { ...prev, [providerId]: { phase: "loading", models: [], error: "" } };
@@ -12144,7 +13626,7 @@ function ModelCenterPanel({ providers, rpcCall, statuses }) {
     if (Object.prototype.hasOwnProperty.call(openIds, providerId)) return openIds[providerId] === true;
     return filtering && states[providerId]?.phase === "ready";
   };
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     for (const section of sections) {
       if (section.phase !== "idle") continue;
       if (!isOpen(section.id)) continue;
@@ -12272,49 +13754,49 @@ function ModelCenterPanel({ providers, rpcCall, statuses }) {
     const bulk = centerBulkState(section.models);
     const allDisabled = section.loaded && bulk.allDisabled;
     const noneDisabled = section.loaded && bulk.noneDisabled;
-    return React9.createElement(
+    return React12.createElement(
       "div",
       { key: section.id, className: "dim-jh-modelGroup" },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modelGroupHead" },
-        React9.createElement("button", {
+        React12.createElement("button", {
           className: "dim-jh-modelGroupToggle",
           "aria-expanded": opened ? "true" : "false",
           title: opened ? "收起该供应商的模型" : "展开并读取该供应商的模型列表",
           onClick: () => toggleSection(section.id)
         }, `${opened ? "▾" : "▸"} ${section.label}`),
-        React9.createElement("span", { className: "dim-jh-modelGroupCount" }, countText),
-        React9.createElement("button", {
+        React12.createElement("span", { className: "dim-jh-modelGroupCount" }, countText),
+        React12.createElement("button", {
           className: "dim-jh-btn dim-jh-modelGroupBtn",
           disabled: !section.loaded || sectionBusy || noneDisabled,
           title: noneDisabled ? "该供应商没有已关闭的模型" : "打开该供应商的全部模型（含之前关闭的）",
           onClick: () => void setProviderAll(section.id, section.label, false)
         }, sectionBusy ? "处理中…" : "全开"),
-        React9.createElement("button", {
+        React12.createElement("button", {
           className: "dim-jh-btn dim-jh-modelGroupBtn",
           disabled: !section.loaded || sectionBusy || allDisabled,
           title: allDisabled ? "该供应商的模型已全部关闭" : "关闭该供应商的全部模型",
           onClick: () => void setProviderAll(section.id, section.label, true)
         }, sectionBusy ? "处理中…" : "全关")
       ),
-      opened ? React9.createElement(
+      opened ? React12.createElement(
         "div",
         { className: "dim-jh-modelGroupBody" },
-        section.phase === "error" ? React9.createElement(
+        section.phase === "error" ? React12.createElement(
           "div",
           { className: "dim-jh-empty" },
-          React9.createElement("p", null, states[section.id]?.error || "读取该供应商的模型列表失败。"),
-          React9.createElement("button", {
+          React12.createElement("p", null, states[section.id]?.error || "读取该供应商的模型列表失败。"),
+          React12.createElement("button", {
             className: "dim-jh-btn",
             onClick: () => void loadProvider(section.id)
           }, "重新读取")
-        ) : !section.loaded ? React9.createElement("p", { className: "dim-jh-modalHint" }, "正在读取该供应商的模型列表…") : section.summary.total === 0 ? React9.createElement("p", { className: "dim-jh-modalHint" }, "该 Provider 当前没有可用的模型。") : section.models.length === 0 ? React9.createElement(
+        ) : !section.loaded ? React12.createElement("p", { className: "dim-jh-modalHint" }, "正在读取该供应商的模型列表…") : section.summary.total === 0 ? React12.createElement("p", { className: "dim-jh-modalHint" }, "该 Provider 当前没有可用的模型。") : section.models.length === 0 ? React12.createElement(
           "div",
           { className: "dim-jh-empty" },
-          React9.createElement("p", null, "没有符合当前搜索与筛选条件的模型。"),
-          React9.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选")
-        ) : section.models.map((model) => React9.createElement(ModelToggle, {
+          React12.createElement("p", null, "没有符合当前搜索与筛选条件的模型。"),
+          React12.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选")
+        ) : section.models.map((model) => React12.createElement(ModelToggle, {
           key: model.id,
           // 模型中心**横跨全部供应商**，故图标必须按**分组所属**
           // 的那家取（`section.id`）。这里没有外层 `provider`
@@ -12329,13 +13811,13 @@ function ModelCenterPanel({ providers, rpcCall, statuses }) {
       ) : null
     );
   };
-  return React9.createElement(
+  return React12.createElement(
     "div",
     null,
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-modelFilterBar" },
-      React9.createElement("input", {
+      React12.createElement("input", {
         type: "search",
         className: "dim-jh-input dim-jh-modelSearch",
         placeholder: "搜索供应商、模型名或 id…",
@@ -12343,14 +13825,14 @@ function ModelCenterPanel({ providers, rpcCall, statuses }) {
         value: query,
         onChange: (event) => setQuery(event.target.value)
       }),
-      React9.createElement(
+      React12.createElement(
         "div",
         {
           className: "dim-jh-modelStatusFilter",
           role: "group",
           "aria-label": "按模型开关状态筛选"
         },
-        [["all", "全部"], ["enabled", "已打开"], ["disabled", "已关闭"]].map(([value, label]) => React9.createElement("button", {
+        [["all", "全部"], ["enabled", "已打开"], ["disabled", "已关闭"]].map(([value, label]) => React12.createElement("button", {
           key: value,
           className: "dim-jh-btn",
           "data-active": statusFilter === value ? "true" : "false",
@@ -12358,45 +13840,45 @@ function ModelCenterPanel({ providers, rpcCall, statuses }) {
           onClick: () => setStatusFilter(value)
         }, label))
       ),
-      filtering ? React9.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选") : null,
-      React9.createElement("button", {
+      filtering ? React12.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选") : null,
+      React12.createElement("button", {
         className: "dim-jh-btn",
         title: "读取所有还没读过的供应商目录（并发 3 个，避免同时打爆上游）。",
         disabled: loadingAll || pending2.length === 0,
         onClick: () => void loadAll()
       }, loadingAll ? "读取中…" : `加载全部${pending2.length > 0 ? `（${pending2.length}）` : ""}`)
     ),
-    React9.createElement(
+    React12.createElement(
       "p",
       { className: "dim-jh-modalHint" },
       `已读取 ${totals.loaded} / ${providerCount} 家` + (totals.loaded === 0 ? "。展开某一家，或点「加载全部」。" : `：共 ${totals.total} 个模型，已关闭 ${totals.disabled} 个。`) + "关闭开关后该模型不再出现在对话框的模型选择里；「已下架」的模型是上游移除的，可用「重新显示」恢复。未读取的供应商不参与搜索，点「加载全部」补齐。"
     ),
-    toggleError ? React9.createElement("div", {
+    toggleError ? React12.createElement("div", {
       className: "dim-jh-probeNotice",
       "data-tone": "error",
       role: "alert"
-    }, React9.createElement("div", null, toggleError)) : null,
+    }, React12.createElement("div", null, toggleError)) : null,
     // `warn` 必须是这个拼写：写成 `warning` 会静默落成中性色（`data-tone` 是枚举）。
-    toggleWarnings.length > 0 ? React9.createElement("div", {
+    toggleWarnings.length > 0 ? React12.createElement("div", {
       className: "dim-jh-probeNotice",
       "data-tone": "warn",
       role: "status"
-    }, React9.createElement("div", null, toggleWarnings.join("；"))) : null,
-    React9.createElement(
+    }, React12.createElement("div", null, toggleWarnings.join("；"))) : null,
+    React12.createElement(
       "div",
       { className: "dim-jh-modelList" },
-      sections.length === 0 ? React9.createElement(
+      sections.length === 0 ? React12.createElement(
         "div",
         { className: "dim-jh-empty" },
-        React9.createElement("p", null, "没有符合当前搜索与筛选条件的供应商。"),
-        React9.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选")
+        React12.createElement("p", null, "没有符合当前搜索与筛选条件的供应商。"),
+        React12.createElement("button", { className: "dim-jh-btn", onClick: resetFilters }, "清空筛选")
       ) : sections.map((section) => renderSection(section))
     )
   );
 }
 function GatewayModelRow({ model }) {
   const badge = modelCapabilityBadge(model);
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-gatewayModelRow",
@@ -12404,13 +13886,13 @@ function GatewayModelRow({ model }) {
       title: `${model.id}
 ${model.name || ""}`.trim()
     },
-    React9.createElement("code", { className: "dim-jh-modelId" }, gatewayModelKeyOf(model)),
-    React9.createElement("span", { className: "dim-jh-modelName" }, model.name || model.id),
-    badge ? React9.createElement("span", { className: "dim-jh-modelBadge", title: "该模型接受图片输入。" }, badge) : null
+    React12.createElement("code", { className: "dim-jh-modelId" }, gatewayModelKeyOf(model)),
+    React12.createElement("span", { className: "dim-jh-modelName" }, model.name || model.id),
+    badge ? React12.createElement("span", { className: "dim-jh-modelBadge", title: "该模型接受图片输入。" }, badge) : null
   );
 }
 function GatewayEffortRow({ row }) {
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-effortRow",
@@ -12418,48 +13900,48 @@ function GatewayEffortRow({ row }) {
 真实档位：${row.declared}
 客户端该填：${row.fill}`
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-effortHead" },
       // 卡片头已写明供应商，行内显示去掉前缀的名字；完整 id 在 tooltip 与复制里。
-      React9.createElement("code", { className: "dim-jh-effortModel" }, gatewayModelKeyOf(row)),
-      row.lossy ? React9.createElement("span", {
+      React12.createElement("code", { className: "dim-jh-effortModel" }, gatewayModelKeyOf(row)),
+      row.lossy ? React12.createElement("span", {
         className: "dim-jh-modelBadge",
         title: "该模型的档位名与 OpenAI 客户端不同名：照 DSH 界面上的名字填，网关会按强度就近翻译。"
       }, "需对照") : null
     ),
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-effortLine" },
-      React9.createElement("span", { className: "dim-jh-effortLabel" }, "真实档位："),
+      React12.createElement("span", { className: "dim-jh-effortLabel" }, "真实档位："),
       row.declared
     ),
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-effortLine" },
-      React9.createElement("span", { className: "dim-jh-effortLabel" }, "客户端该填："),
+      React12.createElement("span", { className: "dim-jh-effortLabel" }, "客户端该填："),
       row.fill
     )
   );
 }
 function GatewayCards({ cards, renderRow, isExpanded, onToggle, onCopy, isCopied, foldSuffix, foldLabel, copyNoun }) {
-  return React9.createElement(
+  return React12.createElement(
     "div",
     { className: "dim-jh-gatewayCards", style: { marginTop: "6px" } },
     cards.map((card) => {
       const expanded = isExpanded(card.provider);
       const label = gatewayCardLabel(card.provider, providerLabel);
-      return React9.createElement(
+      return React12.createElement(
         "div",
         {
           // ⚠️ 供应商 key 拿不到时用 `__unknown__`：`key: ''` 会让 React 报警并可能丢行。
           key: card.provider === "" ? "__unknown__" : card.provider,
           className: "dim-jh-gatewayCard"
         },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-gatewayCardHead" },
-          React9.createElement(
+          React12.createElement(
             "button",
             {
               className: "dim-jh-gatewayCardToggle",
@@ -12474,25 +13956,25 @@ function GatewayCards({ cards, renderRow, isExpanded, onToggle, onCopy, isCopied
             //    被点击/换行。放外面时窄屏换行会把图标甩到上一行去。
             //    `card.provider` 可能是空串（上游没回传供应商字段，卡片标题回落
             //    到兜底名）—— `ProviderLogo` 对未知 id 返回 null，正好不留空位。
-            React9.createElement(ProviderLogo, { provider: card.provider }),
+            React12.createElement(ProviderLogo, { provider: card.provider }),
             ` ${label}`
           ),
-          React9.createElement(
+          React12.createElement(
             "span",
             { className: "dim-jh-gatewayCardCount" },
             card.counts.fold > 0 && foldLabel !== "" ? `${card.counts.total} ${foldSuffix} · ${card.counts.fold} 个${foldLabel}` : `${card.counts.total} ${foldSuffix}`
           ),
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn dim-jh-gatewayCardBtn",
             title: `只复制「${label}」这一家的 ${card.counts.total} ${copyNoun}（每行一个完整 ID）。`,
             onClick: () => onCopy(card)
           }, isCopied(card.provider) ? "已复制 ✓" : "复制本组")
         ),
-        expanded ? React9.createElement(
+        expanded ? React12.createElement(
           "div",
           { className: "dim-jh-gatewayCardBody" },
-          card.entries.map((entry2, index) => React9.createElement(
-            React9.Fragment,
+          card.entries.map((entry2, index) => React12.createElement(
+            React12.Fragment,
             { key: `${card.provider}#${entry2.id}#${index}` },
             renderRow(entry2)
           ))
@@ -12502,18 +13984,18 @@ function GatewayCards({ cards, renderRow, isExpanded, onToggle, onCopy, isCopied
   );
 }
 function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onReload, onClose }) {
-  const [copied, setCopied] = React9.useState(false);
-  const [revealed, setRevealed] = React9.useState(false);
-  const [modelsOpen, setModelsOpen] = React9.useState(false);
-  const [effortsOpen, setEffortsOpen] = React9.useState(false);
-  const [modelsQuery, setModelsQuery] = React9.useState("");
-  const [effortsQuery, setEffortsQuery] = React9.useState("");
-  const [effortsCopied, setEffortsCopied] = React9.useState(false);
-  const [idsCopied, setIdsCopied] = React9.useState(false);
-  const [modelCardToggles, setModelCardToggles] = React9.useState({});
-  const [effortCardToggles, setEffortCardToggles] = React9.useState({});
-  const [copiedModelCard, setCopiedModelCard] = React9.useState(null);
-  const [copiedEffortCard, setCopiedEffortCard] = React9.useState(null);
+  const [copied, setCopied] = React12.useState(false);
+  const [revealed, setRevealed] = React12.useState(false);
+  const [modelsOpen, setModelsOpen] = React12.useState(false);
+  const [effortsOpen, setEffortsOpen] = React12.useState(false);
+  const [modelsQuery, setModelsQuery] = React12.useState("");
+  const [effortsQuery, setEffortsQuery] = React12.useState("");
+  const [effortsCopied, setEffortsCopied] = React12.useState(false);
+  const [idsCopied, setIdsCopied] = React12.useState(false);
+  const [modelCardToggles, setModelCardToggles] = React12.useState({});
+  const [effortCardToggles, setEffortCardToggles] = React12.useState({});
+  const [copiedModelCard, setCopiedModelCard] = React12.useState(null);
+  const [copiedEffortCard, setCopiedEffortCard] = React12.useState(null);
   const apiKey = status?.apiKey ?? null;
   const models = status?.models ?? [];
   const modelsFiltering = isFilterActive({ query: modelsQuery });
@@ -12523,19 +14005,19 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
   const visibleEffortRows = filterEffortRows(effortRows, effortsQuery);
   const effortsFiltering = isFilterActive({ query: effortsQuery });
   const effortCards = groupGatewayEntries(visibleEffortRows, (row) => row.lossy);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     setCopied(false);
     setRevealed(false);
   }, [status?.apiKey?.value]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     setIdsCopied(false);
     setCopiedModelCard(null);
   }, [models.length, modelsQuery]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     setEffortsCopied(false);
     setCopiedEffortCard(null);
   }, [models.length, effortsQuery]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     const onKeyDown = (event) => {
       if (event.key === "Escape") onClose();
     };
@@ -12584,7 +14066,7 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
   const action = status?.enabled ? "关闭" : "打开";
   const allowLanDisabled = gatewayAllowLanSwitchDisabled(status);
   const allowLanAction = status?.allowLan ? "关闭" : "打开";
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-modalOverlay",
@@ -12592,7 +14074,7 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
         if (event.target === event.currentTarget) onClose();
       }
     },
-    React9.createElement(
+    React12.createElement(
       "div",
       {
         className: "dim-jh-modal dim-jh-gatewayModal",
@@ -12600,30 +14082,30 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
         "aria-modal": "true",
         "aria-label": "本机 OpenAI 网关"
       },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalHead" },
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modalTitle" },
-          React9.createElement("strong", null, "本机 OpenAI 网关")
+          React12.createElement("strong", null, "本机 OpenAI 网关")
         ),
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-modelPanelActions" },
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             title: "重新读取网关状态。",
             onClick: () => void onReload()
           }, "刷新"),
-          React9.createElement("button", {
+          React12.createElement("button", {
             className: "dim-jh-btn",
             "data-kind": "primary",
             onClick: onClose
           }, "完成")
         )
       ),
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-modalBody" },
         // ── 第 1 段：开关与连接信息 ──
@@ -12631,16 +14113,16 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
         // 一起有点难看清」）。做法是每段包一个 .dim-jh-gatewaySection：
         // 段与段之间用上边框 + 更大的间距分开，段内保持紧凑。
         // ⚠️ 不要用「给每段加不同底色」：弹窗会被截图，色块在深色主题下还要另配一套 token。
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-gatewaySection" },
-          React9.createElement(
+          React12.createElement(
             "label",
             { className: "dim-jh-modelRow" },
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-modelInfo" },
-              React9.createElement("strong", { className: "dim-jh-modelName" }, "启用本机网关"),
+              React12.createElement("strong", { className: "dim-jh-modelName" }, "启用本机网关"),
               // ⚠️ 用户 2026-10-04 要求这句只留「在 127.0.0.1 监听，供客户端调用」——
               // 原先列了 Pi / Continue / Cline / OpenCode 四个客户端名，在窄面板下折成两行
               // 且把「打开/关闭」那个动作词挤到很后面。客户端列举属于 README 的内容。
@@ -12648,13 +14130,13 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
               // 就是容器桥接 IP），写死 127.0.0.1 会让用户照着抄一个从容器外连不上的
               // 地址 —— 而那正是 issue 报告者踩的坑。未在监听时退回「本机」这一定性
               // 说法（与 gatewayEndpoint 返回 '' 的既有取舍同源：不编造具体地址）。
-              React9.createElement(
+              React12.createElement(
                 "code",
                 { className: "dim-jh-modelId" },
                 status?.address ? `在 ${status.address.host} 监听，供客户端调用` : "在本机监听，供客户端调用"
               )
             ),
-            React9.createElement("input", {
+            React12.createElement("input", {
               type: "checkbox",
               className: "dim-jh-switch",
               role: "switch",
@@ -12669,20 +14151,20 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
           // ⚠️ 与主开关同一行结构，但**语义不同**：它改变的是监听地址（127.0.0.1 ↔
           // 0.0.0.0），翻动会触发服务端关闭旧实例并重建换绑；env 显式给了
           // DSH_OPENAI_GATEWAY_HOST 时被禁用（那一刻翻动无效，禁用并说明原因）。
-          React9.createElement(
+          React12.createElement(
             "label",
             { className: "dim-jh-modelRow" },
-            React9.createElement(
+            React12.createElement(
               "span",
               { className: "dim-jh-modelInfo" },
-              React9.createElement("strong", { className: "dim-jh-modelName" }, "允许局域网访问"),
-              React9.createElement(
+              React12.createElement("strong", { className: "dim-jh-modelName" }, "允许局域网访问"),
+              React12.createElement(
                 "code",
                 { className: "dim-jh-modelId" },
                 "打开后监听 0.0.0.0，同一局域网的设备可凭 API Key 访问"
               )
             ),
-            React9.createElement("input", {
+            React12.createElement("input", {
               type: "checkbox",
               className: "dim-jh-switch",
               role: "switch",
@@ -12692,14 +14174,14 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
               onChange: () => void onToggleAllowLan(!(status?.allowLan === true))
             })
           ),
-          gatewayAllowLanHint(status) ? React9.createElement("p", {
+          gatewayAllowLanHint(status) ? React12.createElement("p", {
             key: "allow-lan-hint",
             className: "dim-jh-modalHint dim-jh-gatewayLine"
           }, gatewayAllowLanHint(status)) : null,
           gatewayStatusLines(status).map((line, index) => (
             // ⚠️ 顶部三行是同一段话，用更紧的 .dim-jh-gatewayLine（再叠上弹窗级的
             // 6px 会显得像三段互不相干的内容）。
-            React9.createElement("p", {
+            React12.createElement("p", {
               key: `status-${index}`,
               className: "dim-jh-modalHint dim-jh-gatewayLine"
             }, line)
@@ -12712,25 +14194,25 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
           // <网关 API Key>。」+ 下面一排按钮，现改为「API KEY：」与两个按钮**同一行**。
           // Bearer 那半句没丢 —— 它移到了 CC Switch 之外的客户端需要的信息里，见 README
           // 的「鉴权使用」；面板上只留用户真正要抄的两个东西（地址、密钥）。
-          apiKey ? React9.createElement(
+          apiKey ? React12.createElement(
             "div",
             { className: "dim-jh-gatewayKeyRow", style: { marginTop: "6px" } },
-            React9.createElement("span", { className: "dim-jh-modalHint dim-jh-gatewayKeyLabel" }, "API KEY："),
-            React9.createElement("button", {
+            React12.createElement("span", { className: "dim-jh-modalHint dim-jh-gatewayKeyLabel" }, "API KEY："),
+            React12.createElement("button", {
               className: "dim-jh-btn",
               "data-kind": "primary",
               title: "把密钥复制到剪贴板。明文会进入剪贴板历史，注意别在不信任的机器上这么做。",
               onClick: () => void handleCopy()
             }, copied ? "已复制 ✓" : "复制密钥"),
-            revealed ? React9.createElement("code", {
+            revealed ? React12.createElement("code", {
               className: "dim-jh-modelId",
               style: { userSelect: "all" }
-            }, apiKey.value) : React9.createElement("button", {
+            }, apiKey.value) : React12.createElement("button", {
               className: "dim-jh-btn",
               title: "自动复制不可用时用它显示明文，供手动选中。",
               onClick: () => setRevealed(true)
             }, "显示明文")
-          ) : React9.createElement(
+          ) : React12.createElement(
             "p",
             { className: "dim-jh-modalHint" },
             "API KEY：尚未生成（启用网关时会自动创建）。"
@@ -12739,36 +14221,36 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
           // 「尚未生成（启用网关时会自动创建）」已经把事情说完，而
           // `gatewayApiKeyHint(null)` 说的是同一件事 —— 两句并排就是冗余，
           // 与本次「精简臃肿」的目标正好相反。
-          apiKey ? React9.createElement("p", { className: "dim-jh-modalHint" }, gatewayApiKeyHint(apiKey)) : null
+          apiKey ? React12.createElement("p", { className: "dim-jh-modalHint" }, gatewayApiKeyHint(apiKey)) : null
         ),
         // ── 第 2 段：模型目录 ──
         // 存在的理由：有些 agent（ZCode 等）**不会**主动扫 `/v1/models`，要靠用户
         // 手工把 ID 填进配置。而该端点需要 Bearer 头，浏览器地址栏直接打开只会得到
         // 401 —— 所以清单必须出现在设置页里。
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-gatewaySection" },
-          React9.createElement(
+          React12.createElement(
             "p",
             { className: "dim-jh-gatewaySectionTitle" },
-            React9.createElement("strong", null, "模型 ID（可用的完整清单）")
+            React12.createElement("strong", null, "模型 ID（可用的完整清单）")
           ),
-          React9.createElement("p", { className: "dim-jh-modalHint" }, gatewayModelsHint(models, status?.modelsSource)),
+          React12.createElement("p", { className: "dim-jh-modalHint" }, gatewayModelsHint(models, status?.modelsSource)),
           // ⚠️ `dim-jh-gatewayActions` 是给「下方四个按钮压成与密钥行同款小号」用的钩子
           // （见 jet-hub-styles.js 里与 .dim-jh-gatewayKeyRow 合并的那条规则）。
           // 不能直接改 .dim-jh-modelPanelActions .dim-jh-btn —— 那个类在页头、模型面板、
           // 卡片头等 8 处都在用，改它会把无关页面一起改小。
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-modelPanelActions dim-jh-gatewayActions", style: { marginTop: "4px" } },
-            React9.createElement("button", {
+            React12.createElement("button", {
               className: "dim-jh-btn",
               "data-kind": "primary",
               disabled: visibleModels.length === 0,
               title: "把模型 ID 每行一个复制到剪贴板（每行一个完整 ID；有搜索词时只复制筛出来的那些）。",
               onClick: () => void handleCopyModelIds()
             }, idsCopied ? "已复制 ✓" : `复制全部 ${visibleModels.length} 个 ID`),
-            React9.createElement("button", {
+            React12.createElement("button", {
               className: "dim-jh-btn",
               "aria-expanded": modelsOpen ? "true" : "false",
               onClick: () => {
@@ -12777,13 +14259,13 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
               }
             }, modelsOpen ? "收起清单" : "展开清单")
           ),
-          modelsOpen ? React9.createElement(
-            React9.Fragment,
+          modelsOpen ? React12.createElement(
+            React12.Fragment,
             null,
-            React9.createElement(
+            React12.createElement(
               "div",
               { className: "dim-jh-modelFilterBar" },
-              React9.createElement("input", {
+              React12.createElement("input", {
                 type: "search",
                 className: "dim-jh-input dim-jh-modelSearch",
                 placeholder: "搜索模型 ID 或展示名…",
@@ -12791,15 +14273,15 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
                 "aria-label": "搜索模型 ID",
                 onChange: (event) => setModelsQuery(event.target.value)
               }),
-              modelsFiltering ? React9.createElement("button", {
+              modelsFiltering ? React12.createElement("button", {
                 className: "dim-jh-btn",
                 title: "清空搜索词，恢复完整清单。",
                 onClick: () => setModelsQuery("")
               }, "清空搜索") : null
             ),
-            visibleModels.length === 0 ? React9.createElement("div", { className: "dim-jh-gatewayEmpty" }, gatewayModelsEmptyHint(modelsQuery)) : React9.createElement(GatewayCards, {
+            visibleModels.length === 0 ? React12.createElement("div", { className: "dim-jh-gatewayEmpty" }, gatewayModelsEmptyHint(modelsQuery)) : React12.createElement(GatewayCards, {
               cards: modelCards,
-              renderRow: (model) => React9.createElement(GatewayModelRow, { model }),
+              renderRow: (model) => React12.createElement(GatewayModelRow, { model }),
               isExpanded: (provider) => gatewayCardExpanded(
                 modelCards.find((card) => card.provider === provider),
                 // 有搜索词时一律展开：命中结果藏在折叠卡里，用户会以为「搜不到」。
@@ -12829,36 +14311,36 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
         //
         // ⚠️ 数据只含**已开启**的模型（来自适配器 listModels 的黑名单过滤），
         // 故与对话框里的模型选择器同源。
-        React9.createElement(
+        React12.createElement(
           "div",
           { className: "dim-jh-gatewaySection" },
-          React9.createElement(
+          React12.createElement(
             "p",
             { className: "dim-jh-gatewaySectionTitle" },
-            React9.createElement("strong", null, "思考档位对照表")
+            React12.createElement("strong", null, "思考档位对照表")
           ),
           // ⚠️ 说明**一行一个 p**（与弹窗顶部 gatewayStatusLines 同款做法）。
           // 用户 2026-10-04 第三次报障：这两句原先拼成一整段交给浏览器断行，
           // 于是品牌名被从中间切开 —— 前一行结尾是「CC」、下一行开头是「Switch」。
           // 两句本就各说一件事，各占一行既不会断开品牌名，也更好读。
-          gatewayEffortsHintLines(models).map((line, index) => React9.createElement("p", {
+          gatewayEffortsHintLines(models).map((line, index) => React12.createElement("p", {
             key: `efforts-hint-${index}`,
             className: "dim-jh-modalHint dim-jh-gatewayLine"
           }, line)),
           // ⚠️ 用户 2026-10-04 要求这两个按钮**互换位置**，与模型清单那段保持一致
           //（那边是「复制全部 …」在前、「展开清单」在后）。顺序统一后，
           // 三段里的按钮位置可预期，用户不必每段重新找。
-          React9.createElement(
+          React12.createElement(
             "div",
             { className: "dim-jh-modelPanelActions dim-jh-gatewayActions", style: { marginTop: "4px" } },
             // 复制的是**当前筛出来的那些行**：用户搜完再复制，拿到的正是屏幕上看到的内容。
-            effortRows.length > 0 ? React9.createElement("button", {
+            effortRows.length > 0 ? React12.createElement("button", {
               className: "dim-jh-btn",
               "data-kind": "primary",
               title: "把对照表（含真实档位与该填的值）复制到剪贴板。有搜索词时只复制筛出来的行。",
               onClick: () => void handleCopyEfforts()
             }, effortsCopied ? "已复制 ✓" : `复制对照表（${visibleEffortRows.length} 行）`) : null,
-            React9.createElement("button", {
+            React12.createElement("button", {
               className: "dim-jh-btn",
               "aria-expanded": effortsOpen ? "true" : "false",
               // 没有模型声明档位时禁用而非「点了没反应」：展开一张空表毫无意义。
@@ -12869,18 +14351,18 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
               }
             }, effortsOpen ? "收起对照表" : `展开对照表（${effortRows.length} 行）`)
           ),
-          effortsOpen ? React9.createElement(
-            React9.Fragment,
+          effortsOpen ? React12.createElement(
+            React12.Fragment,
             null,
             // 搜索：对照表本身要能按**档位名**查（「哪些渠道有 xhigh？」「界面上的 Max 是哪个 id？」
             // —— 后者是用户真踩过的坑）。故判据比模型清单的搜索多匹配档位名，
             // 但「空搜索词 = 未搜索」的约定与它共用同一份实现（model-filter.js）。
             //
             // ⚠️ 用户 2026-10-04 要求它**展开后才可用**（原先挂在展开区之外，收起时也在占位）。
-            effortRows.length > 0 ? React9.createElement(
+            effortRows.length > 0 ? React12.createElement(
               "div",
               { className: "dim-jh-modelFilterBar" },
-              React9.createElement("input", {
+              React12.createElement("input", {
                 type: "search",
                 className: "dim-jh-input dim-jh-modelSearch",
                 placeholder: "搜索模型 id、展示名或档位名（如 xhigh / Max / Extra）…",
@@ -12888,15 +14370,15 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
                 "aria-label": "搜索思考档位",
                 onChange: (event) => setEffortsQuery(event.target.value)
               }),
-              effortsFiltering ? React9.createElement("button", {
+              effortsFiltering ? React12.createElement("button", {
                 className: "dim-jh-btn",
                 title: "清空搜索词，恢复完整对照表。",
                 onClick: () => setEffortsQuery("")
               }, "清空搜索") : null
             ) : null,
-            visibleEffortRows.length === 0 ? React9.createElement("div", { className: "dim-jh-effortEmpty" }, gatewayEffortsEmptyHint(effortsQuery)) : React9.createElement(GatewayCards, {
+            visibleEffortRows.length === 0 ? React12.createElement("div", { className: "dim-jh-effortEmpty" }, gatewayEffortsEmptyHint(effortsQuery)) : React12.createElement(GatewayCards, {
               cards: effortCards,
-              renderRow: (row) => React9.createElement(GatewayEffortRow, { row }),
+              renderRow: (row) => React12.createElement(GatewayEffortRow, { row }),
               isExpanded: (provider) => gatewayCardExpanded(
                 effortCards.find((card) => card.provider === provider),
                 // ⚠️ 有搜索词时一律展开：命中结果藏在折叠卡里，用户会以为「搜不到」
@@ -12922,17 +14404,17 @@ function GatewayPanel({ status, busy, notice, onToggle, onToggleAllowLan, onRelo
         // ⚠️ 这段是**安全声明**，随着 host 可配（issue IKL7UN）它必须跟着实际监听
         // 地址变化 —— 写死「只绑定 127.0.0.1」在容器部署下是错误陈述（详见
         // `gatewayFootnote` 的注释）。
-        React9.createElement(
+        React12.createElement(
           "p",
           { className: "dim-jh-modalHint dim-jh-gatewayFootnote" },
           gatewayFootnote(status)
         ),
-        notice ? React9.createElement("div", {
+        notice ? React12.createElement("div", {
           className: "dim-jh-probeNotice",
           "data-tone": notice.tone,
           role: notice.tone === "error" ? "alert" : "status",
           style: { marginTop: "10px" }
-        }, React9.createElement("div", null, notice.text)) : null
+        }, React12.createElement("div", null, notice.text)) : null
       )
     )
   );
@@ -12955,21 +14437,25 @@ var AGG_WIRED_CHANNEL_IDS = [
   "astudio",
   "minimax",
   "minimaxintl",
-  "magicrew"
+  "magicrew",
+  "magicrewintl",
+  "monkeycode",
+  "monkeycodeintl",
+  "baizhi"
 ];
 var AGG_EXPIRY_REPROBE_MS = 2 * 60 * 1e3;
 function AggregatePanel({ rpcCall }) {
-  const [models, setModels] = React9.useState(null);
-  const [rejections, setRejections] = React9.useState({});
-  const [busy, setBusy] = React9.useState(false);
-  const [notice, setNotice] = React9.useState(null);
-  const [expanded, setExpanded] = React9.useState({});
-  const [orderMode, setOrderMode] = React9.useState("expiry");
-  const [pendingOrder, setPendingOrder] = React9.useState({});
-  const [orderBusy, setOrderBusy] = React9.useState({});
-  const [rejectBusy, setRejectBusy] = React9.useState(false);
-  const [lastProbeAt, setLastProbeAt] = React9.useState(null);
-  const load = React9.useCallback(async (force = false, options = {}) => {
+  const [models, setModels] = React12.useState(null);
+  const [rejections, setRejections] = React12.useState({});
+  const [busy, setBusy] = React12.useState(false);
+  const [notice, setNotice] = React12.useState(null);
+  const [expanded, setExpanded] = React12.useState({});
+  const [orderMode, setOrderMode] = React12.useState("expiry");
+  const [pendingOrder, setPendingOrder] = React12.useState({});
+  const [orderBusy, setOrderBusy] = React12.useState({});
+  const [rejectBusy, setRejectBusy] = React12.useState(false);
+  const [lastProbeAt, setLastProbeAt] = React12.useState(null);
+  const load = React12.useCallback(async (force = false, options = {}) => {
     setBusy(true);
     try {
       const res = await rpcCall("aggregate.catalog", { force });
@@ -12985,10 +14471,10 @@ function AggregatePanel({ rpcCall }) {
       setBusy(false);
     }
   }, [rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void load();
   }, [load]);
-  const onToggleCandidate = React9.useCallback(async (model, candidate) => {
+  const onToggleCandidate = React12.useCallback(async (model, candidate) => {
     const { rpc, payload } = candidateToggleAction(model.canonicalId, candidate, {
       // ⚠️ 传**回退后**的三态：老宿主（响应无 `state`）下按终端的拒绝表判，
       //    于是只会发出老宿主认识的 `aggregate.setRejected`（它没有 `setAllowed` 端点）。
@@ -13012,9 +14498,9 @@ function AggregatePanel({ rpcCall }) {
       await load(false, { keepNotice: true });
     }
   }, [rpcCall, load]);
-  const [expiryOrder, setExpiryOrder] = React9.useState(null);
-  const [expiryBusy, setExpiryBusy] = React9.useState(false);
-  const onSortByExpiry = React9.useCallback(async () => {
+  const [expiryOrder, setExpiryOrder] = React12.useState(null);
+  const [expiryBusy, setExpiryBusy] = React12.useState(false);
+  const onSortByExpiry = React12.useCallback(async () => {
     setExpiryBusy(true);
     try {
       const res = await rpcCall("aggregate.expiryOrder", { force: true });
@@ -13027,7 +14513,7 @@ function AggregatePanel({ rpcCall }) {
       setExpiryBusy(false);
     }
   }, [rpcCall]);
-  const onSelectOrderMode = React9.useCallback(async (mode) => {
+  const onSelectOrderMode = React12.useCallback(async (mode) => {
     if (mode === orderMode) {
       await onSortByExpiry();
       return;
@@ -13042,7 +14528,7 @@ function AggregatePanel({ rpcCall }) {
       setNotice(`切换排序方式失败：${caught?.message ?? String(caught)}`);
     }
   }, [orderMode, rpcCall, load, onSortByExpiry]);
-  React9.useEffect(() => startExpiryReprobe({
+  React12.useEffect(() => startExpiryReprobe({
     orderMode,
     intervalMs: AGG_EXPIRY_REPROBE_MS,
     isHidden: () => typeof document !== "undefined" && document.hidden === true,
@@ -13050,7 +14536,7 @@ function AggregatePanel({ rpcCall }) {
       void onSortByExpiry();
     }
   }), [orderMode, onSortByExpiry]);
-  const onRejectNonExpiring = React9.useCallback(async () => {
+  const onRejectNonExpiring = React12.useCallback(async () => {
     setRejectBusy(true);
     try {
       const res = await rpcCall("aggregate.rejectNonExpiring", {});
@@ -13064,7 +14550,7 @@ function AggregatePanel({ rpcCall }) {
     }
   }, [rpcCall, load]);
   const orderOf = (model) => pendingOrder[model.canonicalId] ?? model.order ?? [];
-  const commitOrder = React9.useCallback(async (model, participating) => {
+  const commitOrder = React12.useCallback(async (model, participating) => {
     if (orderBusy[model.canonicalId] === true) return;
     setOrderBusy((prev) => ({ ...prev, [model.canonicalId]: true }));
     try {
@@ -13083,7 +14569,7 @@ function AggregatePanel({ rpcCall }) {
       setOrderBusy((prev) => ({ ...prev, [model.canonicalId]: false }));
     }
   }, [orderBusy, rpcCall]);
-  const dragKeyRef = React9.useRef(null);
+  const dragKeyRef = React12.useRef(null);
   const renderCandidate = (model, candidate, options = {}) => {
     const canonicalId = model.canonicalId;
     const resolvedState = { state: candidateStateOf(canonicalId, candidate, rejections) };
@@ -13092,7 +14578,7 @@ function AggregatePanel({ rpcCall }) {
     const inactive = candidateStateOf(canonicalId, candidate, rejections) !== "allowed";
     const draggable = options.draggable === true;
     const parts = candidateRowParts(candidate);
-    return React9.createElement(
+    return React12.createElement(
       "div",
       {
         className: "dim-jh-aggCandidate" + (inactive ? " dim-jh-aggCandidateRejected" : "") + (options.dragOver === true ? " dim-jh-aggDragOver" : ""),
@@ -13136,7 +14622,7 @@ function AggregatePanel({ rpcCall }) {
       },
       // ⚠️ 拖动手柄**显式**给出（HTML5 拖动的一个已知可用性坑）：
       //    整行可拖时用户不知道能拖；且手柄能承载 title 说明「拖到哪」。
-      draggable ? React9.createElement("span", {
+      draggable ? React12.createElement("span", {
         className: "dim-jh-aggDragHandle",
         title: "按住拖动以调整这个模型的候选顺序",
         "aria-hidden": "true"
@@ -13147,7 +14633,7 @@ function AggregatePanel({ rpcCall }) {
       //    buddy / codearts / lobsterai / loomy / … 各有一条候选），认渠道却只能
       //    读名字。图标在这里的信息量比其它列表更大。
       //    `candidate.provider` 就是渠道 id，与 `candidateRowLabel` 用的是同一个值。
-      React9.createElement(ProviderLogo, { provider: candidate.provider }),
+      React12.createElement(ProviderLogo, { provider: candidate.provider }),
       // ── 候选行的文字部分：拆成**四个独立格子**（用户 2026-10-27「美化聚合页模型列表」）──
       // ⚠️ 原先这里是 `candidateRowLabel(candidate)` 一个字符串直接塞进 span，
       //    于是「渠道名 · 模型 id · 倍率」三者在视觉上完全同权、同色、同字号 ——
@@ -13160,27 +14646,27 @@ function AggregatePanel({ rpcCall }) {
       // ⚠️ 整行的完整文案仍挂在 `title` 上 —— 模型 id 过长时会被省略号截断，
       //    悬停必须能读到全文，否则用户分不清 `deepseek-v4.1-flash` 与
       //    `deepseek-v4.1-flash-thinking`（前 20 个字符完全一样）。
-      React9.createElement(
+      React12.createElement(
         "span",
         {
           className: "dim-jh-aggCandidateLabel",
           title: candidateRowLabel(candidate)
         },
-        React9.createElement("span", { className: "dim-jh-aggCandidateProvider" }, parts.provider),
-        React9.createElement("span", { className: "dim-jh-aggCandidateId" }, parts.realId),
-        parts.price === null ? null : React9.createElement("span", {
+        React12.createElement("span", { className: "dim-jh-aggCandidateProvider" }, parts.provider),
+        React12.createElement("span", { className: "dim-jh-aggCandidateId" }, parts.realId),
+        parts.price === null ? null : React12.createElement("span", {
           className: "dim-jh-aggCandidatePrice",
           // `price === 0` 是「不计倍率」，与「倍率 0.15」是两回事 ⇒ 用 data-free 走另一套配色。
           "data-free": parts.price === 0 ? "true" : void 0,
           title: parts.price === 0 ? "该渠道对这个模型不计倍率（免费）" : `该渠道对这个模型的计费倍率：x${parts.price}`
         }, parts.price === 0 ? "免费" : `x${parts.price}`),
-        parts.patched ? React9.createElement("span", {
+        parts.patched ? React12.createElement("span", {
           className: "dim-jh-aggCandidatePatch",
           title: "这条候选来自显式映射补丁（不是字面推导出来的）—— 规格 §7.1 要求对这种来源人工核查一次。"
         }, "补丁") : null
       ),
       // ⚠️ 只有探测过才显示到期提示 —— 否则显示「到期未知」会让用户以为查过了。
-      expiry === void 0 ? null : React9.createElement("span", {
+      expiry === void 0 ? null : React12.createElement("span", {
         className: "dim-jh-aggCandidateExpiry",
         title: "按临期排序时算出的到期时刻"
       }, expiryLabel(expiry)),
@@ -13192,7 +14678,7 @@ function AggregatePanel({ rpcCall }) {
       // ⚠️ 上移 / 下移按钮**已删除**（用户明确要求：「我们不应该有上下箭头就是应该
       //    鼠标拖动」）。键盘可达性由开关与展开区承担；拖动走 HTML5 drag（已修
       //    `setData` 那一处，见 `onDragStart`）。
-      React9.createElement("button", {
+      React12.createElement("button", {
         type: "button",
         className: "dim-jh-aggToggle" + (state.pressed ? "" : " dim-jh-aggToggleOff"),
         // ⚠️ 语义是「**参与**轮换」的正向开关：打开 = 允许用这个渠道（规格 §7.1 的原话）。
@@ -13216,24 +14702,24 @@ function AggregatePanel({ rpcCall }) {
       expiry: expiryOrder[c.provider]
     })));
     const blocker = rotationBlockerOf(model, rejections);
-    const blockerNode = blocker === "all-rejected" ? React9.createElement("span", {
+    const blockerNode = blocker === "all-rejected" ? React12.createElement("span", {
       className: "dim-jh-aggAllRejected",
       title: "你把该模型的全部候选都关了「参与轮换」——请求会如实报「没有任何可用候选」。若想恢复，展开后在子列表里重新打开至少一条。"
-    }, "全部被拒") : blocker === "all-default" ? React9.createElement("span", {
+    }, "全部被拒") : blocker === "all-default" ? React12.createElement("span", {
       className: "dim-jh-aggAllRejected",
       title: "该模型的候选都来自没有临期积分折算的渠道，默认不参与轮换。展开后可以逐条手工打开（打开后它们排在所有能算出临期的候选之后）。在打开之前，这个模型不会出现在模型选择器里。"
-    }, "无临期全拒") : blocker === "mixed" ? React9.createElement("span", {
+    }, "无临期全拒") : blocker === "mixed" ? React12.createElement("span", {
       className: "dim-jh-aggAllRejected",
       title: "候选全部未参与轮换：其中一部分是你拒绝的、一部分是没有临期积分折算默认不参与的。展开后可以逐条处理。"
     }, "均未参与") : null;
-    return React9.createElement(
+    return React12.createElement(
       "div",
       {
         className: "dim-jh-aggModel",
         "data-open": open ? "true" : void 0,
         key: model.canonicalId
       },
-      React9.createElement(
+      React12.createElement(
         "button",
         {
           type: "button",
@@ -13241,7 +14727,7 @@ function AggregatePanel({ rpcCall }) {
           "aria-expanded": String(open),
           onClick: () => setExpanded((prev) => ({ ...prev, [model.canonicalId]: !open }))
         },
-        React9.createElement(
+        React12.createElement(
           "span",
           { className: "dim-jh-aggModelName" },
           model.name || model.canonicalId
@@ -13253,10 +14739,10 @@ function AggregatePanel({ rpcCall }) {
         //   ⚠️ 候选**数量**信息并未丢失：展开后「未参与轮换（K）」那一段仍带计数，
         //   而参与数量 = 展开后的可拖行数。
         blockerNode,
-        React9.createElement(
+        React12.createElement(
           "span",
           { className: "dim-jh-aggChevron", "aria-hidden": "true" },
-          React9.createElement(
+          React12.createElement(
             "svg",
             {
               width: 12,
@@ -13270,11 +14756,11 @@ function AggregatePanel({ rpcCall }) {
             },
             // 右侧箭头，展开时由 CSS 转 90° 朝下 —— 比换两个字符顺滑，
             // 且旋转有过渡动画（字符版本没有中间态，看起来是「跳」的）。
-            React9.createElement("path", { d: "M9 6l6 6-6 6" })
+            React12.createElement("path", { d: "M9 6l6 6-6 6" })
           )
         )
       ),
-      open ? React9.createElement(
+      open ? React12.createElement(
         "div",
         { className: "dim-jh-aggCandidates" },
         candidates.map((candidate, index) => renderCandidate(model, candidate, {
@@ -13287,10 +14773,10 @@ function AggregatePanel({ rpcCall }) {
         //    **松手即提交**（见 `onDrop`），那个按钮既多余、又会让人以为
         //    「不点就不会保存」（真实缺陷：原先不点就真的不保存 ⇒
         //     关窗再开顺序就丢了）。交互与本仓库另两处拖动统一。
-        manual && inactive.length > 0 ? React9.createElement(
+        manual && inactive.length > 0 ? React12.createElement(
           "div",
           { className: "dim-jh-aggInactiveSection" },
-          React9.createElement(
+          React12.createElement(
             "span",
             { className: "dim-jh-aggInactiveTitle" },
             `未参与轮换（${inactive.length}）`
@@ -13305,27 +14791,27 @@ function AggregatePanel({ rpcCall }) {
     const minutes = Math.floor((Date.now() - lastProbeAt) / 6e4);
     return minutes < 1 ? "刚刚" : `${minutes} 分钟前`;
   })();
-  return React9.createElement(
+  return React12.createElement(
     "div",
     {
       className: "dim-jh-aggPanel"
     },
     // ── 说明区 ──
-    React9.createElement(
+    React12.createElement(
       "section",
       { className: "dim-jh-aggIntro" },
-      React9.createElement("h2", { className: "dim-jh-aggTitle" }, "聚合"),
-      React9.createElement(
+      React12.createElement("h2", { className: "dim-jh-aggTitle" }, "聚合"),
+      React12.createElement(
         "p",
         { className: "dim-jh-aggIntroLine" },
         "把同一个模型在各渠道的条目聚合成一个名字，请求时按「积分最快作废」自动选渠道。"
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-aggIntroLine" },
         "三层开关互不影响：关渠道（各渠道自己的面板）、关模型（模型选择器）、以及本页子列表里逐条控制某个候选是否参与轮换（只影响这一个模型）。"
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-aggIntroWarn" },
         "本 provider 无需登录、没有账号池；积分与限流由各渠道自己管理。"
@@ -13333,7 +14819,7 @@ function AggregatePanel({ rpcCall }) {
       // ⚠️ 文案必须**说真话**（2026-10-15 改写）：未接入折算的渠道现在**也出现在目录里**
       //    且可逐条手工打开，故不能再写「不参与轮换（仍可直连使用）」那句 ——
       //    它会让用户以为这里做什么都没用。
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-aggIntroLine" },
         "没有临期积分折算的渠道**默认不参与轮换**（它们现在也出现在目录里，展开模型后可以逐条手工打开）。"
@@ -13341,7 +14827,7 @@ function AggregatePanel({ rpcCall }) {
       // ⚠️ 这一句是**必须**的：手工打开的未接入候选与「无临期积分」的已接入候选
       //    都是 `NEVER` ⇒ 它们排在能算出临期的候选**之后**。用户看到「我明明手工打开了
       //    却排在最后」时，若面板从没说过这件事，就会以为是缺陷。
-      React9.createElement(
+      React12.createElement(
         "p",
         { className: "dim-jh-aggIntroLine" },
         "「按手工排序」模式下可以拖动候选调整顺序。手工打开的「无临期积分」候选排在所有能算出临期的候选之后（两者没有可比较的到期时间），这种混合顺序是正常的、不是缺陷。"
@@ -13352,7 +14838,7 @@ function AggregatePanel({ rpcCall }) {
     //    「43 个聚合模型应该显示在按钮下面」）。
     //    原先计数在最前 ⇒ 它占掉第一行的一个位置。⇒ 现在按钮先排，计数放**最后**
     //    并由 CSS 的 flex-basis: 100% 强制换行 ⇒ 恒定显示在按钮**下面**。
-    React9.createElement(
+    React12.createElement(
       "div",
       { className: "dim-jh-aggToolbar" },
       // ⚠️⚠️ 排序模式改成**单个切换按钮**（用户 2026-10-16 验收要求：
@@ -13370,7 +14856,7 @@ function AggregatePanel({ rpcCall }) {
       //    「解锁永久积分」正是它）⇒ 两套样式看起来不像同一个 UI。
       //    ⇒ 排序切换与「拒绝非临期」「刷新」全部改用 `.dim-jh-btn`，
       //      激活态沿用 `data-kind='primary'`（与「锁定永久积分」**逐字同一形态**）。
-      React9.createElement("button", {
+      React12.createElement("button", {
         type: "button",
         className: "dim-jh-btn",
         "data-kind": orderMode === "manual" ? "primary" : void 0,
@@ -13384,7 +14870,7 @@ function AggregatePanel({ rpcCall }) {
       // ⚠️ 一键「拒绝非临期」：把未接入折算渠道的手工打开恢复为「默认不参与」。
       //    它**不弹确认**（可逆、且逐条还能再打开）—— 但文案必须区分
       //    「恢复了 N 条」与「本来就没打开」（见 `onRejectNonExpiring`）。
-      React9.createElement("button", {
+      React12.createElement("button", {
         type: "button",
         className: "dim-jh-btn",
         disabled: rejectBusy,
@@ -13393,7 +14879,7 @@ function AggregatePanel({ rpcCall }) {
           void onRejectNonExpiring();
         }
       }, rejectBusy ? "处理中…" : "拒绝非临期"),
-      React9.createElement("button", {
+      React12.createElement("button", {
         type: "button",
         className: "dim-jh-btn",
         disabled: busy,
@@ -13406,13 +14892,13 @@ function AggregatePanel({ rpcCall }) {
       }, busy ? "刷新中…" : "刷新"),
       // ⚠️ 计数**放最后**（见工具行开头的注释）：CSS 的 flex-basis: 100% 让它
       //    恒定换行到按钮**下一行**（用户要求「应该显示在按钮下面」）。
-      React9.createElement(
+      React12.createElement(
         "span",
         { className: "dim-jh-aggCount" },
         models === null ? "读取中…" : `${models.length} 个聚合模型`
       )
     ),
-    notice !== null ? React9.createElement("div", { className: "dim-jh-aggNotice" }, notice) : null,
+    notice !== null ? React12.createElement("div", { className: "dim-jh-aggNotice" }, notice) : null,
     // ── 空态 ──
     // ⚠️ 文案**不得写死渠道数量**（那类快照必然腐坏，仓库既有教训：接入 accio/officeace
     //    后手抄名单没人回头改，只登那两家的用户会看到「请先登录」这句错话）。
@@ -13420,7 +14906,7 @@ function AggregatePanel({ rpcCall }) {
     //    由用例锁死；**名字不抄**（registry 是唯一真相源）⇒ 改名 / 新增均零改动。
     // ⚠️ 2026-10-15 补上「或手工打开」这条出路：未接入渠道的账号**不会**让模型自动
     //    进轮换，用户若只登录了那几家，看到的仍是空态 —— 必须告诉他第二步做什么。
-    models !== null && models.length === 0 ? React9.createElement(
+    models !== null && models.length === 0 ? React12.createElement(
       "div",
       { className: "dim-jh-aggEmpty" },
       "当前没有可聚合的模型：请先在至少一个已接入临期折算的渠道（" + AGG_WIRED_CHANNEL_IDS.map((id) => providerLabel(id)).join(" / ") + "）登录账号；或者登录其它渠道后，在本页展开模型、把候选逐条手工打开。"
@@ -13428,20 +14914,20 @@ function AggregatePanel({ rpcCall }) {
     // ── 模型列表（**平铺**，全局按候选渠道数降序；不再有厂商分组标题）──
     sortedModels.map((model) => renderModel(model)),
     // ── 页脚说明 ──
-    React9.createElement(
+    React12.createElement(
       "footer",
       { className: "dim-jh-aggFooter" },
-      React9.createElement(
+      React12.createElement(
         "p",
         null,
         "为什么没有签到 / 重置 / 新建账号按钮：本 provider 不持有账号与积分。"
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         null,
         "候选如何得出：字面推导（id / name 双通道）+ 显式映射补丁。"
       ),
-      React9.createElement(
+      React12.createElement(
         "p",
         null,
         "如何核查：展开任一模型，逐条看渠道与真实 modelId；不同意就关掉那一行。"
@@ -13450,29 +14936,55 @@ function AggregatePanel({ rpcCall }) {
   );
 }
 function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
-  const [selected, setSelected] = React9.useState(PROVIDERS[0].id);
-  const [version, setVersion] = React9.useState(0);
-  const [checkinBusy, setCheckinBusy] = React9.useState(false);
-  const [checkinNotice, setCheckinNotice] = React9.useState(null);
-  const [providerStatuses, setProviderStatuses] = React9.useState(null);
-  const [providerStatusFailed, setProviderStatusFailed] = React9.useState(false);
-  const [showProviderSwitches, setShowProviderSwitches] = React9.useState(false);
-  const [openCodeModels, setOpenCodeModels] = React9.useState(false);
-  const [providerBusy, setProviderBusy] = React9.useState(() => /* @__PURE__ */ new Set());
-  const [providerOrder, setProviderOrder] = React9.useState(null);
-  const [providerReordering, setProviderReordering] = React9.useState(false);
-  const reorderLockRef = React9.useRef(false);
-  const [providerNotice, setProviderNotice] = React9.useState(null);
-  const [showGateway, setShowGateway] = React9.useState(false);
-  const [gatewayStatus, setGatewayStatus] = React9.useState(null);
-  const [gatewayBusy, setGatewayBusy] = React9.useState(false);
-  const [gatewayNotice, setGatewayNotice] = React9.useState(null);
-  const [showTokenLedger, setShowTokenLedger] = React9.useState(false);
-  const mounted = React9.useRef(true);
-  React9.useEffect(() => () => {
+  const [selected, setSelected] = React12.useState(PROVIDERS[0].id);
+  const [version, setVersion] = React12.useState(0);
+  const [checkinBusy, setCheckinBusy] = React12.useState(false);
+  const [checkinNotice, setCheckinNotice] = React12.useState(null);
+  const [showCheckinPanel, setShowCheckinPanel] = React12.useState(false);
+  const checkinWrapRef = React12.useRef(null);
+  const [autoCheckin, setAutoCheckin] = React12.useState(null);
+  const [autoCheckinError, setAutoCheckinError] = React12.useState("");
+  const [autoCheckinBusy, setAutoCheckinBusy] = React12.useState(false);
+  const [timeDraft, setTimeDraft] = React12.useState(["09:00", "21:00"]);
+  const [jitterOn, setJitterOn] = React12.useState(false);
+  const [jitterMinutes, setJitterMinutes] = React12.useState(10);
+  const timeDraftRef = React12.useRef(timeDraft);
+  const jitterOnRef = React12.useRef(jitterOn);
+  const jitterMinutesRef = React12.useRef(jitterMinutes);
+  React12.useEffect(() => {
+    timeDraftRef.current = timeDraft;
+  }, [timeDraft]);
+  React12.useEffect(() => {
+    jitterOnRef.current = jitterOn;
+  }, [jitterOn]);
+  React12.useEffect(() => {
+    jitterMinutesRef.current = jitterMinutes;
+  }, [jitterMinutes]);
+  const autoCheckinRef = React12.useRef(autoCheckin);
+  React12.useEffect(() => {
+    autoCheckinRef.current = autoCheckin;
+  }, [autoCheckin]);
+  const checkinSavingRef = React12.useRef(false);
+  const checkinSaveFailedRef = React12.useRef(false);
+  const [providerStatuses, setProviderStatuses] = React12.useState(null);
+  const [providerStatusFailed, setProviderStatusFailed] = React12.useState(false);
+  const [showProviderSwitches, setShowProviderSwitches] = React12.useState(false);
+  const [openCodeModels, setOpenCodeModels] = React12.useState(false);
+  const [providerBusy, setProviderBusy] = React12.useState(() => /* @__PURE__ */ new Set());
+  const [providerOrder, setProviderOrder] = React12.useState(null);
+  const [providerReordering, setProviderReordering] = React12.useState(false);
+  const reorderLockRef = React12.useRef(false);
+  const [providerNotice, setProviderNotice] = React12.useState(null);
+  const [showGateway, setShowGateway] = React12.useState(false);
+  const [gatewayStatus, setGatewayStatus] = React12.useState(null);
+  const [gatewayBusy, setGatewayBusy] = React12.useState(false);
+  const [gatewayNotice, setGatewayNotice] = React12.useState(null);
+  const [showTokenLedger, setShowTokenLedger] = React12.useState(false);
+  const mounted = React12.useRef(true);
+  React12.useEffect(() => () => {
     mounted.current = false;
   }, []);
-  const loadGatewayStatus = React9.useCallback(async () => {
+  const loadGatewayStatus = React12.useCallback(async () => {
     try {
       const res = await rpcCall("gateway.getEnabled", {});
       if (!mounted.current) return;
@@ -13484,10 +14996,10 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       setGatewayNotice({ tone: "error", text: "读取网关状态失败：" + (caught?.message || "未知错误") });
     }
   }, [rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void loadGatewayStatus();
   }, [loadGatewayStatus]);
-  const toggleGatewayAllowLan = React9.useCallback(async (nextAllowLan) => {
+  const toggleGatewayAllowLan = React12.useCallback(async (nextAllowLan) => {
     setGatewayBusy(true);
     setGatewayNotice(null);
     try {
@@ -13504,7 +15016,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       if (mounted.current) setGatewayBusy(false);
     }
   }, [rpcCall, loadGatewayStatus]);
-  const toggleGateway = React9.useCallback(async (nextEnabled) => {
+  const toggleGateway = React12.useCallback(async (nextEnabled) => {
     setGatewayBusy(true);
     setGatewayNotice(null);
     try {
@@ -13521,7 +15033,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       if (mounted.current) setGatewayBusy(false);
     }
   }, [rpcCall, loadGatewayStatus]);
-  const loadProviderStatuses = React9.useCallback(async () => {
+  const loadProviderStatuses = React12.useCallback(async () => {
     try {
       const res = await rpcCall("provider.status", { providers: POOLED_PROVIDERS.map((p) => p.id) });
       if (!mounted.current) return;
@@ -13538,11 +15050,11 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       });
     }
   }, [rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     mounted.current = true;
     void loadProviderStatuses();
   }, [loadProviderStatuses]);
-  const loadProviderOrder = React9.useCallback(async () => {
+  const loadProviderOrder = React12.useCallback(async () => {
     try {
       const res = await rpcCall("provider.getOrder", {});
       if (!mounted.current) return;
@@ -13553,11 +15065,11 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       setProviderOrder(null);
     }
   }, [rpcCall]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void loadProviderOrder();
   }, [loadProviderOrder]);
-  const providerTouchedRef = React9.useRef(false);
-  React9.useEffect(() => {
+  const providerTouchedRef = React12.useRef(false);
+  React12.useEffect(() => {
     if (providerTouchedRef.current) return;
     if (!Array.isArray(providerOrder) || providerOrder.length === 0) return;
     const firstUsable = providerOrder.find((id) => providerStatuses === null || providerStatuses?.[id]?.closed !== true) ?? providerOrder[0];
@@ -13566,7 +15078,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       setVersion((v) => v + 1);
     }
   }, [providerOrder, providerStatuses, selected]);
-  const commitProviderOrder = React9.useCallback(async (next) => {
+  const commitProviderOrder = React12.useCallback(async (next) => {
     if (!Array.isArray(next)) return;
     if (reorderLockRef.current) return;
     reorderLockRef.current = true;
@@ -13640,6 +15152,105 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       }
     }
   };
+  React12.useEffect(() => {
+    if (!showCheckinPanel) return void 0;
+    const onPointerDown = (event) => {
+      const wrap = checkinWrapRef.current;
+      const inside = isInsideCheckinDock({
+        contains: (node) => wrap !== null && wrap.contains(node),
+        target: event.target,
+        isNode: typeof Node !== "undefined" && event.target instanceof Node
+      });
+      if (inside) return;
+      closeCheckinPanel();
+    };
+    document.addEventListener("mousedown", onPointerDown, true);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown, true);
+    };
+  }, [showCheckinPanel]);
+  const loadAutoCheckin = React12.useCallback(async () => {
+    try {
+      const res = await rpcCall("usage.autoCheckin", {});
+      const next = res?.autoCheckin || null;
+      setAutoCheckin(next);
+      if (Array.isArray(next?.times) && next.times.length === 2) setTimeDraft([...next.times]);
+      if (typeof next?.jitterMinutes === "number") {
+        setJitterOn(next.jitterMinutes > 0);
+        if (next.jitterMinutes > 0) setJitterMinutes(next.jitterMinutes);
+      }
+      setAutoCheckinError("");
+    } catch (error) {
+      setAutoCheckinError(error?.message || "定时签到状态读取失败");
+    }
+  }, [rpcCall]);
+  const closeCheckinPanel = () => {
+    const plan = checkinCommitPlan({
+      hostTimes: autoCheckinRef.current?.times,
+      hostJitter: autoCheckinRef.current?.jitterMinutes,
+      draftTimes: timeDraftRef.current,
+      draftJitterOn: jitterOnRef.current,
+      draftJitterMinutes: jitterMinutesRef.current
+    });
+    if (plan === null) {
+      setShowCheckinPanel(false);
+      return;
+    }
+    if (checkinSavingRef.current) return;
+    if (checkinSaveFailedRef.current) {
+      setShowCheckinPanel(false);
+      return;
+    }
+    checkinSavingRef.current = true;
+    void saveCheckinTimesWith(plan.times, plan.jitterMinutes > 0, plan.jitterMinutes).then((okSaved) => {
+      checkinSavingRef.current = false;
+      if (okSaved) setShowCheckinPanel(false);
+      else checkinSaveFailedRef.current = true;
+    });
+  };
+  const toggleCheckinPanel = () => {
+    if (showCheckinPanel) {
+      closeCheckinPanel();
+      return;
+    }
+    setAutoCheckinError("");
+    checkinSaveFailedRef.current = false;
+    setShowCheckinPanel(true);
+    setShowProviderSwitches(false);
+    setShowGateway(false);
+    setShowTokenLedger(false);
+    void loadAutoCheckin();
+  };
+  const toggleAutoCheckin = async (enabled) => {
+    setAutoCheckinBusy(true);
+    setAutoCheckinError("");
+    try {
+      const res = await rpcCall("usage.autoCheckin", { enabled });
+      const next = res?.autoCheckin || null;
+      setAutoCheckin(next);
+      if (Array.isArray(next?.times) && next.times.length === 2) setTimeDraft([...next.times]);
+    } catch (error) {
+      setAutoCheckinError(error?.message || "定时签到开关保存失败");
+    } finally {
+      setAutoCheckinBusy(false);
+    }
+  };
+  const saveCheckinTimesWith = async (draft, jOn, jMin) => {
+    setAutoCheckinBusy(true);
+    setAutoCheckinError("");
+    try {
+      const res = await rpcCall("usage.autoCheckin", { times: [...draft], jitterMinutes: jOn ? jMin : 0 });
+      const next = res?.autoCheckin || null;
+      setAutoCheckin(next);
+      if (Array.isArray(next?.times) && next.times.length === 2) setTimeDraft([...next.times]);
+      return true;
+    } catch (error) {
+      setAutoCheckinError(error?.message || "时刻保存失败");
+      return false;
+    } finally {
+      setAutoCheckinBusy(false);
+    }
+  };
   const checkinAll = async () => {
     setCheckinBusy(true);
     setCheckinNotice(null);
@@ -13659,6 +15270,9 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
           totalByUnit.token += Number(byUnit.token) || 0;
           const amount = formatClaimGains(byUnit);
           if (amount !== null) bits.push(amount);
+          else {
+            bits.push(`${s.claimed} 个签到成功`);
+          }
         }
         if (s.alreadyClaimed > 0) bits.push(`${s.alreadyClaimed} 个今日已领`);
         if (s.inactive > 0) bits.push(`${s.inactive} 个暂无活动`);
@@ -13694,10 +15308,10 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
   };
   const renderProviderRow = (p) => {
     const closed = providerStatuses?.[p.id]?.closed === true;
-    return React9.createElement(
+    return React12.createElement(
       "div",
       { className: "dim-jh-providerRow", key: p.id, "data-provider": p.id },
-      React9.createElement(
+      React12.createElement(
         "button",
         {
           type: "button",
@@ -13709,16 +15323,16 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
           title: closed ? `${p.label}（已关闭，可在页头「供应商」按钮里打开）` : p.label,
           onClick: () => selectProvider(p.id)
         },
-        React9.createElement(ProviderLogo, { provider: p.id }),
+        React12.createElement(ProviderLogo, { provider: p.id }),
         // ⚠️ 这里给 label 加了 `dim-jh-providerLabel` —— 该类在样式表里**早已定义**
         // （含 min-width: 0 与省略号），但此前从未被任何 JS 使用，故真实界面上长
         // 供应商名一直在**折行**。加上它可把折行改为单行省略号（实测：rail 243px 时
         // 只有 WorkBuddy 一行超宽 21px），且列表总高不变（384px）；若不加，行高会
         // 从 48px 被顶到 58px、总高 424px。这是一处左侧的可见变化，已在交付说明中注明。
-        React9.createElement(
+        React12.createElement(
           "span",
           { className: "dim-jh-providerLabel" },
-          React9.createElement("strong", null, p.label)
+          React12.createElement("strong", null, p.label)
         )
       )
     );
@@ -13728,10 +15342,10 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       return PROVIDERS.map((p) => renderProviderRow(p));
     }
     const { open, closed } = groupProviders(POOLED_PROVIDERS, providerStatuses);
-    const group = (title, list, key) => React9.createElement(
+    const group = (title, list, key) => React12.createElement(
       "div",
       { className: "dim-jh-railGroup", key },
-      React9.createElement("div", { className: "dim-jh-railGroupTitle" }, title),
+      React12.createElement("div", { className: "dim-jh-railGroupTitle" }, title),
       list.map((p) => renderProviderRow(p))
     );
     return [
@@ -13749,10 +15363,10 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
     ];
   };
   const providerSummary = providerToggleSummary(POOLED_PROVIDERS, providerStatuses);
-  const [nativeSearchOn, setNativeSearchOn] = React9.useState(true);
-  const [nativeSearchBusy, setNativeSearchBusy] = React9.useState(false);
-  const [nativeSearchFailed, setNativeSearchFailed] = React9.useState(false);
-  const loadNativeSearchStatus = React9.useCallback(async () => {
+  const [nativeSearchOn, setNativeSearchOn] = React12.useState(true);
+  const [nativeSearchBusy, setNativeSearchBusy] = React12.useState(false);
+  const [nativeSearchFailed, setNativeSearchFailed] = React12.useState(false);
+  const loadNativeSearchStatus = React12.useCallback(async () => {
     try {
       const res = await rpcCall("nativeSearch.getEnabled", {});
       if (!mounted.current) return;
@@ -13765,7 +15379,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       setNativeSearchFailed(true);
     }
   }, [rpcCall]);
-  const toggleNativeSearch = React9.useCallback(async (nextEnabled) => {
+  const toggleNativeSearch = React12.useCallback(async (nextEnabled) => {
     setNativeSearchBusy(true);
     try {
       const res = await rpcCall("nativeSearch.setEnabled", { enabled: nextEnabled });
@@ -13780,10 +15394,139 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
       if (mounted.current) setNativeSearchBusy(false);
     }
   }, [rpcCall, loadNativeSearchStatus]);
-  React9.useEffect(() => {
+  React12.useEffect(() => {
     void loadNativeSearchStatus();
   }, [loadNativeSearchStatus]);
-  return React9.createElement(
+  function renderCheckinPanel() {
+    const a = autoCheckin;
+    const busy = autoCheckinBusy;
+    return React12.createElement(
+      "div",
+      {
+        className: "dim-jh-checkinPanel",
+        role: "dialog",
+        "aria-label": "定时签到设置",
+        // ⚠️ 阻止冒泡：外层页头没有点击关闭逻辑，但将来若给它加，这里不该被连带触发。
+        onClick: (event) => event.stopPropagation()
+      },
+      React12.createElement("div", { className: "dim-jh-checkinPanelTitle" }, "定时签到"),
+      // ⚠️⚠️ **不能让 `<label>` 包住整行**（用户 2026-10-31：「按钮范围有点大啊」）：
+      //    `label` 的语义是「点它任意位置都切换那个 input」⇒ 整行 300px 全成了
+      //    命中区，用户点行尾空白也会把开关切走。
+      //    修法：容器改 `div`，只有**开关 + 紧邻文字**包在 label 里。
+      //    ⚠️ 也不能干脆不要 label：那样键盘 Tab 到 checkbox 时没有可读的关联文字。
+      React12.createElement(
+        "div",
+        { className: "dim-jh-checkinRow" },
+        React12.createElement(
+          "label",
+          { className: "dim-jh-checkinToggle" },
+          React12.createElement("input", {
+            type: "checkbox",
+            className: "dim-jh-switch",
+            checked: a?.enabled === true,
+            // ⚠️ 只在 `autoCheckinBusy` 时禁用，**不再**因 `a === null` 禁用：
+            //   那会让面板刚打开的一瞬间开关是灰的，用户点了没反应（也是「闪」的一种）。
+            disabled: busy,
+            onChange: (event) => void toggleAutoCheckin(event.target.checked)
+          }),
+          React12.createElement("span", null, "每天自动签到（两次）")
+        )
+      ),
+      React12.createElement(
+        "div",
+        { className: "dim-jh-checkinRow" },
+        React12.createElement("label", null, "执行时刻"),
+        timeDraft.map((value, index) => React12.createElement("input", {
+          key: `t-${index}`,
+          type: "time",
+          className: "dim-jh-checkinTime",
+          value,
+          disabled: busy,
+          "aria-label": `第 ${index + 1} 个执行时刻`,
+          onChange: (event) => {
+            const next = [...timeDraft];
+            next[index] = event.target.value;
+            checkinSaveFailedRef.current = false;
+            setTimeDraft(next);
+          }
+        }))
+      ),
+      // ★ 随机浮动（用户 2026-10-31：「搞得像真人一样有时间波动」）。
+      //   勾上 = 每个时段在 ±jitter 分钟内随机偏移；关掉 = 精确按时刻跑。
+      //
+      // ⚠️ 同「每天自动签到」那行：`label` **只**包开关 + 紧邻文字，
+      //    数字框与「分钟」在 label 外面 —— 否则点数字框附近也会切换开关
+      //    （用户 2026-10-31：「按钮范围有点大啊」）。
+      React12.createElement(
+        "div",
+        { className: "dim-jh-checkinRow" },
+        React12.createElement(
+          "label",
+          { className: "dim-jh-checkinToggle" },
+          React12.createElement("input", {
+            type: "checkbox",
+            className: "dim-jh-switch",
+            checked: jitterOn,
+            disabled: busy,
+            onChange: (event) => {
+              checkinSaveFailedRef.current = false;
+              setJitterOn(event.target.checked);
+            }
+          }),
+          React12.createElement("span", null, "随机浮动")
+        ),
+        React12.createElement("input", {
+          type: "number",
+          className: "dim-jh-checkinJitter",
+          min: 0,
+          max: 120,
+          step: 5,
+          value: jitterMinutes,
+          disabled: busy || !jitterOn,
+          "aria-label": "随机浮动分钟数",
+          onChange: (event) => {
+            checkinSaveFailedRef.current = false;
+            setJitterMinutes(Number(event.target.value));
+          }
+        }),
+        React12.createElement("span", null, "分钟")
+      ),
+      React12.createElement(
+        "div",
+        { className: "dim-jh-checkinHint" },
+        jitterOn ? "每个时刻会在 ±" + String(jitterMinutes) + " 分钟内随机偏移（两个时刻挨得近时，幅度会被夹到间隔的一半），避免固定时刻被识别为脚本；改完关闭面板自动保存。" : "固定时刻执行；改完关闭面板自动保存。"
+      ),
+      renderCheckinStatus(a),
+      autoCheckinError === "" ? null : React12.createElement("div", { className: "dim-jh-checkinHint", role: "alert", style: { color: "#d93025" } }, autoCheckinError)
+    );
+  }
+  function renderCheckinStatus(a) {
+    if (a === null) {
+      return React12.createElement("div", {
+        className: "dim-jh-checkinStatus dim-jh-checkinStatusLoading",
+        "aria-hidden": "true"
+      });
+    }
+    if (needsHostRestartNotice(a)) {
+      return React12.createElement(
+        "div",
+        { className: "dim-jh-checkinStatus", role: "alert" },
+        "⚠️ 宿主仍在运行旧代码（没有定时签到接口）。请完全退出并重新打开 DSH，之后这里才会显示「下次执行」时间。"
+      );
+    }
+    return React12.createElement(
+      "div",
+      { className: "dim-jh-checkinStatus" },
+      React12.createElement("div", null, `下次执行：${formatNextRunAt(a.nextRunAt, Date.now())}`),
+      // ★ 逐渠道水位线：这个时段还有渠道没领到（典型：10:00 才刷新额度的渠道）。
+      //   宿主会按退避重试它们，界面必须说出来 —— 否则用户只看到「下次执行 21:00」
+      //   却不知道 10:00 那批还要再过一会儿才会领到。
+      typeof a.pendingSlot === "string" && a.pendingSlot !== "" ? React12.createElement("div", null, `有渠道待补（${a.pendingSlot.slice(11, 16)} 那一轮），正在自动重试`) : null,
+      a.lastResult === "" ? null : React12.createElement("div", null, `上次：${a.lastResult}`)
+    );
+  }
+  return React12.createElement(
     "section",
     { className: "dim-jh-page", "aria-label": "Jet Hub Provider 设置" },
     // ⚠️ 页头左侧的「Jet Hub」标题块已**整块删除**（用户 2026-10-07 要求：
@@ -13794,10 +15537,10 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
     // ② 标题本体「Jet Hub」（.dim-jh-brand / .dim-jh-brandName）—— 2026-10-07，
     //    页头一排已有 7 个按钮，标题纯属占位。设置页的语义由本节点的
     //    aria-label 与宿主左侧「Jet Hub」导航项承担，不丢。
-    React9.createElement(
+    React12.createElement(
       "header",
       { className: "dim-jh-header" },
-      React9.createElement(
+      React12.createElement(
         "div",
         { className: "dim-jh-headerActions" },
         // 「供应商开关」在页头，而不是左侧每个供应商行尾（!25 的原形态）：
@@ -13805,7 +15548,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
         // 误点的可能性归零，也让左侧窄栏回到纯导航。见 `ProviderSwitchPanel`。
         // ⚠️ 按钮文字只写「供应商」（不是「供应商开关」）：页头四个按钮要排成
         // 一排，5 个字会把「关闭」挤到第二行 —— 完整语义由 tooltip 与弹窗标题承担。
-        React9.createElement("button", {
+        React12.createElement("button", {
           className: "dim-jh-btn",
           title: (providerSummary.known ? "供应商开关：逐个打开/关闭（已打开 " + providerSummary.open + "、已关闭 " + providerSummary.closed + "）。" : "供应商开关：逐个打开/关闭。") + "关闭一个供应商 = 关闭它的全部模型并停用它的全部账号。",
           "aria-haspopup": "dialog",
@@ -13815,14 +15558,33 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
             setShowProviderSwitches(true);
           }
         }, "供应商"),
-        // 一键签到在备份/恢复**左侧**（需求指定位置）
-        React9.createElement("button", {
-          className: "dim-jh-btn",
-          title: "依次签到全部支持签到的渠道（CodeBuddy / LobsterAI / CodeArts / Qoder / TRAE）。串行执行以避免触发风控。",
-          disabled: checkinBusy,
-          onClick: () => void checkinAll()
-        }, checkinBusy ? "签到中…" : "一键签到"),
-        React9.createElement(BackupPanel, {
+        // 一键签到在备份/恢复**左侧**（需求指定位置）。
+        //
+        // ★ 2026-10-18：按钮改成「[一键签到][▾]」两段式 —— 主按钮仍是**立刻签到**
+        //   （高频动作，不该多点一次），右侧小箭头展开**定时签到配置面板**。
+        //   用户原话：「在原来的一键签到那里加一个展开页面里面进行配置」。
+        //   ⚠️ 不做成「点主按钮即展开」：那会让「立刻签到」多一步，且与用户
+        //   「不是手动点击、要自动」的诉求相反 —— 手动入口必须保留且零成本。
+        React12.createElement(
+          "span",
+          { className: "dim-jh-checkinWrap", ref: checkinWrapRef },
+          React12.createElement("button", {
+            className: "dim-jh-btn dim-jh-checkinMain",
+            title: "依次签到全部支持签到的渠道（CodeBuddy / LobsterAI / CodeArts / Qoder / TRAE）。串行执行以避免触发风控。",
+            disabled: checkinBusy,
+            onClick: () => void checkinAll()
+          }, checkinBusy ? "签到中…" : "一键签到"),
+          React12.createElement("button", {
+            className: "dim-jh-btn dim-jh-checkinCaret",
+            title: "定时签到：设置每天两个自动执行的时刻",
+            "aria-haspopup": "dialog",
+            "aria-expanded": showCheckinPanel ? "true" : "false",
+            "aria-label": "定时签到设置",
+            onClick: toggleCheckinPanel
+          }, "▾"),
+          showCheckinPanel ? renderCheckinPanel() : null
+        ),
+        React12.createElement(BackupPanel, {
           rpcCall,
           // 导入成功会整体替换账号，ProviderPanel 只在挂载时拉列表；
           // 递增版号强制重新挂载，让账号列表与模型目录立即反映新状态。
@@ -13830,7 +15592,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
         }),
         // 本机网关开关。⚠️ 文字刻意只写「网关」（见「供应商」按钮上方的同款
         // 注释）：页头按钮排成一行，长文字会把右端「关闭」挤到第二行。
-        React9.createElement("button", {
+        React12.createElement("button", {
           className: "dim-jh-btn",
           title: gatewayButtonTitle(gatewayStatus),
           "aria-haspopup": "dialog",
@@ -13843,7 +15605,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
           }
         }, gatewayButtonLabel(gatewayStatus)),
         // 「Token 用量」入口：全 provider 的本地记账（直连/网关分开统计）。
-        React9.createElement("button", {
+        React12.createElement("button", {
           className: "dim-jh-btn",
           title: "Token 用量：按渠道（直连/网关）、供应商与模型统计本机请求的 token 消耗。",
           "aria-haspopup": "dialog",
@@ -13860,13 +15622,13 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
         //
         // 语义：开 = 支持原生搜索的渠道（CodeBuddy / WorkBuddy）走自己后端的
         // 搜索接口；关 = 所有渠道一律回官方 DeepSeek 搜索（需要 API Key）。
-        React9.createElement(
+        React12.createElement(
           "label",
           {
             className: "dim-jh-nativeSearch",
             title: nativeSearchFailed ? "⚠️ 开关状态读取失败，当前显示的是默认值（开启）。点击即可重新提交一次。" : "渠道原生搜索：为支持原生搜索的渠道（CodeBuddy / WorkBuddy）启用其自带搜索。关闭后所有渠道都改用 DeepSeek 官方搜索（需要 DEEPSEEK_API_KEY）。"
           },
-          React9.createElement("input", {
+          React12.createElement("input", {
             type: "checkbox",
             className: "dim-jh-switch",
             checked: nativeSearchOn,
@@ -13877,14 +15639,14 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
             disabled: nativeSearchBusy,
             onChange: (event) => void toggleNativeSearch(event.target.checked)
           }),
-          React9.createElement("span", null, "渠道原生搜索")
+          React12.createElement("span", null, "渠道原生搜索")
         )
       )
     ),
     // 签到结果放在页头下方横跨整宽：页头是 flex 且不换行，塞进去会挤压按钮。
     // `flex: none` 是必需的 —— `dim-jh-page` 是 column flex 且 `dim-jh-layout`
     // 带 `flex: 1`，不锁住的话提示条会被压扁（与 modal 内同款做法）。
-    checkinNotice ? React9.createElement(
+    checkinNotice ? React12.createElement(
       "div",
       {
         className: "dim-jh-probeNotice",
@@ -13892,44 +15654,44 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
         role: checkinNotice.tone === "error" ? "alert" : "status",
         style: { flex: "none", margin: "12px 24px 0" }
       },
-      React9.createElement("div", null, checkinNotice.text),
+      React12.createElement("div", null, checkinNotice.text),
       // 需要用户操作的提示单列成列表（如「请先用 Qoder 官方客户端登录一次」）。
       // 复用既有的 `dim-jh-probeDetails` 样式，不引入新样式。
-      (checkinNotice.notes || []).length > 0 ? React9.createElement(
+      (checkinNotice.notes || []).length > 0 ? React12.createElement(
         "ul",
         { className: "dim-jh-probeDetails" },
-        checkinNotice.notes.map((note, index) => React9.createElement("li", { key: index }, note))
+        checkinNotice.notes.map((note, index) => React12.createElement("li", { key: index }, note))
       ) : null
     ) : null,
     // ⚠️ `inModal` 的提示交给弹窗自己渲染（见 ProviderSwitchPanel）—— 重复渲染
     // 会让同一条错误在遮罩内外各出现一次。
-    providerNotice && !providerNotice.inModal ? React9.createElement("div", {
+    providerNotice && !providerNotice.inModal ? React12.createElement("div", {
       className: "dim-jh-probeNotice",
       "data-tone": providerNotice.tone,
       role: providerNotice.tone === "error" ? "alert" : "status",
       style: { flex: "none", margin: "12px 24px 0" }
-    }, React9.createElement("div", null, providerNotice.text)) : null,
-    React9.createElement(
+    }, React12.createElement("div", null, providerNotice.text)) : null,
+    React12.createElement(
       "div",
       { className: "dim-jh-layout" },
-      React9.createElement(
+      React12.createElement(
         "nav",
         { className: "dim-jh-rail", role: "tablist", "aria-label": "Provider 导航" },
         renderRail()
       ),
-      React9.createElement(
+      React12.createElement(
         "main",
         {
           className: "dim-jh-panel",
           role: "tabpanel"
         },
-        PROVIDERS.map((p) => p.id === selected ? p.id === "aggregate" ? React9.createElement(AggregatePanel, { key: p.id + "-" + version, rpcCall }) : p.externalAccount ? React9.createElement(ChatGptPlanPanel, { key: p.id + "-" + version, chatGptCall }) : p.id === "opencode" ? React9.createElement(OpencodeLocalPanel, { key: p.id + "-" + version, rpcCall, showModelList: () => setOpenCodeModels(true) }) : React9.createElement(ProviderPanel, { key: p.id + "-" + version, provider: p.id, rpcCall, isolatedLoginCall }) : null)
+        PROVIDERS.map((p) => p.id === selected ? p.id === "aggregate" ? React12.createElement(AggregatePanel, { key: p.id + "-" + version, rpcCall }) : p.externalAccount ? React12.createElement(ChatGptPlanPanel, { key: p.id + "-" + version, chatGptCall }) : p.id === "opencode" ? React12.createElement(OpencodeLocalPanel, { key: p.id + "-" + version, rpcCall, showModelList: () => setOpenCodeModels(true) }) : React12.createElement(ProviderPanel, { key: p.id + "-" + version, provider: p.id, rpcCall, isolatedLoginCall }) : null)
       )
     ),
-    openCodeModels ? React9.createElement(ModelListPanel, { provider: "opencode", rpcCall, onClose: () => setOpenCodeModels(false) }) : null,
+    openCodeModels ? React12.createElement(ModelListPanel, { provider: "opencode", rpcCall, onClose: () => setOpenCodeModels(false) }) : null,
     // 「供应商开关」以 modal 渲染：它是覆盖层，放在布局之后只是组件树的书写顺序
     // （与账号面板里的模型列表同款做法）。关闭即不挂载，避免常驻一份开关列表。
-    showProviderSwitches ? React9.createElement(ProviderSwitchPanel, {
+    showProviderSwitches ? React12.createElement(ProviderSwitchPanel, {
       providers: POOLED_PROVIDERS,
       statuses: providerStatuses,
       statusFailed: providerStatusFailed,
@@ -13946,7 +15708,7 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
     }) : null,
     // 同款做法：网关开关也是覆盖层，且与「供应商开关」互斥 —— 两者都是
     // `position: fixed` 的全屏弹窗，同时打开会叠在一起、ESC 只关掉后挂载的那个。
-    showGateway ? React9.createElement(GatewayPanel, {
+    showGateway ? React12.createElement(GatewayPanel, {
       status: gatewayStatus,
       busy: gatewayBusy,
       notice: gatewayNotice,
@@ -13957,14 +15719,14 @@ function JetHubPage({ close, rpcCall, chatGptCall, isolatedLoginCall }) {
     }) : null,
     // 「Token 用量」弹窗：同样是覆盖层（createElement 形式 —— 与其它弹窗
     // 同一理由，见 OpencodeProxyModal 上方的 hook 计数事故注释）。
-    showTokenLedger ? React9.createElement(TokenLedgerPanel, {
+    showTokenLedger ? React12.createElement(TokenLedgerPanel, {
       rpcCall,
       onClose: () => setShowTokenLedger(false)
     }) : null
   );
 }
 
-// plugin-src/client/zcode-carrier.js
+// vendor/dsh-codearts-auth/plugin-src/client/zcode-carrier.js
 var CARRIER_PENDING = "__pending__";
 var CARRIER_FAILURE = Object.freeze({
   /** 载体页回的不是 200/401/403（被反代改写、端口上跑的是别的东西……）。 */
@@ -14455,11 +16217,11 @@ function startCarrierContribution(options = {}) {
   };
 }
 
-// plugin-src/client/usage-badge.js
-var React10 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/usage-badge.js
+var React13 = __toESM(require("react"), 1);
 var import_react_dom = require("react-dom");
 
-// plugin-src/client/badge-model.js
+// vendor/dsh-codearts-auth/plugin-src/client/badge-model.js
 var BADGE_PREFERENCES = Object.freeze(["auto", "subscription", "credits"]);
 var DEFAULT_BADGE_PREFERENCE = "auto";
 var AGGREGATE_PROVIDER_ID = "aggregate";
@@ -14739,7 +16501,7 @@ function formatUpdatedAt(ms) {
   return `${at.getFullYear()}/${at.getMonth() + 1}/${at.getDate()} ${pad(at.getHours())}:${pad(at.getMinutes())}:${pad(at.getSeconds())}`;
 }
 
-// plugin-src/client/usage-badge.js
+// vendor/dsh-codearts-auth/plugin-src/client/usage-badge.js
 var POPOVER_ANCHOR_STYLE = Object.freeze({
   position: "absolute",
   right: 0,
@@ -14789,10 +16551,10 @@ var CREDITS_COLLAPSED_LIMIT = 5;
 var RESOLVE_RETRY_DELAYS = [300, 700, 1500, 2e3];
 function UsageBadge(props) {
   const resolveDirectory = props.resolveDirectory;
-  const [directory, setDirectory] = React10.useState(null);
-  const resolvedRef = React10.useRef(false);
-  const snapshotErrorRef = React10.useRef(false);
-  React10.useEffect(() => {
+  const [directory, setDirectory] = React13.useState(null);
+  const resolvedRef = React13.useRef(false);
+  const snapshotErrorRef = React13.useRef(false);
+  React13.useEffect(() => {
     if (typeof resolveDirectory !== "function") return void 0;
     if (resolvedRef.current) return void 0;
     let alive = true;
@@ -14842,7 +16604,7 @@ function UsageBadge(props) {
       return void 0;
     }
   };
-  const state = React10.useSyncExternalStore(
+  const state = React13.useSyncExternalStore(
     // ⚠️ 订阅要**真的转发 onChange**（用户切模型时徽标跟着更新）；
     // try/catch 只为把「订阅时才发现抛错」这一类也收进徽标内部。
     (onChange) => {
@@ -14861,9 +16623,9 @@ function UsageBadge(props) {
   let provider = state?.current?.provider;
   const modelId = state?.current?.model;
   const readActiveProvider = props.readActiveProvider;
-  const [activeProvider, setActiveProvider] = React10.useState(null);
+  const [activeProvider, setActiveProvider] = React13.useState(null);
   const isAggregate = provider === AGGREGATE_PROVIDER_ID;
-  React10.useEffect(() => {
+  React13.useEffect(() => {
     if (!isAggregate || typeof readActiveProvider !== "function") return void 0;
     let alive = true;
     let timer = null;
@@ -14886,43 +16648,43 @@ function UsageBadge(props) {
     provider = resolveBadgeProvider(provider, activeProvider === null ? null : { provider: activeProvider });
   }
   if (isAggregate && provider === null) {
-    return React10.createElement("span", {
+    return React13.createElement("span", {
       className: "dim-jh-badgePending",
       role: "status",
       title: "聚合（跨渠道）：尚未发出过请求，还不知道会走哪个渠道。发送一条消息后这里会显示实际使用的渠道与积分。"
     }, [
-      React10.createElement("span", { key: "dot", className: "dim-jh-badgeDot", "data-tone": "muted" }),
-      React10.createElement("span", { key: "text" }, "聚合 · 待首次请求")
+      React13.createElement("span", { key: "dot", className: "dim-jh-badgeDot", "data-tone": "muted" }),
+      React13.createElement("span", { key: "text" }, "聚合 · 待首次请求")
     ]);
   }
   if (typeof provider !== "string" || provider.length === 0) return null;
   if (provider === AUTO_PROVIDER_ID) {
-    return React10.createElement(UsageBadgeActive, { ...props, provider });
+    return React13.createElement(UsageBadgeActive, { ...props, provider });
   }
   if (!supportsCreditBalance(provider)) return null;
-  return React10.createElement(UsageBadgeActive, { ...props, provider });
+  return React13.createElement(UsageBadgeActive, { ...props, provider });
 }
 function UsageBadgeActive(props) {
   const { provider, providerLabel: providerLabel2, readBadge, writePreference, setAutoCheckin, dismissAutoCheckin, claimCredits } = props;
   const label = providerLabel2(provider);
-  const [snapshot, setSnapshot] = React10.useState(null);
-  const [failed, setFailed] = React10.useState(false);
-  const [readError, setReadError] = React10.useState("");
-  const [busy, setBusy] = React10.useState(false);
-  const [open, setOpen] = React10.useState(false);
-  const [preference, setPreference] = React10.useState(null);
-  const [prefError, setPrefError] = React10.useState("");
-  const [autoError, setAutoError] = React10.useState("");
-  const [claiming, setClaiming] = React10.useState(null);
-  const [claimProgress, setClaimProgress] = React10.useState(null);
-  const [claimNotice, setClaimNotice] = React10.useState(null);
-  const [creditsExpanded, setCreditsExpanded] = React10.useState(false);
-  const root = React10.useRef(null);
-  const popRef = React10.useRef(null);
-  const read = React10.useRef(() => {
+  const [snapshot, setSnapshot] = React13.useState(null);
+  const [failed, setFailed] = React13.useState(false);
+  const [readError, setReadError] = React13.useState("");
+  const [busy, setBusy] = React13.useState(false);
+  const [open, setOpen] = React13.useState(false);
+  const [preference, setPreference] = React13.useState(null);
+  const [prefError, setPrefError] = React13.useState("");
+  const [autoError, setAutoError] = React13.useState("");
+  const [claiming, setClaiming] = React13.useState(null);
+  const [claimProgress, setClaimProgress] = React13.useState(null);
+  const [claimNotice, setClaimNotice] = React13.useState(null);
+  const [creditsExpanded, setCreditsExpanded] = React13.useState(false);
+  const root = React13.useRef(null);
+  const popRef = React13.useRef(null);
+  const read = React13.useRef(() => {
   });
-  const claimInFlightRef = React10.useRef(false);
-  React10.useEffect(() => {
+  const claimInFlightRef = React13.useRef(false);
+  React13.useEffect(() => {
     ensureJetHubStyles();
     if (!open) return;
     const element = popRef.current;
@@ -14932,7 +16694,7 @@ function UsageBadgeActive(props) {
       console.warn(`[jet-hub] 浮层定位异常（position=${position}）：会撑高输入区（检查 POPOVER_ANCHOR_STYLE / NARROW_POPOVER_STYLE 是否被改坏）`);
     }
   }, [open]);
-  React10.useEffect(() => {
+  React13.useEffect(() => {
     setSnapshot(null);
     setFailed(false);
     setClaimNotice(null);
@@ -14940,7 +16702,7 @@ function UsageBadgeActive(props) {
     setAutoError("");
     setCreditsExpanded(false);
   }, [provider]);
-  React10.useEffect(() => {
+  React13.useEffect(() => {
     let alive = true;
     let inFlight = false;
     const load = async (options = {}) => {
@@ -14985,7 +16747,7 @@ function UsageBadgeActive(props) {
       document.removeEventListener("visibilitychange", onVisible);
     };
   }, [provider, readBadge]);
-  React10.useEffect(() => {
+  React13.useEffect(() => {
     if (!open) return void 0;
     const onDown = (event) => {
       if (!(event.target instanceof Node)) return;
@@ -15003,7 +16765,7 @@ function UsageBadgeActive(props) {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-  React10.useEffect(() => {
+  React13.useEffect(() => {
     if (claimNotice === null) return void 0;
     const ms = claimNotice.tone === "warn" ? CLAIM_NOTICE_WARN_MS : CLAIM_NOTICE_MS;
     const timer = setTimeout(() => setClaimNotice(null), ms);
@@ -15050,14 +16812,15 @@ function UsageBadgeActive(props) {
   };
   const autoTitle = (() => {
     const what = "自动签到开关";
+    const slots = Array.isArray(auto?.times) && auto.times.length === 2 ? auto.times.join(" / ") : "设定时刻";
     if (auto === void 0) return `${what}：状态读取中…`;
     if (auto.enabled !== true) {
-      return `${what}（当前：关闭）—— 点击开启后，每天首次启动 DSH 时会自动为全部渠道签到一次`;
+      return `${what}（当前：关闭）—— 点击开启后，每天 ${slots} 会自动为全部渠道签到`;
     }
     if (auto.running === true) return `${what}（当前：开启，正在执行）—— 串行遍历有账号的渠道，请稍候`;
     const last = auto.lastResult === "" ? "" : `；上次：${auto.lastResult}`;
-    if (auto.ranToday === true) return `${what}（当前：开启，今天已完成）${last} —— 点击关闭`;
-    return `${what}（当前：开启，今天尚未执行）—— 每天首次启动 DSH 时自动签到${last}；点击关闭`;
+    if (auto.ranToday === true) return `${what}（当前：开启，今天已跑过；每天 ${slots}）${last} —— 点击关闭`;
+    return `${what}（当前：开启，今天尚未执行）—— 每天 ${slots} 自动签到${last}；点击关闭`;
   })();
   const autoState = auto === void 0 || auto.enabled !== true ? "off" : auto.ranToday === true ? "done" : "on";
   const withAutoSuffix = (label2) => auto?.enabled === true ? `${label2}（自动）` : label2;
@@ -15125,6 +16888,9 @@ function UsageBadgeActive(props) {
             totalByUnit.token += Number(byUnit.token) || 0;
             const amount = formatClaimGains(byUnit);
             if (amount !== null) bits.push(amount);
+            else {
+              bits.push(`${summary.claimed} 个签到成功`);
+            }
           }
           if (summary.alreadyClaimed > 0) bits.push(`${summary.alreadyClaimed} 个今日已领`);
           if (summary.inactive > 0) bits.push(`${summary.inactive} 个暂无活动`);
@@ -15163,16 +16929,16 @@ function UsageBadgeActive(props) {
   const tone = failed && snapshot === null ? "error" : view.tone;
   const title = [view.text, view.incompleteNote, view.failureReason].filter((part) => part !== "").join("\n");
   const ariaLabel = `${label} 用量：${view.text}${view.incompleteNote === "" ? "" : `（${view.incompleteNote}）`}`;
-  const collapsed = React10.createElement("span", { key: "text", className: "dim-jh-badgeText" }, [
-    React10.createElement("span", { key: "name", className: "dim-jh-badgeName" }, view.name),
-    React10.createElement("span", { key: "sep", className: "dim-jh-badgeSep" }, "•"),
+  const collapsed = React13.createElement("span", { key: "text", className: "dim-jh-badgeText" }, [
+    React13.createElement("span", { key: "name", className: "dim-jh-badgeName" }, view.name),
+    React13.createElement("span", { key: "sep", className: "dim-jh-badgeSep" }, "•"),
     // 空串时**不渲染**该节点：留一个空 span 会白吃一个 5px 的 gap
     //（.dim-jh-badgeText 用的是 .dim-jh-badgeBtn 的 gap）。只有套餐模式有中段。
-    view.detail === "" ? null : React10.createElement("span", { key: "detail", className: "dim-jh-badgeDetail" }, view.detail),
+    view.detail === "" ? null : React13.createElement("span", { key: "detail", className: "dim-jh-badgeDetail" }, view.detail),
     // ⚠️ 类名是 Reading 而**不是** Value：.dim-jh-badgeValue 已被弹窗里的读数占用
     //（那条规则带 font-weight:600，且排在样式表更后面 —— 同名会让胶囊里的数字
     // 被静默加粗、并拿到 flex:none 而无法收缩）。
-    React10.createElement("span", { key: "value", className: "dim-jh-badgeReading" }, view.reading),
+    React13.createElement("span", { key: "value", className: "dim-jh-badgeReading" }, view.reading),
     /**
      * 「这个数字不完整」的标记（用户 2026-10-03 要求）。
      *
@@ -15185,15 +16951,15 @@ function UsageBadgeActive(props) {
      * ⚠️ `aria-hidden` 是**故意**的：同一句话已经并进按钮的 `aria-label`，
      * 不隐藏会被读屏念两遍。鼠标用户的解释走 `title`。
      */
-    view.incompleteNote === "" ? null : React10.createElement("span", {
+    view.incompleteNote === "" ? null : React13.createElement("span", {
       key: "incomplete",
       className: "dim-jh-badgeWarn",
       title: view.incompleteNote,
       "aria-hidden": "true"
     }, "⚠")
   ]);
-  return React10.createElement("div", { className: "dim-jh-badge", ref: root }, [
-    React10.createElement("button", {
+  return React13.createElement("div", { className: "dim-jh-badge", ref: root }, [
+    React13.createElement("button", {
       key: "btn",
       type: "button",
       className: "dim-jh-badgeBtn",
@@ -15202,7 +16968,7 @@ function UsageBadgeActive(props) {
       title,
       onClick: () => setOpen((was) => !was)
     }, [
-      React10.createElement("span", { key: "dot", className: "dim-jh-badgeDot", "data-tone": tone }),
+      React13.createElement("span", { key: "dot", className: "dim-jh-badgeDot", "data-tone": tone }),
       collapsed
     ]),
     open ? renderPopover() : null
@@ -15210,15 +16976,15 @@ function UsageBadgeActive(props) {
   function renderPopover() {
     const stamp = snapshot === null ? "" : formatUpdatedAt(value?.generatedAt ?? snapshot.at);
     const children = [
-      React10.createElement("div", { key: "head", className: "dim-jh-badgeHead" }, [
-        React10.createElement("span", { key: "dot", className: "dim-jh-badgeDot", "data-tone": tone }),
-        React10.createElement("span", { key: "title", className: "dim-jh-badgeTitle" }, label),
-        React10.createElement(
+      React13.createElement("div", { key: "head", className: "dim-jh-badgeHead" }, [
+        React13.createElement("span", { key: "dot", className: "dim-jh-badgeDot", "data-tone": tone }),
+        React13.createElement("span", { key: "title", className: "dim-jh-badgeTitle" }, label),
+        React13.createElement(
           "span",
           { key: "at", className: "dim-jh-badgeAt" },
           snapshot === null ? "读取中…" : `${stamp === "" ? "已读取" : stamp}${value?.cached === true ? " · 缓存" : ""}`
         ),
-        React10.createElement("button", {
+        React13.createElement("button", {
           key: "auto",
           type: "button",
           className: "dim-jh-badgeAuto",
@@ -15230,8 +16996,8 @@ function UsageBadgeActive(props) {
           onClick: () => {
             void onToggleAutoCheckin();
           }
-        }, auto?.running === true ? "…" : React10.createElement("span", { className: "dim-jh-badgeAutoDot" })),
-        React10.createElement("button", {
+        }, auto?.running === true ? "…" : React13.createElement("span", { className: "dim-jh-badgeAutoDot" })),
+        React13.createElement("button", {
           key: "refresh",
           type: "button",
           className: "dim-jh-badgeRefresh",
@@ -15243,11 +17009,11 @@ function UsageBadgeActive(props) {
       ]),
       // 开关写入失败时单独一行说明：它属于设置写入，混进偏好那行会让人以为
       // 是「显示偏好」没保存。
-      autoError === "" ? null : React10.createElement("div", { key: "autoErr", className: "dim-jh-badgeFail", role: "alert" }, autoError),
+      autoError === "" ? null : React13.createElement("div", { key: "autoErr", className: "dim-jh-badgeFail", role: "alert" }, autoError),
       renderPreference()
     ];
     if (snapshot === null) {
-      children.push(React10.createElement("div", {
+      children.push(React13.createElement("div", {
         key: "placeholder",
         className: failed ? "dim-jh-badgeFail" : "dim-jh-badgeNote",
         role: failed ? "alert" : void 0
@@ -15264,7 +17030,7 @@ function UsageBadgeActive(props) {
   function wrapPopover(children) {
     const narrow = isNarrowViewport();
     if (!narrow) {
-      return React10.createElement("div", {
+      return React13.createElement("div", {
         className: "dim-jh-badgePop",
         style: POPOVER_ANCHOR_STYLE,
         ref: popRef
@@ -15277,7 +17043,7 @@ function UsageBadgeActive(props) {
       // 直接用 CSS 变量名作 key。
       "--dsh-composer-height": `${composerHeight}px`
     };
-    const node = React10.createElement("div", {
+    const node = React13.createElement("div", {
       className: "dim-jh-badgePop",
       style,
       ref: popRef
@@ -15286,14 +17052,14 @@ function UsageBadgeActive(props) {
     return (0, import_react_dom.createPortal)(node, document.body, "jet-hub-badge-pop");
   }
   function renderPreference() {
-    return React10.createElement("div", {
+    return React13.createElement("div", {
       key: "pref",
       className: "dim-jh-badgePref",
       // ⚠️ 三档的差别必须写清：auto 与 credits 在**有订阅时**表现不同
       //（auto 会回落，credits 不回落到订阅）—— 只说「优先显示哪个」会让人以为两档一样。
       title: "显示偏好：「自动」= 优先显示一共能用的余额（没有余额读数才显示订阅窗口/套餐）；「优先订阅」= 只看窗口与套餐；「只看积分」= 强制只显示余额，也是套餐判定不准时的兜底"
     }, [
-      ...BADGE_PREFERENCES.map((item) => React10.createElement("button", {
+      ...BADGE_PREFERENCES.map((item) => React13.createElement("button", {
         key: item,
         type: "button",
         className: "dim-jh-badgePrefBtn",
@@ -15302,7 +17068,7 @@ function UsageBadgeActive(props) {
           void onPickPreference(item);
         }
       }, BADGE_PREFERENCE_LABELS[item])),
-      prefError === "" ? null : React10.createElement("span", { key: "err", className: "dim-jh-badgeFail" }, prefError)
+      prefError === "" ? null : React13.createElement("span", { key: "err", className: "dim-jh-badgeFail" }, prefError)
     ]);
   }
   function renderSubscription() {
@@ -15312,47 +17078,47 @@ function UsageBadgeActive(props) {
       const rows = Array.isArray(subscription.accounts) ? subscription.accounts : [];
       const account = rows.find((row) => row?.ok === true) ?? rows[0];
       const windows = account === void 0 ? [] : quotaWindowsOf(account.windows ?? []);
-      return React10.createElement("div", { key: "sub", className: "dim-jh-badgeSection" }, [
-        React10.createElement("div", { key: "title", className: "dim-jh-badgeSectionTitle" }, "订阅额度"),
-        ...windows.length === 0 ? [React10.createElement(
+      return React13.createElement("div", { key: "sub", className: "dim-jh-badgeSection" }, [
+        React13.createElement("div", { key: "title", className: "dim-jh-badgeSectionTitle" }, "订阅额度"),
+        ...windows.length === 0 ? [React13.createElement(
           "div",
           { key: "empty", className: "dim-jh-badgeNote" },
           account?.ok === true ? "该账号没有额度窗口" : account?.error || "订阅额度不可用"
-        )] : [React10.createElement(
+        )] : [React13.createElement(
           "div",
           { key: "wins", className: "dim-jh-badgeWins" },
           windows.map(([type, windowLabel, win]) => {
             const percent = quotaPercentValue(win?.percentUsed);
             const left = quotaResetsIn(win?.resetsAt);
-            return React10.createElement("div", { key: type, className: "dim-jh-badgeWin" }, [
-              React10.createElement("span", { key: "l", className: "dim-jh-badgeWinLabel" }, windowLabel),
-              React10.createElement(
+            return React13.createElement("div", { key: type, className: "dim-jh-badgeWin" }, [
+              React13.createElement("span", { key: "l", className: "dim-jh-badgeWinLabel" }, windowLabel),
+              React13.createElement(
                 "div",
                 { key: "bar", className: "dim-jh-quotaBar" },
-                React10.createElement("div", {
+                React13.createElement("div", {
                   key: "fill",
                   className: "dim-jh-quotaBarFill",
                   "data-tone": quotaTone(percent),
                   style: { width: `${percent}%` }
                 })
               ),
-              React10.createElement("span", { key: "v", className: "dim-jh-badgeValue" }, formatQuotaPercent(percent)),
-              left === "" ? null : React10.createElement("span", { key: "r", className: "dim-jh-badgeWinReset", title: left }, left)
+              React13.createElement("span", { key: "v", className: "dim-jh-badgeValue" }, formatQuotaPercent(percent)),
+              left === "" ? null : React13.createElement("span", { key: "r", className: "dim-jh-badgeWinReset", title: left }, left)
             ]);
           })
         )]
       ]);
     }
     const groups = view.planGroups;
-    return React10.createElement("div", { key: "sub", className: "dim-jh-badgeSection" }, [
-      React10.createElement("div", { key: "title", className: "dim-jh-badgeSectionTitle" }, "订阅套餐"),
-      ...groups.length === 0 ? [React10.createElement("div", { key: "empty", className: "dim-jh-badgeNote" }, "没有可用的套餐包")] : groups.map((group) => React10.createElement("div", {
+    return React13.createElement("div", { key: "sub", className: "dim-jh-badgeSection" }, [
+      React13.createElement("div", { key: "title", className: "dim-jh-badgeSectionTitle" }, "订阅套餐"),
+      ...groups.length === 0 ? [React13.createElement("div", { key: "empty", className: "dim-jh-badgeNote" }, "没有可用的套餐包")] : groups.map((group) => React13.createElement("div", {
         key: `${group.name}\0${group.unit}`,
         className: "dim-jh-badgeRow"
       }, [
-        React10.createElement("div", { key: "head", className: "dim-jh-badgeRowHead" }, [
-          React10.createElement("span", { key: "l", className: "dim-jh-badgeRowName", title: group.name }, group.name),
-          React10.createElement(
+        React13.createElement("div", { key: "head", className: "dim-jh-badgeRowHead" }, [
+          React13.createElement("span", { key: "l", className: "dim-jh-badgeRowName", title: group.name }, group.name),
+          React13.createElement(
             "span",
             { key: "v", className: "dim-jh-badgeValue" },
             // ⚠️ 数值与单位之间**不留空格**（`100.00M / 200.00MToken`）：
@@ -15365,7 +17131,7 @@ function UsageBadgeActive(props) {
             `${formatUnits(group.remaining, group.unit) ?? "?"} / ${formatUnits(group.total, group.unit) ?? "?"}${group.label}`
           )
         ]),
-        React10.createElement(
+        React13.createElement(
           "div",
           { key: "note", className: "dim-jh-badgeRowNote" },
           [
@@ -15385,17 +17151,17 @@ function UsageBadgeActive(props) {
       limit: CREDITS_COLLAPSED_LIMIT,
       expanded: creditsExpanded
     });
-    return React10.createElement("div", { key: "credits", className: "dim-jh-badgeSection" }, [
+    return React13.createElement("div", { key: "credits", className: "dim-jh-badgeSection" }, [
       // 合计放进节标题右侧，省掉一整行
-      React10.createElement("div", { key: "title", className: "dim-jh-badgeSectionTitle" }, [
+      React13.createElement("div", { key: "title", className: "dim-jh-badgeSectionTitle" }, [
         // ⚠️ 节标题的单位标签走**纯函数**（`creditSectionLabel`），不在这里写三元：
         //   原写法是 `quotaGroup === undefined ? '积分' : unitLabel(...)` —— 那个
         //   兜底分支把 **ZCode 的 token** 冒充成了积分（真实缺陷，2026-10-05 复审
         //   PR !56 时发现），渲染成「积分 … 94.54MToken」自相矛盾的一屏。
         //   判据收进 `badge-model.js` 是为了能被单测锁死（组件里没法测 —— 本仓库
         //   node_modules 没有 react）。
-        React10.createElement("span", { key: "l" }, creditSectionLabel(view.groups)),
-        accounts.length === 0 || sum === "" ? null : React10.createElement(
+        React13.createElement("span", { key: "l" }, creditSectionLabel(view.groups)),
+        accounts.length === 0 || sum === "" ? null : React13.createElement(
           "span",
           { key: "sum", className: "dim-jh-badgeSectionSum" },
           // ⚠️ 「合计」二字只对**可累加的余额**成立。配额窗口是并行百分比，
@@ -15404,18 +17170,18 @@ function UsageBadgeActive(props) {
           quotaGroup === void 0 ? `合计 ${sum}` : sum
         )
       ]),
-      ...accounts.length === 0 ? [React10.createElement(
+      ...accounts.length === 0 ? [React13.createElement(
         "div",
         { key: "empty", className: "dim-jh-badgeNote" },
         value?.disabledCount > 0 ? "该渠道的账号全部已停用" : "该渠道还没有账号（可在 Jet Hub 设置页添加）"
-      )] : shown.map((row) => React10.createElement("div", { key: row.accountId, className: "dim-jh-badgeRow" }, [
-        React10.createElement("div", { key: "head", className: "dim-jh-badgeRowHead" }, [
-          React10.createElement("span", {
+      )] : shown.map((row) => React13.createElement("div", { key: row.accountId, className: "dim-jh-badgeRow" }, [
+        React13.createElement("div", { key: "head", className: "dim-jh-badgeRowHead" }, [
+          React13.createElement("span", {
             key: "l",
             className: "dim-jh-badgeRowName",
             title: row.nickname || row.accountId
           }, row.nickname || row.accountId),
-          React10.createElement("span", {
+          React13.createElement("span", {
             key: "v",
             className: "dim-jh-badgeValue",
             "data-tone": row.balance === null ? "warn" : "ok",
@@ -15426,7 +17192,7 @@ function UsageBadgeActive(props) {
         // 存在时才占一行。用户 2026-10-12 明确要求三档分色。
         row.balance === null ? null : renderSplitNote(splitParts(row.balance, windowDays, provider))
       ])),
-      hidden === 0 ? null : React10.createElement("button", {
+      hidden === 0 ? null : React13.createElement("button", {
         key: "more",
         type: "button",
         className: "dim-jh-badgeMore",
@@ -15437,14 +17203,14 @@ function UsageBadgeActive(props) {
   }
   function renderNote(text) {
     if (typeof text !== "string" || text.length === 0) return null;
-    return React10.createElement("div", { key: "note", className: "dim-jh-badgeRowNote" }, text);
+    return React13.createElement("div", { key: "note", className: "dim-jh-badgeRowNote" }, text);
   }
   function renderSplitNote(parts) {
     if (!Array.isArray(parts) || parts.length === 0) return null;
     const children = [];
     parts.forEach((part, index) => {
-      if (index > 0) children.push(React10.createElement("span", { key: `sep-${part.key}`, className: "dim-jh-badgeNoteSep" }, " · "));
-      children.push(React10.createElement("span", {
+      if (index > 0) children.push(React13.createElement("span", { key: `sep-${part.key}`, className: "dim-jh-badgeNoteSep" }, " · "));
+      children.push(React13.createElement("span", {
         key: part.key,
         className: "dim-jh-badgeNotePart",
         "data-tone": part.tone,
@@ -15464,14 +17230,14 @@ function UsageBadgeActive(props) {
         ...part.countdown === void 0 ? {} : { title: `最早作废：${part.countdown}` }
       }, part.countdown === void 0 ? part.text : `${part.text}（${part.countdown}）`));
     });
-    return React10.createElement("div", { key: "note", className: "dim-jh-badgeRowNote" }, children);
+    return React13.createElement("div", { key: "note", className: "dim-jh-badgeRowNote" }, children);
   }
   function renderClaim() {
     const canClaimCurrent = supportsDailyCheckin(provider);
     const allBusy = claiming === "all";
-    return React10.createElement("div", { key: "claim", className: "dim-jh-badgeSection dim-jh-badgeClaim" }, [
-      React10.createElement("div", { key: "row", className: "dim-jh-badgeClaimRow" }, [
-        canClaimCurrent ? React10.createElement("button", {
+    return React13.createElement("div", { key: "claim", className: "dim-jh-badgeSection dim-jh-badgeClaim" }, [
+      React13.createElement("div", { key: "row", className: "dim-jh-badgeClaimRow" }, [
+        canClaimCurrent ? React13.createElement("button", {
           key: "cur",
           type: "button",
           className: "dim-jh-badgeAction",
@@ -15486,16 +17252,19 @@ function UsageBadgeActive(props) {
             void onClaim();
           }
         }, claiming === "current" ? "领取中…" : "签到（本渠道）") : null,
-        React10.createElement("button", {
+        React13.createElement("button", {
           key: "all",
           type: "button",
           className: "dim-jh-badgeAction",
           disabled: claiming !== null,
-          // ⚠️ 渠道数是**从能力表数出来的快照**（`registry.credits.dailyCheckin === true`
-          // 的家数）—— 加一个支持签到的渠道就必须改这里。
-          // 2026-10-16 合并审计发现：加 `minimaxintl` 后能力表已 9 → **10**，
-          // 而此处仍写 9（**零守卫**：全仓没有断言这个数字的用例）。
-          title: `串行签到全部支持签到的渠道（10 个；WorkBuddy 国际版 / Cline / Raccoon 后端没有签到接口）${auto?.enabled === true ? "；自动签到已开启，每天首次启动 DSH 时会自动执行一次" : ""}`,
+          // ⚠️ 渠道数**必须从能力表派生**（`registry.credits.dailyCheckin === true` 的家数）。
+          // 2026-10-16 合并审计发现「加 `minimaxintl` 后能力表已 9 → 10，此处仍写 9」
+          // 且**零守卫**（全仓没有断言这个数字的用例）。
+          // 2026-11-01 二审：该数字**又漂了 6 家**（实测已是 16 家，这里仍写 10）
+          // —— 硬编码必然腐坏，改成 `checkinProviders().length` 现算（该函数本文件已 import）。
+          // 2026-11-01 三审（本分支）：自动签到的语义已从「每天首次启动」改成「每天两个时段」，
+          // 文案必须跟着改，否则与面板「下次执行：21:00」自相矛盾。
+          title: `串行签到全部支持签到的渠道（${checkinProviders().length} 个；WorkBuddy 国际版 / Cline / Raccoon 后端没有签到接口）${auto?.enabled === true ? "；自动签到已开启，每天按设定时刻自动执行" : ""}`,
           onClick: () => {
             void onClaimAll();
           }
@@ -15509,19 +17278,19 @@ function UsageBadgeActive(props) {
        * （WorkBuddy 国际版 / Cline / Raccoon 后端没有签到接口，Raccoon 的每日积分由
        * 服务端自动发放）。少了这一句，用户只能靠猜。
        */
-      canClaimCurrent ? null : React10.createElement(
+      canClaimCurrent ? null : React13.createElement(
         "div",
         { key: "nocount", className: "dim-jh-badgeNote" },
         "该渠道没有签到接口，签到请用「全部渠道签到」"
       ),
-      claimNotice === null ? null : React10.createElement("div", {
+      claimNotice === null ? null : React13.createElement("div", {
         key: "notice",
         className: "dim-jh-badgeNotice",
         "data-tone": claimNotice.tone
       }, claimNotice.text),
       // 「需要用户操作」的提示单独列出（后端显式字段 actionRequired），
       // 混进计数行会被读漏，而它的价值就在于被看到。
-      ...(claimNotice?.notes || []).map((message, index) => React10.createElement("div", {
+      ...(claimNotice?.notes || []).map((message, index) => React13.createElement("div", {
         key: `note-${index}`,
         className: "dim-jh-badgeNotice",
         "data-tone": "warn"
@@ -15535,12 +17304,12 @@ function UsageBadgeActive(props) {
     const running = auto.running === true;
     if (!running && channels.length === 0) return null;
     const stamp = running ? "" : formatUpdatedAt(auto.lastAt);
-    return React10.createElement("div", { key: "autostatus", className: "dim-jh-badgeAutoStatus" }, [
+    return React13.createElement("div", { key: "autostatus", className: "dim-jh-badgeAutoStatus" }, [
       // 小关闭按钮在**文字上方**（用户：「在文字上方放个小按钮，点击直接关闭」）。
-      React10.createElement(
+      React13.createElement(
         "div",
         { key: "closerow", className: "dim-jh-badgeAutoCloseRow" },
-        React10.createElement("button", {
+        React13.createElement("button", {
           key: "close",
           type: "button",
           className: "dim-jh-badgeAutoClose",
@@ -15551,15 +17320,15 @@ function UsageBadgeActive(props) {
           }
         }, "×")
       ),
-      React10.createElement(
+      React13.createElement(
         "div",
         { key: "head", className: "dim-jh-badgeAutoStatusHead" },
         running ? "自动签到 · 进行中…" : `自动签到${stamp === "" ? "" : ` · ${stamp}`}：${auto.lastResult}`
       ),
-      channels.length === 0 ? null : React10.createElement(
+      channels.length === 0 ? null : React13.createElement(
         "div",
         { key: "channels", className: "dim-jh-badgeAutoChannels" },
-        channels.map((entry2, index) => React10.createElement("span", {
+        channels.map((entry2, index) => React13.createElement("span", {
           key: `${entry2.provider}-${index}`,
           className: "dim-jh-badgeAutoChannel"
         }, `${providerLabel2(entry2.provider)} ${entry2.text}`))
@@ -15572,7 +17341,7 @@ function UsageBadgeActive(props) {
     if (view.failedCount > 0) parts.push(view.incompleteNote === "" ? `${view.failedCount} 个账号读取失败` : view.incompleteNote);
     if (failed && snapshot !== null) parts.push("本次刷新失败，显示的是上一次读数");
     if (parts.length === 0) return null;
-    return React10.createElement("div", { key: "foot", className: "dim-jh-badgeFoot" }, parts.join(" · "));
+    return React13.createElement("div", { key: "foot", className: "dim-jh-badgeFoot" }, parts.join(" · "));
   }
 }
 function balanceLine(balance) {
@@ -15633,13 +17402,13 @@ function summarizeClaim(result) {
   };
 }
 
-// plugin-src/client/zcode-reset-launcher.js
-var React11 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/zcode-reset-launcher.js
+var React14 = __toESM(require("react"), 1);
 var import_client = require("react-dom/client");
 function ZcodeComposerResetDialog({ rpcCall, onClose, onChanged, model }) {
-  const [accounts, setAccounts] = React11.useState([]), [accountId, setAccountId] = React11.useState(""), [sources, setSources] = React11.useState(null), [error, setError] = React11.useState(""), [loading, setLoading] = React11.useState(true);
-  const closeRef = React11.useRef(null);
-  React11.useEffect(() => {
+  const [accounts, setAccounts] = React14.useState([]), [accountId, setAccountId] = React14.useState(""), [sources, setSources] = React14.useState(null), [error, setError] = React14.useState(""), [loading, setLoading] = React14.useState(true);
+  const closeRef = React14.useRef(null);
+  React14.useEffect(() => {
     let alive = true;
     closeRef.current?.focus();
     rpcCall("account.list", { provider: "zcode" }).then((value) => {
@@ -15657,7 +17426,7 @@ function ZcodeComposerResetDialog({ rpcCall, onClose, onChanged, model }) {
       alive = false;
     };
   }, [rpcCall]);
-  React11.useEffect(() => {
+  React14.useEffect(() => {
     setSources(null);
     setError("");
     if (!accountId) return;
@@ -15675,7 +17444,7 @@ function ZcodeComposerResetDialog({ rpcCall, onClose, onChanged, model }) {
     };
   }, [accountId, rpcCall]);
   const account = accounts.find((a) => a.id === accountId), selected = sources?.sources.find((s) => s.id === sources.selected);
-  return React11.createElement(
+  return React14.createElement(
     "div",
     { className: "dim-jh-modalOverlay", style: { zIndex: 4e3 }, onClick: (e) => {
       if (e.target === e.currentTarget) onClose();
@@ -15696,19 +17465,19 @@ function ZcodeComposerResetDialog({ rpcCall, onClose, onChanged, model }) {
         }
       }
     } },
-    React11.createElement(
+    React14.createElement(
       "section",
       { role: "dialog", "aria-modal": true, "aria-label": "ZCode 套餐额度重置", className: "dim-jh-modal" },
-      React11.createElement("header", { className: "dim-jh-modalHead" }, React11.createElement("strong", null, "ZCode · 重置额度"), React11.createElement("button", { ref: closeRef, type: "button", className: "dim-jh-btn", onClick: onClose, "aria-label": "关闭额度重置" }, "关闭")),
-      React11.createElement(
+      React14.createElement("header", { className: "dim-jh-modalHead" }, React14.createElement("strong", null, "ZCode · 重置额度"), React14.createElement("button", { ref: closeRef, type: "button", className: "dim-jh-btn", onClick: onClose, "aria-label": "关闭额度重置" }, "关闭")),
+      React14.createElement(
         "div",
         { className: "dim-jh-modalBody" },
-        model ? React11.createElement("p", { className: "dim-jh-hint" }, "当前模型：" + model) : null,
-        React11.createElement("label", null, "ZCode 账号", React11.createElement("select", { "aria-label": "重置额度的 ZCode 账号", value: accountId, onChange: (e) => setAccountId(e.target.value), style: { width: "100%", minHeight: 40 } }, React11.createElement("option", { value: "" }, "请选择账号…"), accounts.map((a) => React11.createElement("option", { key: a.id, value: a.id }, a.nickname || a.accountName || "ZCode 账号")))),
-        loading ? React11.createElement("p", { role: "status" }, "正在读取账号和套餐…") : null,
-        error ? React11.createElement("p", { role: "alert" }, error) : null,
-        selected && selected.kind !== "individual" && selected.kind !== "team" ? React11.createElement("p", { className: "dim-jh-hint" }, "当前调用来源为“" + selected.label + "”。此重置不会增加该来源余额，请在下面明确选择要重置的编程套餐。") : null,
-        account && sources ? React11.createElement(ZcodeResetPanel, { key: accountId, account: { ...account, zcodeSource: sources.selected }, sources: sources.sources, rpcCall, embedded: true, onChanged }) : null
+        model ? React14.createElement("p", { className: "dim-jh-hint" }, "当前模型：" + model) : null,
+        React14.createElement("label", null, "ZCode 账号", React14.createElement("select", { "aria-label": "重置额度的 ZCode 账号", value: accountId, onChange: (e) => setAccountId(e.target.value), style: { width: "100%", minHeight: 40 } }, React14.createElement("option", { value: "" }, "请选择账号…"), accounts.map((a) => React14.createElement("option", { key: a.id, value: a.id }, a.nickname || a.accountName || "ZCode 账号")))),
+        loading ? React14.createElement("p", { role: "status" }, "正在读取账号和套餐…") : null,
+        error ? React14.createElement("p", { role: "alert" }, error) : null,
+        selected && selected.kind !== "individual" && selected.kind !== "team" ? React14.createElement("p", { className: "dim-jh-hint" }, "当前调用来源为“" + selected.label + "”。此重置不会增加该来源余额，请在下面明确选择要重置的编程套餐。") : null,
+        account && sources ? React14.createElement(ZcodeResetPanel, { key: accountId, account: { ...account, zcodeSource: sources.selected }, sources: sources.sources, rpcCall, embedded: true, onChanged }) : null
       )
     )
   );
@@ -15729,7 +17498,7 @@ function installZcodeComposerReset({ rpcCall }) {
     node.dataset.dshZcodeReset = "";
     document.body.appendChild(node);
     root = (0, import_client.createRoot)(node);
-    root.render(React11.createElement(ZcodeComposerResetDialog, { rpcCall, onClose: close, onChanged, model }));
+    root.render(React14.createElement(ZcodeComposerResetDialog, { rpcCall, onClose: close, onChanged, model }));
   };
   globalThis.__dshOpenZcodeReset = launch;
   return () => {
@@ -15738,11 +17507,11 @@ function installZcodeComposerReset({ rpcCall }) {
   };
 }
 
-// plugin-src/client/panel-entry.js
-var React13 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/panel-entry.js
+var React16 = __toESM(require("react"), 1);
 
-// plugin-src/client/error-boundary.js
-var React12 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/error-boundary.js
+var React15 = __toESM(require("react"), 1);
 var NO_ERROR = Symbol("jet-hub:no-error");
 function describeThrown(error) {
   try {
@@ -15759,7 +17528,7 @@ function describeThrown(error) {
 }
 function withErrorBoundary(Inner, options) {
   const label = options !== null && typeof options === "object" && typeof options.label === "string" && options.label.length > 0 ? options.label : "这个面板";
-  class PanelErrorBoundary extends React12.Component {
+  class PanelErrorBoundary extends React15.Component {
     constructor(props) {
       super(props);
       this.state = { error: NO_ERROR };
@@ -15772,9 +17541,9 @@ function withErrorBoundary(Inner, options) {
     }
     render() {
       const error = this.state.error;
-      if (error === NO_ERROR) return React12.createElement(Inner, this.props);
+      if (error === NO_ERROR) return React15.createElement(Inner, this.props);
       const message = describeThrown(error);
-      return React12.createElement(
+      return React15.createElement(
         "div",
         {
           className: "dim-jh-probeNotice",
@@ -15782,8 +17551,8 @@ function withErrorBoundary(Inner, options) {
           role: "alert",
           style: { margin: "16px" }
         },
-        React12.createElement("div", null, `${label}渲染失败，已拦住 —— 其余页面仍可正常使用，不必重启。`),
-        React12.createElement("div", { style: { marginTop: "6px", fontFamily: "monospace", fontSize: "12px" } }, message),
+        React15.createElement("div", null, `${label}渲染失败，已拦住 —— 其余页面仍可正常使用，不必重启。`),
+        React15.createElement("div", { style: { marginTop: "6px", fontFamily: "monospace", fontSize: "12px" } }, message),
         // ⚠️ **必须给出可自我恢复的出路**（2026-10-25 审计 A3-2）。
         //
         // 本 fallback 是**粘性**的：没有 `key`、也没有 `componentDidUpdate`
@@ -15796,23 +17565,23 @@ function withErrorBoundary(Inner, options) {
         //
         // ⇒ 两件事：①给一个**就地重试**（`setState` 回 `NO_ERROR`，子树随即重挂载，
         // 比让用户摸索「关掉再打开」快得多）；②把那条路径**写出来**当兜底。
-        React12.createElement(
+        React15.createElement(
           "div",
           { style: { marginTop: "8px" } },
-          React12.createElement("button", {
+          React15.createElement("button", {
             type: "button",
             className: "dim-jh-btn",
             onClick: () => {
               this.setState({ error: NO_ERROR });
             }
           }, "重试"),
-          React12.createElement(
+          React15.createElement(
             "span",
             { style: { marginLeft: "8px", opacity: 0.75 } },
             "也可以关掉这一节再重新打开（或切到别的页面再切回来）来恢复。"
           )
         ),
-        React12.createElement(
+        React15.createElement(
           "div",
           { style: { marginTop: "6px" } },
           "这是插件的缺陷，不是你操作错了。把上面这行报错连同「当时点了什么」一起反馈即可。"
@@ -15824,7 +17593,7 @@ function withErrorBoundary(Inner, options) {
   return PanelErrorBoundary;
 }
 
-// plugin-src/client/panel-entry-store.js
+// vendor/dsh-codearts-auth/plugin-src/client/panel-entry-store.js
 var VALID_ENTRIES = ["sidebar", "settings"];
 var FALLBACK_ENTRY = "sidebar";
 var JET_HUB_PANEL_KEY = "jet-hub";
@@ -15935,12 +17704,12 @@ async function setPanelEntry(rpcCall, next) {
   return confirmed;
 }
 
-// plugin-src/client/panel-entry.js
+// vendor/dsh-codearts-auth/plugin-src/client/panel-entry.js
 var JetHubPageForSettings = withErrorBoundary(JetHubPage, { label: "Jet Hub 设置页" });
 var JetHubPageForMain = withErrorBoundary(JetHubPage, { label: "Jet Hub 面板" });
 function JetHubSidebarIcon({ size }) {
   const px = typeof size === "number" && size > 0 ? size : 16;
-  return React13.createElement(
+  return React16.createElement(
     "svg",
     {
       width: px,
@@ -15950,21 +17719,21 @@ function JetHubSidebarIcon({ size }) {
       xmlns: "http://www.w3.org/2000/svg",
       "aria-hidden": "true"
     },
-    React13.createElement("path", {
+    React16.createElement("path", {
       d: "M8 1.7 13.5 4.85v6.3L8 14.3 2.5 11.15v-6.3z",
       stroke: "currentColor",
       strokeWidth: 1.35,
       strokeLinejoin: "round"
     }),
-    React13.createElement("circle", { cx: 8, cy: 8, r: 1.7, fill: "currentColor" })
+    React16.createElement("circle", { cx: 8, cy: 8, r: 1.7, fill: "currentColor" })
   );
 }
 function JetHubMainPanel({ rpcCall, chatGptCall, isolatedLoginCall }) {
   if (typeof rpcCall !== "function") return null;
-  return React13.createElement(
+  return React16.createElement(
     "div",
     { className: "dim-jh-panelHost", "data-plugin": "dsh-providers-hub" },
-    React13.createElement(JetHubPageForMain, { rpcCall, chatGptCall, isolatedLoginCall })
+    React16.createElement(JetHubPageForMain, { rpcCall, chatGptCall, isolatedLoginCall })
   );
 }
 function registerJetHubPanelEntries(ctx, rpcCall, local = {}) {
@@ -16060,8 +17829,8 @@ function registerJetHubPanelEntries(ctx, rpcCall, local = {}) {
   });
 }
 
-// plugin-src/client/settings-card.js
-var React14 = __toESM(require("react"), 1);
+// vendor/dsh-codearts-auth/plugin-src/client/settings-card.js
+var React17 = __toESM(require("react"), 1);
 var import_dsh_client_ui_primitives = require("@deepseek-ai/dsh-client-ui-primitives");
 var OPTIONS = [
   { id: "sidebar", label: "仅侧栏" },
@@ -16075,17 +17844,17 @@ function currentEntry() {
   return panelEntry() ?? "sidebar";
 }
 function JetHubPanelEntryCard({ rpcCall }) {
-  const [entry2, setEntry] = React14.useState(currentEntry);
-  const [open, setOpen] = React14.useState(false);
-  const [busy, setBusy] = React14.useState(false);
-  const [readFailed2, setReadFailed] = React14.useState(() => panelEntryReadFailed());
-  const [writeFailed, setWriteFailed] = React14.useState(false);
-  const busyRef = React14.useRef(false);
-  React14.useEffect(() => subscribePanelEntry(() => {
+  const [entry2, setEntry] = React17.useState(currentEntry);
+  const [open, setOpen] = React17.useState(false);
+  const [busy, setBusy] = React17.useState(false);
+  const [readFailed2, setReadFailed] = React17.useState(() => panelEntryReadFailed());
+  const [writeFailed, setWriteFailed] = React17.useState(false);
+  const busyRef = React17.useRef(false);
+  React17.useEffect(() => subscribePanelEntry(() => {
     setEntry(currentEntry());
     setReadFailed(panelEntryReadFailed());
   }), []);
-  React14.useEffect(() => {
+  React17.useEffect(() => {
     if (typeof rpcCall !== "function") return;
     void loadPanelEntry(rpcCall).then(() => {
       setEntry(currentEntry());
@@ -16093,7 +17862,7 @@ function JetHubPanelEntryCard({ rpcCall }) {
     });
   }, [rpcCall]);
   const selectedLabel = OPTIONS.find((option) => option.id === entry2)?.label ?? OPTIONS[0].label;
-  const choose = React14.useCallback(async (next) => {
+  const choose = React17.useCallback(async (next) => {
     if (typeof rpcCall !== "function") return;
     if (busyRef.current) return;
     busyRef.current = true;
@@ -16110,24 +17879,24 @@ function JetHubPanelEntryCard({ rpcCall }) {
       setBusy(false);
     }
   }, [rpcCall]);
-  return React14.createElement(
+  return React17.createElement(
     "div",
     { className: "dim-jh-cardStack" },
-    React14.createElement(
+    React17.createElement(
       "div",
       { className: "dim-jh-cardRow" },
-      React14.createElement(
+      React17.createElement(
         "div",
         { className: "dim-jh-cardRowText" },
-        React14.createElement("div", { className: "dim-jh-cardTitle" }, CARD_TITLE),
-        React14.createElement(
+        React17.createElement("div", { className: "dim-jh-cardTitle" }, CARD_TITLE),
+        React17.createElement(
           "div",
           { className: "dim-jh-cardDesc" },
           // 两种失败各有各的说法：读失败说「读到的是默认值」，写失败说「刚才那次没存上」。
           writeFailed ? CARD_DESC_WRITE_FAILED : readFailed2 ? CARD_DESC_READ_FAILED : CARD_DESC
         )
       ),
-      React14.createElement(import_dsh_client_ui_primitives.Menu, {
+      React17.createElement(import_dsh_client_ui_primitives.Menu, {
         open,
         onClose: () => setOpen(false),
         items: OPTIONS.map((option) => ({ id: option.id, label: option.label })),
@@ -16140,7 +17909,7 @@ function JetHubPanelEntryCard({ rpcCall }) {
         // ⚠️ **必须开**：卡片在插件页的滚动 detail 列里，就地展开的列表会被
         //    overflow 裁剪（两个参考实现都踩过并留了这条注释）。
         portal: true,
-        anchor: React14.createElement(
+        anchor: React17.createElement(
           "button",
           {
             type: "button",
@@ -16151,14 +17920,14 @@ function JetHubPanelEntryCard({ rpcCall }) {
             onClick: () => setOpen((value) => !value)
           },
           selectedLabel,
-          React14.createElement(import_dsh_client_ui_primitives.IconChevronDownOutlineRegular, { className: "dim-jh-cardChevron" })
+          React17.createElement(import_dsh_client_ui_primitives.IconChevronDownOutlineRegular, { className: "dim-jh-cardChevron" })
         )
       })
     )
   );
 }
 
-// plugin-src/client/index.js
+// vendor/dsh-codearts-auth/plugin-src/client/index.js
 var name = "jet-hub-client";
 var inject = ["slots", "connection", "modelDirectories", "sessions"];
 var JetHubPanelEntryCardGuarded = withErrorBoundary(JetHubPanelEntryCard, { label: "插件详情页卡片" });

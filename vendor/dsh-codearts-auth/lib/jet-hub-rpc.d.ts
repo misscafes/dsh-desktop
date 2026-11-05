@@ -42,6 +42,7 @@ import type { AccioAuth } from './accio-auth.js';
 import type { AutoclawAuth } from './autoclaw-auth.js';
 import type { ModelscopeAuth } from './modelscope-auth.js';
 import type { QiniuAuth } from './qiniu-auth.js';
+import type { MonkeycodeAuth } from './monkeycode-auth.js';
 import { type AstudioAuth } from './astudio-auth.js';
 import { type MagicrewAuth } from './magicrew-auth.js';
 import type { CodelyAuth } from './codely-auth-service.js';
@@ -72,6 +73,7 @@ import { collectBuddyGrowth } from './buddy-growth.js';
  * 消费）。别再回到这里找。
  */
 export { collectBuddyGrowth };
+import type { BaizhiAuth } from './baizhi-auth.js';
 import type { ProviderAccountEntry, RpcCreditsStatusResponse, RpcCreditsClaimAllResponse, RpcBuddyGrowthAccountResult, RpcCreditsClaimSummary, RpcCreditsBalanceExtra, RpcCreditsBalancesResponse, CatalogHealth } from './types.js';
 /** Jet Hub RPC API 路径 */
 export declare const JET_HUB_API_PATH = "/api/jet-hub";
@@ -656,6 +658,20 @@ export interface JetHubAuths {
      * spy 收不到注册循环的调用（本仓库复发过 6 次）。
      */
     readonly magicrew: MagicrewAuth;
+    /**
+     * **MagiCrew 国际站**（`magicrewintl`，2026-11-01 用户要求）。
+     *
+     * ⚠️ 与 `magicrew` **共用同一个 `MagicrewAuth` 类**（两站只差产品配置），
+     * 故类型相同、只是**另一个实例** —— 与 `minimax` / `minimaxintl`、
+     * `qoder` / `qodercn` 同型。
+     * ⚠️ 两站账号体系**物理隔离**（同一个 Go 服务的两个数据面）、凭据 ref 前缀不同
+     * （`MAGICREW_*` / `MAGICREWINTL_*`）。若这里的**键与值接错**，症状是
+     * 「国际站账号的续期去刷了国内站凭据」，而 `authOf` 会把国际站账号
+     * 分派到**国内站实例**上。
+     * ⚠️ 值必须是 `index.ts` 里 `registerProviderRuntime` 的 `registry` 数组中
+     * `['magicrewintl', magicrewIntlAuth]` 的**同一个对象**（同 `magicrew` 那条）。
+     */
+    readonly magicrewintl: MagicrewAuth;
     readonly autoclaw: AutoclawAuth;
     /**
      * **AutoClaw 国际版**（`autoclawintl`）。
@@ -683,6 +699,36 @@ export interface JetHubAuths {
      * ⚠️ 值是 `QiniuAuth` **Service 实例**，与 modelscope 同款。
      */
     readonly qiniu: QiniuAuth;
+    /**
+     * MonkeyCode —— **本 fork 独有**（2026-11-02）。
+     *
+     * ⚠️ 值是 `MonkeycodeAuth` **Service 实例**，与 modelscope / qiniu 同款。
+     * ⚠️ 它与 qiniu 都是「无 refresh 端点」的静态 Key 渠道 ⇒ 刻意**不进**
+     * `SELF_HEAL_REFRESHABLE_PROVIDERS`，而是登记在
+     * `tests/unit/credits-balance-self-heal.spec.ts` 的 `SELF_HEAL_EXEMPT`
+     * 豁免表里（带可核对理由）。漏登记即红 —— 那张表是反向守卫。
+     */
+    readonly monkeycode: MonkeycodeAuth;
+    /**
+     * MonkeyCode 国际站（`monkeycode-ai.net`，2026-11-02）—— 与国内站**独立部署**：
+     * 账号池、会话 cookie、网关凭据完全不通用（实测国内 cookie 打国际站回 401）。
+     *
+     * ⚠️ 与 `monkeycode` 是**同一个类的两个实例**（只差 `product`）⇒
+     * `probeById` / `WRITES_RATE_LIMIT_PROVIDERS` / ref 前缀表 / 积分表每处都要
+     * 两站到位，漏一处静默失效（与 `minimax` / `minimaxintl` 同型）。
+     * ⚠️ 同样**不进** `SELF_HEAL_REFRESHABLE_PROVIDERS`，在
+     * `SELF_HEAL_EXEMPT` 里登记理由。
+     */
+    readonly monkeycodeintl: MonkeycodeAuth;
+    /**
+     * 百智云（`baizhi`，2026-11-02）—— 静态 `sk-…` Key 直连
+     * `ai-models.app.baizhi.cloud`，**按量计费**、无每日额度/积分/签到。
+     *
+     * ⚠️ 它与 monkeycode 两站、qiniu 同为「无 refresh 端点」的静态 Key 渠道 ⇒
+     *    刻意**不进** `SELF_HEAL_REFRESHABLE_PROVIDERS`，由
+     *    `tests/unit/credits-balance-self-heal.spec.ts` 的 `SELF_HEAL_EXEMPT` 记录理由。
+     */
+    readonly baizhi: BaizhiAuth;
 }
 /**
  * 按 provider id 取 auth 实例。

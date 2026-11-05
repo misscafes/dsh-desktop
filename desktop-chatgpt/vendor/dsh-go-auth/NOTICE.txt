@@ -1,0 +1,5 @@
+本目录 bridge.mjs、index.mjs 及 bridge.test.mjs 来自 ccch1mneyyy/dsh-Go：
+https://github.com/ccch1mneyyy/dsh-Go
+固定提交 aa0daddb25b107ab47eeb78d8facc136af0e4aa9。
+上述源文件各自声明 SPDX-License-Identifier: MIT，沿用其 MIT 许可；本次未复制项目其它采用不同许可的代码。
+测试仅调整本地 import 路径。桌面端只公开 ChatGPT/Codex 的操作入口。

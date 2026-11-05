@@ -43,6 +43,17 @@ export function inheritCustomizationContract(installedDir, candidateDir) {
         if (!next.requiredProviders.includes(provider))
             throw Error(`JetHub 升级将丢失渠道 ${provider}；保留当前程序`);
     validateCustomizationSource(candidateDir);
+    const digest = createHash('sha256').update(readFileSync(resolve(installedDir, 'customization-contract.json'))).digest('hex');
+    const reviewed = next.reviewedPredecessors?.[digest];
+    if (reviewed?.upstreamCommit === old.upstreamCommit && reviewed.review) {
+        // 只接收本次三方合并已复核的确切前版；先验证前版没有被本地改写。
+        validateCustomizationSource(installedDir);
+        for (const feature of old.features ?? []) {
+            if (!next.features?.includes(feature))
+                throw Error(`JetHub 升级将丢失定制功能 ${feature}；保留当前程序`);
+        }
+        return { ok: true, family: next.family, requiredProviders: next.requiredProviders, reviewedFrom: digest };
+    }
     // 已批准定制的程序逐字保持才可自动继承；真正需要改这些文件时由维护流程复核。
     checkFiles(candidateDir, old.runtimeFingerprints);
     return { ok: true, family: next.family, requiredProviders: next.requiredProviders };

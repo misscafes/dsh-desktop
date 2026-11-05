@@ -27,7 +27,7 @@ window.__ModuleLoader__ = {load({factory}) {window.picker = factory(id => ({
   '@deepseek-ai/dsh-client-ui-primitives':shared['@deepseek-ai/dsh-client-ui-primitives']
 }[id]));}};
 ${tested}
-const groups = Array.from({length:18}, (_,n)=>({id:'api-'+n,name:n===0?'聚合 API':n===1?'CodeBuddy (腾讯)':'来源 '+n,models:Array.from({length:40},(_,m)=>({id:m===0?'deepseek-v4-flash':m===1?'glm-5.3':'model-'+m,name:m===0?'DeepSeek V4 Flash':m===1?'GLM 5.3':m===2?'超长模型名称 ' + 'ABCDEFGHIJKLMNOP'.repeat(5):'Model '+m,...m===0?{reasoning:{defaultEffort:'high',efforts:[{id:'low',name:'Low'},{id:'high',name:'High'}]}}:{}}))}));
+const groups = Array.from({length:18}, (_,n)=>({id:'api-'+n,name:n===0?'聚合 API':n===1?'CodeBuddy (腾讯)':'来源 '+n,models:Array.from({length:40},(_,m)=>({id:m===0?'deepseek-v4-flash':m===1?'glm-5.3':'model-'+m,name:m===0?'DeepSeek V4 Flash':m===1?'GLM 5.3':m===2?'超长模型名称 ' + 'ABCDEFGHIJKLMNOP'.repeat(5):'Model '+m,...m===0?{reasoning:{efforts:[{id:'minimal',name:'Minimal'},{id:'low',name:'Low'},{id:'medium',name:'Medium'},{id:'high',name:'High'},{id:'xhigh',name:'Xhigh'},{id:'max',name:'Max'},{id:'custom',name:'自定义档位'}]}}:{}}))}));
 window.calls=[]; window.loads=0; window.reject=false; window.deferred=false;
 window.store=createSnapshotStore({current:{provider:'api-1',model:'deepseek-v4-flash',reasoningEffort:'high'},groups,status:'ready',pending:null,error:null,failures:[]});
 const t=(key,args={})=>({'menu.model':'模型','trigger.fallback':'请选择模型','trigger.selectAria':'请选择模型','trigger.aria':'选择模型，当前 '+args.model,'effort.providerDefault':'Default','status.loading':'正在刷新模型列表…','action.reload':'重新加载','search.clear':'清除搜索','error.action':'模型操作失败：'+args.message,'error.sessionInUse':'当前会话已被占用','warning.groupLoad':args.name+' 加载失败：'+args.message})[key]??key;
@@ -108,8 +108,9 @@ try {
     assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('dsh:model-picker:v1')).recent.some(v=>v.provider==='api-1')),false);
     await page.evaluate(()=>{window.reject=false;});await search.fill('codebuddy deepseekv4');await search.press('Enter');await page.getByRole('dialog').waitFor({state:'hidden'});
     // Reasoning uses unchanged Host metadata. Favorites survive a reload.
-    await page.reload();await open();await page.getByRole('button',{name:'推理等级 · High',exact:true}).click();
-    await page.getByRole('menuitemradio',{name:'Low',exact:true}).click();await page.getByRole('dialog').waitFor({state:'hidden'});
+    await page.reload();await open();await page.getByRole('button',{name:'推理等级 · 高',exact:true}).click();
+    assert.deepEqual(await page.getByRole('menuitemradio').allTextContents(), ['默认', '极简', '低', '中', '高✓', '极高', '最高', '自定义档位']);
+    await page.getByRole('menuitemradio',{name:'低',exact:true}).click();await page.getByRole('dialog').waitFor({state:'hidden'});
     assert.deepEqual(await page.evaluate(()=>window.calls.at(-1)),{provider:'api-1',model:'deepseek-v4-flash',reasoningEffort:'low'});
     await open();await page.getByRole('button',{name:'收藏',exact:true}).click();assert.equal(await rows.count(),1);assert.equal(await rows.first().getAttribute('data-provider'),'api-3');
     await page.getByRole('button',{name:'取消收藏 GLM 5.3 · 来源 3',exact:true}).click();assert.equal(await rows.count(),0);

@@ -232,7 +232,10 @@ export function createOpenAiGateway(options) {
         const { groups, effortViews } = await resolveGatewayModelMetadata(options.llm, listed, (provider, error) => {
             logger.warn(`[openai-gateway] ${provider}：${describe(error)}`);
         });
-        jsonResponse(response, 200, { object: 'list', data: toOpenAiModels(groups, effortViews) });
+        jsonResponse(response, 200, {
+            object: 'list',
+            data: toOpenAiModels(groups, effortViews),
+        });
     };
     /**
      * `GET /v1/reasoning-efforts`：**思考档位对照表**（本网关特有的只读端点）。

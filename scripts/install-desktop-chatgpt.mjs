@@ -24,7 +24,7 @@ export async function installDesktopChatGpt(profile, modules) {
   let old = false, installed = false;
   try {
     await mkdir(staging, { recursive: true, mode: 0o700 });
-    for (const name of ['package.json', 'cordis.patch.yml', 'index.mjs']) await cp(path.join(root, 'desktop-chatgpt', name), path.join(staging, name));
+    for (const name of ['package.json', 'cordis.patch.yml', 'index.mjs', 'codex-login.mjs', 'vendor']) await cp(path.join(root, 'desktop-chatgpt', name), path.join(staging, name), {recursive: true});
     for (const name of ['chatgpt.js', 'chatgpt-page.html', 'chatgpt-account.js', 'chatgpt-protocol.js', 'chatgpt-adapter.js']) await cp(path.join(root, 'phone-account', name), path.join(staging, name));
     for (const [name, found] of dependencies) { const link = path.join(staging, 'node_modules', name); await mkdir(path.dirname(link), { recursive: true }); await symlink(found, link, process.platform === 'win32' ? 'junction' : 'dir'); }
     try { await rename(target, backup); old = true; } catch (e) { if (e.code !== 'ENOENT') throw e; }

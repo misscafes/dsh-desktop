@@ -3,6 +3,11 @@
 const DSH_PICKER_KEY = 'dsh:model-picker:v1';
 const MEASURE_STYLE = {visibility:'hidden', left:0, top:0};
 const pickerPair = value => JSON.stringify([value.provider, value.model]);
+function pickerEffortName(id, name, english) {
+  if (english) return name ?? id;
+  const labels = {default:'默认', minimal:'极简', low:'低', medium:'中', high:'高', xhigh:'极高', max:'最高'};
+  return labels[String(id).toLowerCase()] ?? labels[String(name).toLowerCase()] ?? name ?? id;
+}
 function pickerPreferences() {
   try {
     const raw = localStorage.getItem(DSH_PICKER_KEY);
@@ -68,8 +73,9 @@ function ModelSelect({locked, available, directory, load, select, t}) {
   const currentModel = currentGroup?.models.find(model => model.id === state.current?.model);
   const reasoning = currentModel?.reasoning;
   const effectiveEffort = state.current?.reasoningEffort ?? reasoning?.defaultEffort;
-  const effortLabel = reasoning === undefined ? state.retainedEffort : effectiveEffort === undefined ? t('effort.providerDefault') : reasoning.efforts.find(level => level.id === effectiveEffort)?.name ?? effectiveEffort;
-  const effortChoices = reasoning === undefined ? [] : [...reasoning.defaultEffort === undefined ? [{id:'provider-default', effort:undefined, name:t('effort.providerDefault')}] : [], ...reasoning.efforts.map(level => ({id:level.id, effort:level.id, name:level.name}))];
+  const defaultEffortLabel = pickerEffortName('default', t('effort.providerDefault'), english);
+  const effortLabel = reasoning === undefined ? pickerEffortName(state.retainedEffort, state.retainedEffort, english) : effectiveEffort === undefined ? defaultEffortLabel : pickerEffortName(effectiveEffort, reasoning.efforts.find(level => level.id === effectiveEffort)?.name, english);
+  const effortChoices = reasoning === undefined ? [] : [...reasoning.defaultEffort === undefined ? [{id:'provider-default', effort:undefined, name:defaultEffortLabel}] : [], ...reasoning.efforts.map(level => ({id:level.id, effort:level.id, name:pickerEffortName(level.id, level.name, english)}))];
   const rows = react.useMemo(() => pickerRows(groups, query, provider, view, preferences, state.current), [groups, query, provider, view, preferences, state.current]);
   const activeIndex = Math.min(active, rows.length - 1);
   const busy = state.pending !== null || submitting;

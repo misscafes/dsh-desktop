@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 
 const runtime = createRequire(new URL('../desktop-runtime/package.json', import.meta.url));
 const parents = [new URL('../desktop-runtime/package.json', import.meta.url).href];
-for (const name of ['@deepseek-ai/dsh', 'dsh-codearts-auth', 'dsh-peer']) {
+for (const name of ['@deepseek-ai/dsh', 'dsh-providers-hub', 'dsh-peer']) {
   parents.push(pathToFileURL(runtime.resolve(name + '/package.json')).href);
 }
 registerHooks({

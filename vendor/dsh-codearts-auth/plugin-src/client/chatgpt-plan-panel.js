@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { chatGptAuthorizationUrl } from './chatgpt-plan-rpc.js';
+import { CodexPlanPanel } from './codex-plan-panel.js';
 
 const h = React.createElement;
 const pending = state => ['waiting-browser', 'exchanging'].includes(state?.attempt?.phase);
 
-export function ChatGptPlanPanel({ chatGptCall, navigate = url => window.location.assign(url) }) {
+function LegacyChatGptPlanPanel({ chatGptCall, navigate = url => window.location.assign(url) }) {
   const [state, setState] = React.useState(null);
   const [notice, setNotice] = React.useState(null);
   const [busy, setBusy] = React.useState(false);
@@ -127,4 +128,9 @@ export function ChatGptPlanPanel({ chatGptCall, navigate = url => window.locatio
         h('h3', { id: 'dim-jh-chatgptWelcomeTitle' }, '正在使用你的 ChatGPT 会员方案'),
         h('p', null, '符合条件的模型请求使用你的会员方案或可用积分。你可以在 ChatGPT 设置中管理用量和应用授权。'),
         button('知道了', () => void act('welcome'), busy, 'primary'))) : null);
+}
+
+export function ChatGptPlanPanel(props) {
+  return h('div', null, h(CodexPlanPanel, props),
+    h('details', null, h('summary', null, '其他登录方式：原会员授权'), h(LegacyChatGptPlanPanel, props)));
 }

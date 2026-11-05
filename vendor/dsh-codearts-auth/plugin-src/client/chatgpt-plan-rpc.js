@@ -2,9 +2,13 @@ import { unwrapRpcResult } from '../management-rpc.mjs';
 
 // The phone account service owns OAuth credentials; Jet Hub only receives public status.
 export function createChatGptCall(connection) {
-  return async (action, extra = {}, signal) => unwrapRpcResult(
-    await connection.rpc.call('/phone-chatgpt', 'manage', { ...extra, action }, signal),
-  );
+  return async (action, extra = {}, signal) => {
+    const codex = action.startsWith('codex.');
+    return unwrapRpcResult(await connection.rpc.call(
+      codex ? '/desktop-codex' : '/phone-chatgpt', 'manage',
+      { ...extra, action: codex ? action.slice(6) : action }, signal,
+    ));
+  };
 }
 
 export function chatGptAuthorizationUrl(status) {

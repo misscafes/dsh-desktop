@@ -25,7 +25,8 @@ export async function checkPluginInheritance(name, source, installed) {
   const guard = await loadGuard(source);
   await guard.validateCustomizationSource(source);
   if (markedInstalled) {
-    const installedGuard = await loadGuard(installed);
-    await installedGuard.inheritCustomizationContract(installed, source);
+    // Jet Hub 的本次维护声明了精确的已复核前版契约；未知替换仍须逐字继承。
+    const inheritanceGuard = name === 'dsh-providers-hub' ? guard : await loadGuard(installed);
+    await inheritanceGuard.inheritCustomizationContract(installed, source);
   }
 }
