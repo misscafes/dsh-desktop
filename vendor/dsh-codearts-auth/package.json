@@ -153,6 +153,6 @@
       "embedded-signed-outlet"
     ],
     "phoneLoginContract": "phone-browser-sms-native-callback-v1",
-    "desktopRelease": "0.1.11"
+    "desktopRelease": "0.1.12"
   }
 }

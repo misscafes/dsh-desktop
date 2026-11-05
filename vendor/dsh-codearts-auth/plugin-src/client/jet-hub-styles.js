@@ -183,6 +183,39 @@ const STYLES = `
 .dim-jh-codexModel code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 11px/18px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--dsw-alias-label-secondary, #646a73); user-select: text; }
 .dim-jh-codexEmpty { display: grid; justify-items: center; gap: 12px; padding: 28px; border: 1px dashed var(--dsw-alias-border-default, #e5e5e5); border-radius: 11px; color: var(--dsw-alias-label-secondary, #646a73); font-size: 13px; }
 .dim-jh-codexCatalog > .dim-jh-codexFootnote { margin: 12px 0 24px; font-size: 12px; }
+/* 智谱设置页：窄面板中按账号、额度、来源分区，详细资料按需展开。 */
+.dim-jh-accountSection[data-provider="zcode"] > .dim-jh-panelHead { gap: 9px; margin-bottom: 14px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-headerActions { justify-content: flex-start; margin-left: 0; flex: 1 0 100%; gap: 6px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-orderHint { flex: 1 0 100%; margin: 0; font-size: 11px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-headerActions > .dim-jh-btn { min-height: 30px; padding: 5px 9px; font-size: 12px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-nativeSearch { font-size: 12px; gap: 6px; }
+.dim-jh-accountCard[data-provider="zcode"] { padding: 16px; border-radius: 12px; box-shadow: none; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountTop { gap: 7px; align-items: flex-start; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountName { white-space: normal; overflow-wrap: anywhere; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountStatus { margin-top: 5px; }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta { margin-top: 14px; padding: 12px; border-radius: 9px; background: var(--dsw-alias-bg-layer-2, #f5f7f9); }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta > .dim-jh-metaRow { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; gap: 5px; }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta > .dim-jh-metaRow > * { grid-area: auto; }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta dd { white-space: normal; overflow-wrap: anywhere; overflow: visible; font-size: 12px; line-height: 19px; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-creditValue > .dim-jh-creditTotal { display: block; margin-bottom: 4px; font-size: 25px; line-height: 32px; color: var(--dsw-alias-label-primary, #20242b); }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-creditValue > * + * { margin-left: 0; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-creditValue > .dim-jh-creditPackages { display: block; margin-top: 4px; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountActions { grid-column: 1 / -1; justify-content: flex-start; flex-wrap: wrap; gap: 6px; padding-top: 9px; margin-top: 5px; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-btn { min-height: 30px; padding: 5px 9px; font-size: 12px; }
+.dim-jh-zcodeSources { min-width: 0; margin-top: 16px; }
+.dim-jh-zcodeSourceHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+.dim-jh-zcodeSelect, .dim-jh-zcodeReset select { width: 100%; max-width: 100%; box-sizing: border-box; min-height: 36px; padding: 7px 10px; border: 1px solid var(--dsw-alias-border-default, #e5e5e5); border-radius: 8px; color: var(--dsw-alias-label-primary, #20242b); background: var(--dsw-alias-bg-layer-3, #fff); font: inherit; font-size: 13px; }
+.dim-jh-zcodeSourceStatus { margin: 9px 0 0; font-size: 12px; line-height: 19px; overflow-wrap: anywhere; color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeSources .dim-jh-hint, .dim-jh-zcodeReset .dim-jh-hint { margin: 8px 0; font-size: 12px; line-height: 19px; color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeSources .dim-jh-hint[data-tone="error"] { color: var(--dsw-alias-state-error-primary, #d93025); }
+.dim-jh-zcodeSourceDetails, .dim-jh-zcodeAccountDetails { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--dsw-alias-border-l2, #eef0f3); }
+.dim-jh-zcodeSourceDetails > summary, .dim-jh-zcodeAccountDetails > summary, .dim-jh-zcodeReset > summary { cursor: pointer; font-size: 12px; line-height: 20px; color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeSourceItem { display: grid; gap: 3px; margin: 10px 0; font-size: 12px; line-height: 19px; overflow-wrap: anywhere; }
+.dim-jh-zcodeSourceItem span { color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeAccountDetails .dim-jh-metaRow { grid-template-columns: 60px minmax(0, 1fr); }
+.dim-jh-zcodeAccountDetails .dim-jh-metaRow dd { white-space: normal; overflow-wrap: anywhere; }
+.dim-jh-zcodeReset { font-size: 12px; line-height: 19px; }
+.dim-jh-zcodeReset > .dim-jh-btn { margin: 8px 6px 0 0; }
 .dim-jh-empty { text-align: center; padding: 40px; color: var(--dsw-alias-label-tertiary, #888); }
 .dim-jh-empty p { margin: 8px 0; font-size: 14px; }
 

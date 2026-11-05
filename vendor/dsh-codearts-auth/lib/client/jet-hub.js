@@ -238,6 +238,39 @@ var STYLES = `
 .dim-jh-codexModel code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 11px/18px ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--dsw-alias-label-secondary, #646a73); user-select: text; }
 .dim-jh-codexEmpty { display: grid; justify-items: center; gap: 12px; padding: 28px; border: 1px dashed var(--dsw-alias-border-default, #e5e5e5); border-radius: 11px; color: var(--dsw-alias-label-secondary, #646a73); font-size: 13px; }
 .dim-jh-codexCatalog > .dim-jh-codexFootnote { margin: 12px 0 24px; font-size: 12px; }
+/* 智谱设置页：窄面板中按账号、额度、来源分区，详细资料按需展开。 */
+.dim-jh-accountSection[data-provider="zcode"] > .dim-jh-panelHead { gap: 9px; margin-bottom: 14px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-headerActions { justify-content: flex-start; margin-left: 0; flex: 1 0 100%; gap: 6px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-orderHint { flex: 1 0 100%; margin: 0; font-size: 11px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-headerActions > .dim-jh-btn { min-height: 30px; padding: 5px 9px; font-size: 12px; }
+.dim-jh-accountSection[data-provider="zcode"] .dim-jh-nativeSearch { font-size: 12px; gap: 6px; }
+.dim-jh-accountCard[data-provider="zcode"] { padding: 16px; border-radius: 12px; box-shadow: none; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountTop { gap: 7px; align-items: flex-start; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountName { white-space: normal; overflow-wrap: anywhere; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountStatus { margin-top: 5px; }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta { margin-top: 14px; padding: 12px; border-radius: 9px; background: var(--dsw-alias-bg-layer-2, #f5f7f9); }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta > .dim-jh-metaRow { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; gap: 5px; }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta > .dim-jh-metaRow > * { grid-area: auto; }
+.dim-jh-accountCard[data-provider="zcode"] > .dim-jh-accountMeta dd { white-space: normal; overflow-wrap: anywhere; overflow: visible; font-size: 12px; line-height: 19px; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-creditValue > .dim-jh-creditTotal { display: block; margin-bottom: 4px; font-size: 25px; line-height: 32px; color: var(--dsw-alias-label-primary, #20242b); }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-creditValue > * + * { margin-left: 0; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-creditValue > .dim-jh-creditPackages { display: block; margin-top: 4px; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-accountActions { grid-column: 1 / -1; justify-content: flex-start; flex-wrap: wrap; gap: 6px; padding-top: 9px; margin-top: 5px; }
+.dim-jh-accountCard[data-provider="zcode"] .dim-jh-btn { min-height: 30px; padding: 5px 9px; font-size: 12px; }
+.dim-jh-zcodeSources { min-width: 0; margin-top: 16px; }
+.dim-jh-zcodeSourceHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+.dim-jh-zcodeSelect, .dim-jh-zcodeReset select { width: 100%; max-width: 100%; box-sizing: border-box; min-height: 36px; padding: 7px 10px; border: 1px solid var(--dsw-alias-border-default, #e5e5e5); border-radius: 8px; color: var(--dsw-alias-label-primary, #20242b); background: var(--dsw-alias-bg-layer-3, #fff); font: inherit; font-size: 13px; }
+.dim-jh-zcodeSourceStatus { margin: 9px 0 0; font-size: 12px; line-height: 19px; overflow-wrap: anywhere; color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeSources .dim-jh-hint, .dim-jh-zcodeReset .dim-jh-hint { margin: 8px 0; font-size: 12px; line-height: 19px; color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeSources .dim-jh-hint[data-tone="error"] { color: var(--dsw-alias-state-error-primary, #d93025); }
+.dim-jh-zcodeSourceDetails, .dim-jh-zcodeAccountDetails { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--dsw-alias-border-l2, #eef0f3); }
+.dim-jh-zcodeSourceDetails > summary, .dim-jh-zcodeAccountDetails > summary, .dim-jh-zcodeReset > summary { cursor: pointer; font-size: 12px; line-height: 20px; color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeSourceItem { display: grid; gap: 3px; margin: 10px 0; font-size: 12px; line-height: 19px; overflow-wrap: anywhere; }
+.dim-jh-zcodeSourceItem span { color: var(--dsw-alias-label-secondary, #646a73); }
+.dim-jh-zcodeAccountDetails .dim-jh-metaRow { grid-template-columns: 60px minmax(0, 1fr); }
+.dim-jh-zcodeAccountDetails .dim-jh-metaRow dd { white-space: normal; overflow-wrap: anywhere; }
+.dim-jh-zcodeReset { font-size: 12px; line-height: 19px; }
+.dim-jh-zcodeReset > .dim-jh-btn { margin: 8px 6px 0 0; }
 .dim-jh-empty { text-align: center; padding: 40px; color: var(--dsw-alias-label-tertiary, #888); }
 .dim-jh-empty p { margin: 8px 0; font-size: 14px; }
 
@@ -2229,30 +2262,40 @@ function ZcodeSourcePanel({ account, rpcCall, onChanged }) {
   };
   const sources = snapshot?.sources || [];
   const selected = snapshot?.selected ?? account.zcodeSource ?? "auto";
+  const selectedSource = sources.find((source) => source.id === selected);
+  const statusOf = (source) => source.quota || source.reason || (source.available ? "可用" : "不可用");
   return React3.createElement(
     "div",
-    { className: "dim-jh-zcodeSources", style: { minWidth: 0, marginTop: 10 } },
+    { className: "dim-jh-zcodeSources" },
     React3.createElement(
-      "label",
-      { style: { display: "block" } },
-      "额度来源 ",
-      React3.createElement(
-        "select",
-        { "aria-label": "ZCode额度来源", value: selected, disabled: busy || !snapshot, onChange: (e) => void select(e.target.value), style: { width: "100%", maxWidth: "100%", minHeight: 40, marginTop: 6 } },
-        React3.createElement("option", { value: "auto" }, "自动 · 沿用赠送优先的原设置"),
-        sources.map((source) => React3.createElement("option", { key: source.id, value: source.id, disabled: !source.available }, source.label + (source.available ? "" : "（不可用）"))),
-        selected !== "auto" && !sources.some((s) => s.id === selected) ? React3.createElement("option", { value: selected }, "已保存来源 · 等待刷新") : null
-      )
-    ),
-    React3.createElement("p", { className: "dim-jh-hint" }, "后续请求使用所选来源并刷新对应模型目录；已开始的请求保持原来源。机构流量走普通 API，使用该机构项目的资源包或充值余额，不扣编程套餐。余额不足时不会改用本账号其他 Plan。"),
-    sources.map((source) => React3.createElement(
       "div",
-      { key: source.id, className: "dim-jh-hint", style: { overflowWrap: "anywhere", marginTop: 4 } },
-      (selected === source.id ? "当前 · " : "") + source.label + "：" + (source.quota || source.reason || (source.available ? "可用" : "不可用")),
-      source.reason && source.quota ? React3.createElement("span", null, "；" + source.reason) : null
-    )),
+      { className: "dim-jh-zcodeSourceHead" },
+      React3.createElement("label", { htmlFor: "zcode-source-" + account.id }, "额度来源"),
+      React3.createElement("button", { type: "button", className: "dim-jh-btn", disabled: busy, "aria-label": "刷新额度来源", onClick: () => void load(true) }, busy ? "读取中…" : "刷新")
+    ),
+    React3.createElement(
+      "select",
+      { id: "zcode-source-" + account.id, className: "dim-jh-zcodeSelect", "aria-label": "ZCode额度来源", value: selected, disabled: busy || !snapshot, onChange: (e) => void select(e.target.value) },
+      React3.createElement("option", { value: "auto" }, "自动 · 沿用赠送优先的原设置"),
+      sources.map((source) => React3.createElement("option", { key: source.id, value: source.id, disabled: !source.available }, source.label + (source.available ? "" : "（不可用）"))),
+      selected !== "auto" && !sources.some((s) => s.id === selected) ? React3.createElement("option", { value: selected }, "已保存来源 · 等待刷新") : null
+    ),
+    selectedSource && !selectedSource.available ? React3.createElement("p", { className: "dim-jh-zcodeSourceStatus" }, statusOf(selectedSource)) : null,
+    React3.createElement("p", { className: "dim-jh-hint" }, "切换后用于后续请求，当前请求不受影响。"),
+    React3.createElement(
+      "details",
+      { className: "dim-jh-zcodeSourceDetails" },
+      React3.createElement("summary", null, "来源详情与计费说明"),
+      sources.map((source) => React3.createElement(
+        "div",
+        { key: source.id, className: "dim-jh-zcodeSourceItem" },
+        React3.createElement("strong", null, source.label + (selected === source.id ? " · 当前" : "")),
+        React3.createElement("span", null, statusOf(source)),
+        source.reason && source.quota ? React3.createElement("span", null, source.reason) : null
+      )),
+      React3.createElement("p", { className: "dim-jh-hint" }, "机构流量使用对应项目的资源包或充值余额，不扣编程套餐。所选来源余额不足时，不会自动改用其它 Plan。")
+    ),
     error ? React3.createElement("div", { role: "alert", className: "dim-jh-hint", "data-tone": "error" }, error) : null,
-    React3.createElement("button", { type: "button", className: "dim-jh-btn", disabled: busy, onClick: () => void load(true) }, busy ? "读取中…" : "刷新额度来源"),
     snapshot ? React3.createElement(ZcodeResetPanel, { key: account.id, account: { ...account, zcodeSource: selected }, sources, rpcCall, onChanged: async () => {
       await load(true);
     } }) : null
@@ -8361,6 +8404,7 @@ function AccountCard({
     "div",
     {
       className: "dim-jh-accountCard",
+      "data-provider": provider,
       "data-enabled": account.enabled,
       "data-dragging": dragProps.isDragging ? "true" : void 0,
       // 插入位置指示：before 画在卡片上方，after 画在下方 —— 必须与
@@ -8455,13 +8499,13 @@ function AccountCard({
     React12.createElement(
       "dl",
       { className: "dim-jh-accountMeta" },
-      React12.createElement(
+      provider === "zcode" ? null : React12.createElement(
         "div",
         { className: "dim-jh-metaRow" },
         React12.createElement("dt", null, "凭据"),
         React12.createElement("dd", null, React12.createElement("code", null, account.credentialRef))
       ),
-      React12.createElement(
+      provider === "zcode" ? null : React12.createElement(
         "div",
         { className: "dim-jh-metaRow" },
         React12.createElement("dt", null, "有效期"),
@@ -8539,6 +8583,27 @@ function AccountCard({
     // 不支持积分余额的 provider 没有积分行可挂按钮 ⇒ 退回原来的独立行。
     // 否则那个账号卡片上就再也没有「重测 / 重置 / 停用 / 删除」入口了。
     provider === "zcode" ? React12.createElement(ZcodeSourcePanel, { account, rpcCall, onChanged: onSourceChanged }) : null,
+    provider === "zcode" ? React12.createElement(
+      "details",
+      { className: "dim-jh-zcodeAccountDetails" },
+      React12.createElement("summary", null, "账号详情"),
+      React12.createElement(
+        "dl",
+        { className: "dim-jh-accountMeta" },
+        React12.createElement(
+          "div",
+          { className: "dim-jh-metaRow" },
+          React12.createElement("dt", null, "凭据编号"),
+          React12.createElement("dd", null, React12.createElement("code", null, account.credentialRef))
+        ),
+        React12.createElement(
+          "div",
+          { className: "dim-jh-metaRow" },
+          React12.createElement("dt", null, "有效期"),
+          React12.createElement("dd", { "data-tone": expired ? "warn" : void 0 }, account.expiresAt ? `${formatTime(account.expiresAt) || "未知"}${account.refreshable ? " · 自动续期" : ""}` : "未知")
+        )
+      )
+    ) : null,
     showCredits ? null : actionsNode
   );
 }
@@ -11420,6 +11485,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
     "section",
     {
       className: "dim-jh-accountSection",
+      "data-provider": provider,
       "aria-label": `${provider} 账号管理`
     },
     // ⚠️ 2026-10-26 用户要求「将按钮行合并到文案行最右侧」：原先标题 / 按钮组 /

@@ -1256,6 +1256,7 @@ function AccountCard({ account, index, order, provider, onToggle, onDelete, onRe
 
   return React.createElement('div', {
     className: 'dim-jh-accountCard',
+    'data-provider': provider,
     'data-enabled': account.enabled,
     'data-dragging': dragProps.isDragging ? 'true' : undefined,
     // 插入位置指示：before 画在卡片上方，after 画在下方 —— 必须与
@@ -1350,10 +1351,10 @@ function AccountCard({ account, index, order, provider, onToggle, onDelete, onRe
           }, '匿名')
         : null),
     React.createElement('dl', { className: 'dim-jh-accountMeta' },
-      React.createElement('div', { className: 'dim-jh-metaRow' },
+      provider === 'zcode' ? null : React.createElement('div', { className: 'dim-jh-metaRow' },
         React.createElement('dt', null, '凭据'),
         React.createElement('dd', null, React.createElement('code', null, account.credentialRef))),
-      React.createElement('div', { className: 'dim-jh-metaRow' },
+      provider === 'zcode' ? null : React.createElement('div', { className: 'dim-jh-metaRow' },
         React.createElement('dt', null, '有效期'),
         React.createElement('dd', { 'data-tone': expired ? 'warn' : undefined },
           account.expiresAt
@@ -1422,6 +1423,16 @@ function AccountCard({ account, index, order, provider, onToggle, onDelete, onRe
     // 不支持积分余额的 provider 没有积分行可挂按钮 ⇒ 退回原来的独立行。
     // 否则那个账号卡片上就再也没有「重测 / 重置 / 停用 / 删除」入口了。
     provider === 'zcode' ? React.createElement(ZcodeSourcePanel, { account, rpcCall, onChanged: onSourceChanged }) : null,
+    provider === 'zcode' ? React.createElement('details', { className: 'dim-jh-zcodeAccountDetails' },
+      React.createElement('summary', null, '账号详情'),
+      React.createElement('dl', { className: 'dim-jh-accountMeta' },
+        React.createElement('div', { className: 'dim-jh-metaRow' },
+          React.createElement('dt', null, '凭据编号'),
+          React.createElement('dd', null, React.createElement('code', null, account.credentialRef))),
+        React.createElement('div', { className: 'dim-jh-metaRow' },
+          React.createElement('dt', null, '有效期'),
+          React.createElement('dd', { 'data-tone': expired ? 'warn' : undefined }, account.expiresAt
+            ? `${formatTime(account.expiresAt) || '未知'}${account.refreshable ? ' · 自动续期' : ''}` : '未知')))) : null,
     showCredits ? null : actionsNode,
   );
 }
@@ -5401,6 +5412,7 @@ function ProviderPanel({ provider, rpcCall, isolatedLoginCall }) {
   //    所以加类名是本次结构改动的一部分，不是装饰。
   return React.createElement('section', {
     className: 'dim-jh-accountSection',
+    'data-provider': provider,
     'aria-label': `${provider} 账号管理`,
   },
     // ⚠️ 2026-10-26 用户要求「将按钮行合并到文案行最右侧」：原先标题 / 按钮组 /

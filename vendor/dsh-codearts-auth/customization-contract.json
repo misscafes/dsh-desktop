@@ -386,8 +386,8 @@
     "plugin-src/client/credits-format.js": "ce509c8874f49d4eac4c2eb558e00c15e0fae7eac37126a88235f472cf2cd760",
     "plugin-src/client/error-boundary.js": "8b32c7a2a2a80737ae8d2059e5201308289857a4a9f070fc1ff6ea38f9e65f79",
     "plugin-src/client/index.js": "75ba0cf46e33cac8e04f61e950115f115ab08e9751437d00afe00ea91f8bebbe",
-    "plugin-src/client/jet-hub-styles.js": "b726b2d386e3d17f6702d493d64616bfa614b78f4efd832d88493bdcc032bb62",
-    "plugin-src/client/jet-hub.js": "7be5d63c3523745247f03b1acdb0470ba1be9a78fb987e2edc0e81a0120291dc",
+    "plugin-src/client/jet-hub-styles.js": "8f0270c6005068859ad83546c2f8714c84d4f3c63be969249f04a70c653aea88",
+    "plugin-src/client/jet-hub.js": "b416e85ff580d28dadf174df92dd7573d9be8c2e3c65f22028a67444b27b6328",
     "plugin-src/client/model-bulk.js": "b58fc29260cb1b074b2a9928e3d2619840d8e61d007c826239016fb6ecbab68d",
     "plugin-src/client/model-center.js": "6a5388f2dbf1639361ccda89a811920e76a224829de2ee4da60fb61d47d4013c",
     "plugin-src/client/model-filter.js": "bba9984ebe5816197481f37a74808e61d35575903ccf4b98c0e48b7957695b8e",
@@ -415,7 +415,7 @@
     "plugin-src/client/zcode-carrier.js": "0df0c4eb7fc8cc94ade2975d44464d7e086e9a629e795e5ca9883dd26dccb011",
     "plugin-src/client/zcode-reset-launcher.js": "9df18d936e3a549f8280630a58aaf8d7b861d1bcc1ed027c5f6a3215366c8fa9",
     "plugin-src/client/zcode-reset.js": "109f984047286ba3618f46ab065bf43482cf3e57b33edf29c26c94f16e52e501",
-    "plugin-src/client/zcode-sources.js": "594e802e23f81be172bc6b022f75eec28025c29701647664014fd83802029d5d",
+    "plugin-src/client/zcode-sources.js": "fcc34ee83f48c6d395a673fbd3aeca3be16d66a8a384ef5624f7833fcf7734eb",
     "plugin-src/management-rpc.mjs": "a33b92626aa7c8973d9d5f56800d621dc2df1aee235fe10d56cd2b698da711dd"
   },
   "runtimeFingerprints": {
@@ -683,7 +683,7 @@
     "lib/chromium-session.d.ts.map": "5abffd2cb42f03ec021cf6571521c8858763b08dbfcfc1f20cba8c82e1fd90ee",
     "lib/chromium-session.js": "0ba72964d2e17d6cd69ff8d0850ae6eb59bb67f9145b0b8514facb6636ae5257",
     "lib/chromium-session.js.map": "1ef6a53ac14308de1659cf83070572af923ba3fdb49737e5e5effaef0959ba89",
-    "lib/client/jet-hub.js": "9db8474f7842e4977ebd1c9a3b29b7c80d7bfc61dfcc448b5bae199b8d93d5a7",
+    "lib/client/jet-hub.js": "a3e48a594a49657c4ce27eafe3b45f7131c574352a5ffa82ca7431313f868b31",
     "lib/cline-adapter.d.ts": "1fec99c74244c8cfd976d7a2495c9b42860806c7fae2a7584352124fec4c31aa",
     "lib/cline-adapter.d.ts.map": "6d535947b9d9883f5ab044f33c4314a46028b85126698e3dcaaef945be63c8fe",
     "lib/cline-adapter.js": "402e411b26fdaa4693b1a72e9fbea12826815237b9311617da7f828c19c3bb27",
